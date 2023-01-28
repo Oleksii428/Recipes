@@ -1,5 +1,7 @@
 module.exports = {
+	ActionToken: require("./ActionToken"),
 	Author: require("./Author"),
+	Auth: require("./Auth"),
 	Category: require("./Category"),
 	Comment: require("./Comment"),
 	Ingredient: require("./Ingredient"),
