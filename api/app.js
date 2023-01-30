@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const {MONGO_URL, PORT} = require("./configs/config");
-const {authorRouter, authRouter, roleRouter} = require("./routers");
+const {authorRouter, authRouter} = require("./routers");
 const {cronRunner} = require("./crons");
 
 const app = express();
@@ -16,7 +16,6 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/authors", authorRouter);
-app.use("/roles", roleRouter);
 
 app.use((err, req, res) => {
 	res.status(err.status || 500).json({
