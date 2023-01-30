@@ -85,7 +85,7 @@ module.exports = {
 
 			authService.checkToken(accessToken, tokenTypes.accessToken);
 
-			const tokenInfo = await authRepository.findOne({accessToken: accessToken});
+			const tokenInfo = await authRepository.findOneWidthAuthor({accessToken: accessToken});
 
 			if (!tokenInfo) {
 				throw new ApiError("No token in data base", 401);
@@ -96,7 +96,8 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
-	}, checkRefreshToken: async (req, res, next) => {
+	},
+	checkRefreshToken: async (req, res, next) => {
 		try {
 			const refreshToken = req.get("Authorization");
 

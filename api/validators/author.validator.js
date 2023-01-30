@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const {regex} = require("../enums")
+const {regex} = require("../enums");
 
 module.exports = {
 	createAuthorValidator: Joi.object({
@@ -14,4 +14,4 @@ module.exports = {
 		book: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		block: Joi.string().isoDate().default("")
 	})
-}
+};

@@ -1,16 +1,17 @@
 const {config} = require("../configs");
 const {ApiError} = require("../errors");
-const {authorValidator} = require("../validators");
+const {authorValidator, commonValidator,} = require("../validators");
 const {authorRepository, roleRepository} = require("../repositories");
+const {dateHelper} = require("../helpers");
 
 module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
 			const authorInfo = req.body;
-			const {isAdmin} = req.query;
+			const {isAdmin: adminKey} = req.query;
 
-			if (isAdmin) {
-				if (isAdmin === config.CREATE_ADMIN_KEY) {
+			if (adminKey) {
+				if (adminKey === config.CREATE_ADMIN_KEY) {
 					authorInfo.role = await roleRepository.getRoleId("admin");
 				} else {
 					throw new ApiError("Not valid admin key", 400);
@@ -25,6 +26,23 @@ module.exports = {
 			}
 
 			req.author = validatedAuthor.value;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isAuthorExistsDynamically: (fieldName, from = "body", dbField = fieldName) => async (req, res, next) => {
+		try {
+			const fieldToSearch = req[from][fieldName];
+
+			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
+
+			if (!author) {
+				throw new ApiError(`user width ${dbField} ${fieldToSearch} not found`, 400);
+			}
+
+			req.author = author;
+
 			next();
 		} catch (e) {
 			next(e);
@@ -70,6 +88,50 @@ module.exports = {
 				req.author = authorByUserName;
 				next();
 			}
+		} catch (e) {
+			next(e);
+		}
+	},
+	isMongoIdValid: async (req, res, next) => {
+		try {
+			const {authorId} = req.params;
+
+			const validatedId = commonValidator.idValidator.validate(authorId);
+
+			if (validatedId.error) {
+				throw new ApiError(validatedId.error.message, 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isBlockTimeValid: async (req, res, next) => {
+		try {
+			const validatedTime = commonValidator.blockDaysValidator.validate(req.body);
+
+			if (validatedTime.error) {
+				throw new ApiError(validatedTime.error.message, 400);
+			}
+			const {days} = validatedTime.value;
+
+			req.date = await dateHelper.getSomeDaysLaterIso(days);
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isAdmin: async (req, res, next) => {
+		try {
+			const authorId = req.tokenInfo.author.id;
+			const role = await authorRepository.getRoleOfAuthor(authorId);
+
+			if (role.title !== "admin") {
+				throw new ApiError("You are not an admin", 401);
+			}
+
+			next();
 		} catch (e) {
 			next(e);
 		}

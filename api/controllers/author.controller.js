@@ -1,11 +1,12 @@
 const {authorRepository} = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions} = require("../enums");
+const {dateHelper} = require("../helpers");
 
 module.exports = {
 	getAll: async (req, res, next) => {
 		try {
-			const authors = await authorRepository.getByParams({});
+			const authors = await authorRepository.getListByParams({});
 			res.json(authors);
 		} catch (e) {
 			next(e);
@@ -23,14 +24,17 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	block: async (req, res, next) => {
+		try {
+			const {author, date} = req;
+
+			await authorRepository.setBlock(author.id, date);
+			const prettyDate = await dateHelper.getPrettyDate(date);
+
+			res.json(`author ${author.userName} has been baned until ${prettyDate}`);
+		} catch (e) {
+			next(e);
+		}
 	}
-	// delete: async (req, res, next) => {
-	// 	try {
-	// 		const {authorId} = req.params;
-	// 		await authorRepository.deleteById(authorId);
-	// 		res.sendStatus(204);
-	// 	} catch (e) {
-	// 		next(e);
-	// 	}
-	// }
 };
