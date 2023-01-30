@@ -36,5 +36,17 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	changeUserName: async (req, res, next) => {
+		try {
+			const {userName} = req.body;
+			const {author} = req.tokenInfo;
+
+			await authorRepository.updateById(author._id, {userName});
+
+			res.status(201).json(`userName has been changed to ${userName}`);
+		} catch (e) {
+			next(e);
+		}
 	}
 };

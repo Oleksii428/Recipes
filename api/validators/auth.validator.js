@@ -6,7 +6,7 @@ module.exports = {
 	createAuthValidator: Joi.object({
 		userName: Joi.string().trim(),
 		email: Joi.string().regex(regex.EMAIL).lowercase().trim(),
-		password: Joi.string().regex(regex.PASSWORD).required()
+		password: Joi.string()
 	}).xor("userName", "email"),
 	createForgotValidator: Joi.object({
 		userName: Joi.string().trim(),

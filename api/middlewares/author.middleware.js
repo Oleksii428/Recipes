@@ -48,15 +48,11 @@ module.exports = {
 			next(e);
 		}
 	},
-	isFieldUniqueDynamically: (field) => async (req, res, next) => {
+	isFieldUniqueDynamically: (field, from = "body", dbField = field) => async (req, res, next) => {
 		try {
-			const searchValue = req.author[field];
+			const searchValue = req[from][field];
 
-			if (!searchValue) {
-				throw new ApiError("userName is required", 400);
-			}
-
-			const author = await authorRepository.getOneByParams({[field]: searchValue});
+			const author = await authorRepository.getOneByParams({[dbField]: searchValue});
 
 			if (author) {
 				throw new ApiError(`User with this ${field} already exists`, 400);
@@ -131,6 +127,20 @@ module.exports = {
 				throw new ApiError("You are not an admin", 401);
 			}
 
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isUpdateUserNameValid: async (req, res, next) => {
+		try {
+			const validatedUserName = authorValidator.userNameValidator.validate(req.body);
+
+			if (validatedUserName.error) {
+				throw new ApiError(validatedUserName.error.message, 400);
+			}
+
+			req.body.userName = validatedUserName.value.userName;
 			next();
 		} catch (e) {
 			next(e);
