@@ -24,7 +24,9 @@ module.exports = {
 		return Author.find({block: {$ne: ""}});
 	},
 	unlock: async (authorId) => {
-		console.log(authorId);
 		return Author.findByIdAndUpdate(authorId, {$set: {"block": ""}});
+	},
+	deleteById: async (authorId) => {
+		return Author.deleteOne({_id: authorId});
 	}
 };

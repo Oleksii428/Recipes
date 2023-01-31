@@ -85,7 +85,7 @@ module.exports = {
 
 			authService.checkToken(accessToken, tokenTypes.accessToken);
 
-			const tokenInfo = await authRepository.findOneWidthAuthor({accessToken: accessToken});
+			const tokenInfo = await authRepository.findOneWidthAuthor({accessToken});
 
 			if (!tokenInfo) {
 				throw new ApiError("No token in data base", 401);

@@ -29,7 +29,7 @@ module.exports = {
 		try {
 			const {author, date} = req;
 
-			await authorRepository.setBlock(author.id, date);
+			await authorRepository.setBlock(author._id, date);
 			const prettyDate = await dateHelper.getPrettyDate(date);
 
 			res.json(`author ${author.userName} has been baned until ${prettyDate}`);
@@ -45,6 +45,18 @@ module.exports = {
 			await authorRepository.updateById(author._id, {userName});
 
 			res.status(201).json(`userName has been changed to ${userName}`);
+		} catch (e) {
+			next(e);
+		}
+	},
+	delete: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			// const {authorId} = req.params;
+
+			await authorRepository.deleteById(author._id);
+
+			res.sendStatus(204);
 		} catch (e) {
 			next(e);
 		}

@@ -8,7 +8,7 @@ module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
 			const authorInfo = req.body;
-			const {isAdmin: adminKey} = req.query;
+			const {adminKey} = req.query;
 
 			if (adminKey) {
 				if (adminKey === config.CREATE_ADMIN_KEY) {
@@ -38,7 +38,7 @@ module.exports = {
 			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
 
 			if (!author) {
-				throw new ApiError(`user width ${dbField} ${fieldToSearch} not found`, 400);
+				throw new ApiError(`author width ${dbField} ${fieldToSearch} not found`, 400);
 			}
 
 			req.author = author;
@@ -141,6 +141,19 @@ module.exports = {
 			}
 
 			req.body.userName = validatedUserName.value.userName;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isBlockAuthorNotAdmin: async (req, res, next) => {
+		try {
+			const roleOfBlockAuthor = await authorRepository.getRoleOfAuthor(req.author._id);
+
+			if (roleOfBlockAuthor.title === "admin") {
+				throw new ApiError("you cant block admins", 400);
+			}
+
 			next();
 		} catch (e) {
 			next(e);
