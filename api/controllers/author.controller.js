@@ -2,12 +2,15 @@ const {authorRepository} = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions} = require("../enums");
 const {dateHelper} = require("../helpers");
+const {authorPresenter} = require("../presenters");
 
 module.exports = {
 	getAll: async (req, res, next) => {
 		try {
 			const authors = await authorRepository.getListByParams({});
-			res.json(authors);
+			const presentAuthors = authorPresenter.presentMany(authors);
+
+			res.json(presentAuthors);
 		} catch (e) {
 			next(e);
 		}
@@ -18,7 +21,10 @@ module.exports = {
 
 			const hashPassword = await authService.hashPassword(author.password);
 			const newAuthor = await authorRepository.create({...author, password: hashPassword});
+
 			await emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
+
+			authorPresenter.present(newAuthor);
 
 			res.status(201).json(newAuthor);
 		} catch (e) {
@@ -52,7 +58,6 @@ module.exports = {
 	delete: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			// const {authorId} = req.params;
 
 			await authorRepository.deleteById(author._id);
 
