@@ -9,7 +9,6 @@ module.exports = {
 		avatar: Joi.string().optional().default(""),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
 		likes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
-		dislikes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		recipes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		book: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		block: Joi.string().isoDate().default("")
