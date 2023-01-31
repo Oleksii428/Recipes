@@ -1,8 +1,23 @@
 const {Author} = require("../dataBases");
 
 module.exports = {
-	getListByParams: async (filter) => {
-		return Author.find(filter).lean();
+	getListByParams: async (query) => {
+		const {page = 1, name} = query;
+
+		let findObj = {};
+
+		if (name) {
+			findObj = {
+				...findObj,
+				userName: new RegExp(name)
+			};
+		}
+
+		const authors = await Author.find(findObj).limit(5).skip((page - 1) * 5);
+		return {
+			authors,
+			page
+		};
 	},
 	getOneByParams: async (filter) => {
 		return Author.findOne(filter);

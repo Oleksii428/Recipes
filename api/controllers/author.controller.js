@@ -5,12 +5,13 @@ const {dateHelper} = require("../helpers");
 const {authorPresenter} = require("../presenters");
 
 module.exports = {
-	getAll: async (req, res, next) => {
+	getByParams: async (req, res, next) => {
 		try {
-			const authors = await authorRepository.getListByParams({});
-			const presentAuthors = authorPresenter.presentMany(authors);
+			const data = await authorRepository.getListByParams(req.query);
 
-			res.json(presentAuthors);
+			const presentAuthors = authorPresenter.presentMany(data.authors);
+
+			res.json({authors: presentAuthors, page: data.page});
 		} catch (e) {
 			next(e);
 		}

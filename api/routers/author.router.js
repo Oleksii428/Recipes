@@ -5,7 +5,7 @@ const {authorMiddleware, authMiddleware} = require("../middlewares");
 
 router.get(
 	"/",
-	authorController.getAll
+	authorController.getByParams
 );
 router.post(
 	"/",
