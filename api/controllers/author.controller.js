@@ -78,5 +78,17 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	unSubscribe: async (req, res, next) => {
+		try {
+			const {author: subscriber} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			await authorRepository.unSubscribe(subscriber._id, authorId);
+
+			res.json("unsubscribed");
+		} catch (e) {
+			next(e);
+		}
 	}
 };

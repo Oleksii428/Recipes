@@ -52,6 +52,10 @@ module.exports = {
 		await Author.findByIdAndUpdate(authorId, {$push: {"subscribers": subscriberId}});
 		await Author.findByIdAndUpdate(subscriberId, {$push: {"subscriptions": authorId}});
 	},
+	unSubscribe: async (subscriberId, authorId) => {
+		await Author.findByIdAndUpdate(authorId, {$pull: {"subscribers": subscriberId}});
+		await Author.findByIdAndUpdate(subscriberId, {$pull: {"subscriptions": authorId}});
+	},
 	getSubscribers: async (id) => {
 		return Author.findById(id).select("subscribers -_id");
 	}

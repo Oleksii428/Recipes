@@ -31,6 +31,16 @@ router.patch(
 );
 
 router.patch(
+	"/unsubscribe/:authorId",
+	authorMiddleware.isMongoIdValid,
+	authMiddleware.checkAccessToken,
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.checkBanStatus,
+	authorMiddleware.isUnSubscribed,
+	authorController.unSubscribe
+);
+
+router.patch(
 	"/userName",
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isUpdateUserNameValid,
