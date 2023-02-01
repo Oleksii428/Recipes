@@ -90,5 +90,29 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	like: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			await authorRepository.like(author._id, authorId);
+
+			res.json("liked");
+		} catch (e) {
+			next(e);
+		}
+	},
+	unLike: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			await authorRepository.unLike(author._id, authorId);
+
+			res.json("unliked");
+		} catch (e) {
+			next(e);
+		}
 	}
 };

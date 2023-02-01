@@ -119,7 +119,6 @@ module.exports = {
 	},
 	isAdmin: async (req, res, next) => {
 		try {
-			console.log(req.tokenInfo);
 			const authorId = req.tokenInfo.author._id;
 			const role = await authorRepository.getRoleOfAuthor(authorId);
 
@@ -182,7 +181,7 @@ module.exports = {
 			const {subscribers} = await authorRepository.getSubscribers(authorId);
 
 			if (author.id === authorId) {
-				throw new ApiError("you cant subscribe to yourself")
+				throw new ApiError("you cant subscribe to yourself");
 			}
 
 			if (subscribers.includes(author._id)) {
@@ -209,5 +208,45 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
-	}
+	},
+	isLiked: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			const {likes} = await authorRepository.getLikes(authorId);
+
+			if (author.id === authorId) {
+				throw new ApiError("you cant like yourself");
+			}
+
+			if (likes.includes(author._id)) {
+				throw new ApiError("you already liked this author", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isUnLiked: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			const {likes} = await authorRepository.getLikes(authorId);
+
+			if (author.id === authorId) {
+				throw new ApiError("you cant unlike yourself");
+			}
+
+			if (!likes.includes(author._id)) {
+				throw new ApiError("you did not like this author", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 };

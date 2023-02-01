@@ -58,5 +58,14 @@ module.exports = {
 	},
 	getSubscribers: async (id) => {
 		return Author.findById(id).select("subscribers -_id");
-	}
+	},
+	getLikes: async (id) => {
+		return Author.findById(id).select("likes -_id");
+	},
+	like: async (fromId, toId) => {
+		await Author.findByIdAndUpdate(toId, {$push: {"likes": fromId}});
+	},
+	unLike: async (fromId, toId) => {
+		await Author.findByIdAndUpdate(toId, {$pull: {"likes": fromId}});
+	},
 };
