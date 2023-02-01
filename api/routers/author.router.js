@@ -21,6 +21,16 @@ router.delete(
 );
 
 router.patch(
+	"/subscribe/:authorId",
+	authorMiddleware.isMongoIdValid,
+	authMiddleware.checkAccessToken,
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.checkBanStatus,
+	authorMiddleware.isSubscribed,
+	authorController.subscribe
+);
+
+router.patch(
 	"/userName",
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isUpdateUserNameValid,

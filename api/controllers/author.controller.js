@@ -66,5 +66,17 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	subscribe: async (req, res, next) => {
+		try {
+			const {author: subscriber} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			await authorRepository.subscribe(subscriber._id, authorId);
+
+			res.json("subscribed");
+		} catch (e) {
+			next(e);
+		}
 	}
 };

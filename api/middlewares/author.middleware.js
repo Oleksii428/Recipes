@@ -40,7 +40,6 @@ module.exports = {
 			if (!author) {
 				throw new ApiError(`author width ${dbField} ${fieldToSearch} not found`, 400);
 			}
-
 			req.author = author;
 
 			next();
@@ -120,7 +119,8 @@ module.exports = {
 	},
 	isAdmin: async (req, res, next) => {
 		try {
-			const authorId = req.tokenInfo.author.id;
+			console.log(req.tokenInfo);
+			const authorId = req.tokenInfo.author._id;
 			const role = await authorRepository.getRoleOfAuthor(authorId);
 
 			if (role.title !== "admin") {
@@ -152,6 +152,37 @@ module.exports = {
 
 			if (roleOfBlockAuthor.title === "admin") {
 				throw new ApiError("you cant block admins", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	checkBanStatus: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+
+			const banStatus = await authorRepository.getBanStatus(author._id);
+
+			if (banStatus) {
+				throw new ApiError("you are banned", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isSubscribed: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			const {subscribers} = await authorRepository.getSubscribers(authorId);
+
+			if (subscribers.includes(author._id)) {
+				throw new ApiError("you already subscribed to this author", 400);
 			}
 
 			next();

@@ -23,8 +23,8 @@ module.exports = {
 		return Author.findOne(filter);
 	},
 	getRoleOfAuthor: async (authorId) => {
-		const author = await Author.findById(authorId).populate("role");
-		return author.role;
+		const {role} = await Author.findById(authorId).populate("role");
+		return role;
 	},
 	create: async (newAuthor) => {
 		return Author.create(newAuthor);
@@ -43,5 +43,16 @@ module.exports = {
 	},
 	deleteById: async (authorId) => {
 		return Author.deleteOne({_id: authorId});
+	},
+	getBanStatus: async (id) => {
+		const {block} = await Author.findById(id).select("block -_id");
+		return block;
+	},
+	subscribe: async (subscriberId, authorId) => {
+		await Author.findByIdAndUpdate(authorId, {$push: {"subscribers": subscriberId}});
+		await Author.findByIdAndUpdate(subscriberId, {$push: {"subscriptions": authorId}});
+	},
+	getSubscribers: async (id) => {
+		return Author.findById(id).select("subscribers -_id");
 	}
 };

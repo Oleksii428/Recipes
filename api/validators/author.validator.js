@@ -1,4 +1,6 @@
+const {Schema} = require("mongoose");
 const Joi = require("joi");
+
 const {regex} = require("../enums");
 
 module.exports = {
@@ -9,6 +11,8 @@ module.exports = {
 		avatar: Joi.string().optional().default(""),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
 		likes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
+		subscriptions: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),
+		subscribers: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),
 		recipes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		book: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		block: Joi.string().isoDate().default("")

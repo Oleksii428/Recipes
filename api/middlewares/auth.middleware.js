@@ -91,6 +91,10 @@ module.exports = {
 				throw new ApiError("No token in data base", 401);
 			}
 
+			if (!tokenInfo.author) {
+				throw new ApiError("Unauthorized", 401);
+			}
+
 			req.tokenInfo = tokenInfo;
 			next();
 		} catch (e) {
