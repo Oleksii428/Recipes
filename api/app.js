@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
+const swaggerUI = require("swagger-ui-express");
 const mongoose = require("mongoose");
 
 const {MONGO_URL, PORT} = require("./configs/config");
 const {authorRouter, authRouter} = require("./routers");
 const {cronRunner} = require("./crons");
+const swaggerJson = require("./swagger.json");
 
 const app = express();
 app.use(express.json());
@@ -16,6 +18,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/authors", authorRouter);
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJson));
 
 app.use((err, req, res, next) => {
 	res.status(err.status || 500).json({

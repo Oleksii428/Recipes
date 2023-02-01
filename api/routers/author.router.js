@@ -27,7 +27,7 @@ router.patch(
 	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isSubscribed,
-	authorController.subscribe
+	authorController.subscribe,
 );
 
 router.patch(

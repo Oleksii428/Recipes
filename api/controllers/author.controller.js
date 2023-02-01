@@ -3,6 +3,7 @@ const {authService, emailService} = require("../services");
 const {emailActions} = require("../enums");
 const {dateHelper} = require("../helpers");
 const {authorPresenter} = require("../presenters");
+const {WELCOME, NEW_SUBSCRIBER} = require("../enums/email.actions.enum");
 
 module.exports = {
 	getByParams: async (req, res, next) => {
@@ -23,11 +24,8 @@ module.exports = {
 			const hashPassword = await authService.hashPassword(author.password);
 			const newAuthor = await authorRepository.create({...author, password: hashPassword});
 
+			res.status(201).json(authorPresenter.present(newAuthor));
 			await emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
-
-			authorPresenter.present(newAuthor);
-
-			res.status(201).json(newAuthor);
 		} catch (e) {
 			next(e);
 		}
@@ -75,6 +73,10 @@ module.exports = {
 			await authorRepository.subscribe(subscriber._id, authorId);
 
 			res.json("subscribed");
+			await emailService.sendEmail(req.author.email, NEW_SUBSCRIBER, {
+				userName: req.author.userName,
+				subscriber: subscriber.userName
+			});
 		} catch (e) {
 			next(e);
 		}

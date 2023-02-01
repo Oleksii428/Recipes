@@ -1,4 +1,4 @@
-const {WELCOME, FORGOT_PASS} = require("../enums/email.actions.enum");
+const {WELCOME, FORGOT_PASS, NEW_SUBSCRIBER} = require("../enums/email.actions.enum");
 
 module.exports = {
 	[WELCOME]: {
@@ -8,5 +8,9 @@ module.exports = {
 	[FORGOT_PASS]: {
 		subject: "Password title",
 		templateName: "forgot-pass"
+	},
+	[NEW_SUBSCRIBER]: {
+		subject: "New subscriber title",
+		templateName: "new_subscriber"
 	}
 };

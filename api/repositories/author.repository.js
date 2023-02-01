@@ -2,7 +2,7 @@ const {Author} = require("../dataBases");
 
 module.exports = {
 	getListByParams: async (query) => {
-		const {page = 1, name} = query;
+		const {page = "1", name} = query;
 
 		let findObj = {};
 
@@ -13,7 +13,7 @@ module.exports = {
 			};
 		}
 
-		const authors = await Author.find(findObj).limit(5).skip((page - 1) * 5);
+		const authors = await Author.find(findObj).limit(5).skip((+page - 1) * 5);
 		return {
 			authors,
 			page
