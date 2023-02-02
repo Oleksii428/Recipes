@@ -6,7 +6,6 @@ const RecipeSchema = new Schema({
 	servings: {type: Number, require: true},
 	description: {type: String, require: true},
 	category: {type: Schema.Types.ObjectId, ref: "Category", require: true},
-	menu: {type: Schema.Types.ObjectId, ref: "Menu", require: true},
 	kitchen: {type: Schema.Types.ObjectId, ref: "Kitchen", require: true},
 	ingredients: [{type: String, require: true}],
 	gallery: [{type: Schema.Types.ObjectId, ref: "Media"}],
