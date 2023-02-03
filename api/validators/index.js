@@ -3,5 +3,7 @@ module.exports = {
 	authValidator: require("./auth.validator"),
 	categoryValidator: require("./category.validator"),
 	commonValidator: require("./common.validator"),
-	kitchenValidator: require("./kitchen.validator")
+	kitchenValidator: require("./kitchen.validator"),
+	recipeValidator: require("./recipe.validator"),
+	stageValidator: require("./stage.validator")
 };

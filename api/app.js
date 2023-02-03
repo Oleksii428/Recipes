@@ -4,7 +4,7 @@ const swaggerUI = require("swagger-ui-express");
 const mongoose = require("mongoose");
 
 const {MONGO_URL, PORT} = require("./configs/config");
-const {authorRouter, authRouter, categoryRouter, kitchenRouter} = require("./routers");
+const {authorRouter, authRouter, categoryRouter, kitchenRouter, recipeRouter, stageRouter} = require("./routers");
 const {cronRunner} = require("./crons");
 const swaggerJson = require("./swagger.json");
 
@@ -20,6 +20,8 @@ app.use("/auth", authRouter);
 app.use("/authors", authorRouter);
 app.use("/categories", categoryRouter);
 app.use("/kitchens", kitchenRouter);
+app.use("/stages", stageRouter);
+// app.use("/recipes", recipeRouter);
 // app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJson));
 
 app.use((err, req, res, next) => {

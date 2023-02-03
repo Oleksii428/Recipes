@@ -1,7 +1,6 @@
 const {kitchenValidator} = require("../validators");
 const {ApiError} = require("../errors");
-const {categoryRepository, kitchenRepository} = require("../repositories");
-const {kitchenMiddleware} = require("./index");
+const {kitchenRepository} = require("../repositories");
 
 module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
