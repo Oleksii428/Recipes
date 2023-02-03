@@ -87,26 +87,21 @@ module.exports = {
 			next(e);
 		}
 	},
-	like: async (req, res, next) => {
+	likeToggle: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
 			const {authorId} = req.params;
+			let action;
 
-			await authorRepository.like(author._id, authorId);
+			if (!req.liked) {
+				await authorRepository.like(author._id, authorId);
+				action = "liked";
+			} else {
+				await authorRepository.unLike(author._id, authorId);
+				action = "unliked";
+			}
 
-			res.json("liked");
-		} catch (e) {
-			next(e);
-		}
-	},
-	unLike: async (req, res, next) => {
-		try {
-			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
-
-			await authorRepository.unLike(author._id, authorId);
-
-			res.json("unliked");
+			res.status(200).json(action);
 		} catch (e) {
 			next(e);
 		}
