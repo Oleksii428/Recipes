@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 app.use("/auth", authRouter);
 app.use("/authors", authorRouter);
 app.use("/categories", categoryRouter);
-app.use("/kitchen", kitchenRouter);
+app.use("/kitchens", kitchenRouter);
 // app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJson));
 
 app.use((err, req, res, next) => {
