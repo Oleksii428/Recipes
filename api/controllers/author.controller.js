@@ -65,30 +65,24 @@ module.exports = {
 			next(e);
 		}
 	},
-	subscribe: async (req, res, next) => {
+	subscribeToggle: async (req, res, next) => {
 		try {
 			const {author: subscriber} = req.tokenInfo;
 			const {authorId} = req.params;
+			let action;
 
-			await authorRepository.subscribe(subscriber._id, authorId);
-
-			res.json("subscribed");
-			await emailService.sendEmail(req.author.email, NEW_SUBSCRIBER, {
-				userName: req.author.userName,
-				subscriber: subscriber.userName
-			});
-		} catch (e) {
-			next(e);
-		}
-	},
-	unSubscribe: async (req, res, next) => {
-		try {
-			const {author: subscriber} = req.tokenInfo;
-			const {authorId} = req.params;
-
-			await authorRepository.unSubscribe(subscriber._id, authorId);
-
-			res.json("unsubscribed");
+			if (!req.subscribed) {
+				await authorRepository.subscribe(subscriber._id, authorId);
+				action = "subscribed";
+				await emailService.sendEmail(req.author.email, NEW_SUBSCRIBER, {
+					userName: req.author.userName,
+					subscriber: subscriber.userName
+				});
+			} else {
+				await authorRepository.unSubscribe(subscriber._id, authorId);
+				action = "unsubscribed";
+			}
+			res.status(200).json(action);
 		} catch (e) {
 			next(e);
 		}

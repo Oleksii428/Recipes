@@ -178,15 +178,13 @@ module.exports = {
 			const {author} = req.tokenInfo;
 			const {authorId} = req.params;
 
-			const {subscribers} = await authorRepository.getSubscribers(authorId);
-
 			if (author.id === authorId) {
 				throw new ApiError("you cant subscribe to yourself");
 			}
 
-			if (subscribers.includes(author._id)) {
-				throw new ApiError("you already subscribed to this author", 400);
-			}
+			const {subscribers} = await authorRepository.getSubscribers(authorId);
+
+			req.subscribed = !!subscribers.includes(author._id);
 
 			next();
 		} catch (e) {
