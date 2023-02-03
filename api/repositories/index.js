@@ -3,5 +3,6 @@ module.exports = {
 	authorRepository: require("./author.repository"),
 	authRepository: require("./auth.repository"),
 	categoryRepository: require("./category.repository"),
-	roleRepository: require("./role.repository")
+	roleRepository: require("./role.repository"),
+	kitchenRepository: require("./kitchen.repository")
 };

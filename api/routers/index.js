@@ -1,5 +1,6 @@
 module.exports = {
 	authorRouter: require("./author.router"),
 	authRouter: require("./auth.router"),
-	categoryRouter: require("./category.router")
+	categoryRouter: require("./category.router"),
+	kitchenRouter: require("./kitchen.router")
 };
