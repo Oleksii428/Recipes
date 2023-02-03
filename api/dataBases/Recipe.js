@@ -12,7 +12,7 @@ const RecipeSchema = new Schema({
 	stages: [{type: Schema.Types.ObjectId, ref: "Stage", require: true}],
 	rating: {type: Number, default: 0},
 	bookCount: {type: Number, default: 0},
-	comments: [{type: Schema.Types.ObjectId, ref: "Comment"}],
+	reviews: [{type: Schema.Types.ObjectId, ref: "Comment"}],
 	creator: {type: Schema.Types.ObjectId, ref: "Author"},
 	isModerated: {type: Boolean, default: false}
 }, {
