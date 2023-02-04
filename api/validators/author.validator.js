@@ -8,7 +8,7 @@ module.exports = {
 		userName: Joi.string().regex(regex.USERNAME).trim().required(),
 		email: Joi.string().regex(regex.EMAIL).lowercase().trim().required(),
 		password: Joi.string().regex(regex.PASSWORD).required(),
-		avatar: Joi.string().optional().default(""),
+		avatar: Joi.string().regex(regex.MONGO_ID).optional().default(null),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
 		likes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		subscriptions: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),

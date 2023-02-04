@@ -13,7 +13,7 @@ module.exports = {
 				throw new ApiError(validatedBody.error.message, 400);
 			}
 
-			req.review = validatedBody.value;
+			req.review = {...validatedBody.value, owner: req.tokenInfo._id};
 			next();
 		} catch (e) {
 			next(e);

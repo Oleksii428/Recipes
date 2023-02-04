@@ -30,7 +30,6 @@ app.use("/categories", categoryRouter);
 app.use("/kitchens", kitchenRouter);
 app.use("/stages", stageRouter);
 app.use("/recipes", recipeRouter);
-app.use("/reviews", reviewRouter);
 // app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJson));
 
 app.use((err, req, res, next) => {

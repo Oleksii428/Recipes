@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {authMiddleware, recipeMiddleware, authorMiddleware} = require("../middlewares");
+const {authMiddleware, recipeMiddleware, authorMiddleware, reviewMiddleware} = require("../middlewares");
 const {recipeController} = require("../controllers");
 
 router.get(
@@ -30,6 +30,15 @@ router.put(
 	recipeMiddleware.checkCreator,
 	recipeMiddleware.isBodyUpdateValid,
 	recipeController.update
+);
+router.patch(
+	"/addReview/:mongoId",
+	authMiddleware.isMongoIdValid,
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	reviewMiddleware.isBodyCreateValid,
+	recipeController.addReview
 );
 
 router.patch(

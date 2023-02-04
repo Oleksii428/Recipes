@@ -1,4 +1,4 @@
-const {recipeRepository, authorRepository} = require("../repositories");
+const {recipeRepository, authorRepository, reviewRepository} = require("../repositories");
 const {emailService} = require("../services");
 const {
 	CREATE_RECIPE_MODERATION,
@@ -90,6 +90,18 @@ module.exports = {
 			}
 
 			res.json("updated");
+		} catch (e) {
+			next(e);
+		}
+	},
+	addReview: async (req, res, next) => {
+		try {
+			const recipe = req.recipe;
+
+			const newReview = await reviewRepository.create(req.review);
+			const updatedRecipe = await recipeRepository.addReview(recipe._id, newReview._id);
+
+			res.sendStatus(204);
 		} catch (e) {
 			next(e);
 		}
