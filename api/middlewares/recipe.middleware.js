@@ -40,8 +40,8 @@ module.exports = {
 			if (!recipe) {
 				throw new ApiError(`recipe width ${dbField} ${fieldToSearch} not found`, 400);
 			}
-			req.recipe = recipe;
 
+			req.recipe = recipe;
 			next();
 		} catch (e) {
 			next(e);

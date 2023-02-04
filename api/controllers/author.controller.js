@@ -1,9 +1,10 @@
-const {authorRepository} = require("../repositories");
+const {authorRepository, recipeRepository} = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions} = require("../enums");
 const {dateHelper} = require("../helpers");
 const {authorPresenter} = require("../presenters");
 const {WELCOME, NEW_SUBSCRIBER} = require("../enums/email.actions.enum");
+const {ApiError} = require("../errors");
 
 module.exports = {
 	getByParams: async (req, res, next) => {
@@ -99,6 +100,27 @@ module.exports = {
 			} else {
 				await authorRepository.unLike(author._id, mongoId);
 				action = "unliked";
+			}
+
+			res.status(200).json(action);
+		} catch (e) {
+			next(e);
+		}
+	},
+	bookToggle: async (req, res, next) => {
+		try {
+			const {recipe, tokenInfo} = req;
+			const {author} = tokenInfo;
+			let action;
+
+			if (!tokenInfo.author.book.includes(recipe.id)) {
+				await authorRepository.addRecipeToBook(author._id, recipe._id);
+				await recipeRepository.setBookCount(recipe._id, 1);
+				action = "recipe has been added to book";
+			} else {
+				await authorRepository.removeRecipeFromBook(author._id, recipe._id);
+				await recipeRepository.setBookCount(recipe._id, -1);
+				action = "recipe has been removed from book";
 			}
 
 			res.status(200).json(action);

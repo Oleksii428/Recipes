@@ -153,5 +153,6 @@ module.exports = {
 	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator"),
 	moderate: async (id, status) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}}),
 	create: async (newRecipe) => Recipe.create(newRecipe),
-	updateById: async (id, updateRecipe) => Recipe.findByIdAndUpdate(id, updateRecipe)
+	updateById: async (id, updateRecipe) => Recipe.findByIdAndUpdate(id, updateRecipe),
+	setBookCount: async (id, number) => Recipe.findByIdAndUpdate(id, {$inc: {"bookCount": number}})
 };

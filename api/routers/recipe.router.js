@@ -22,7 +22,6 @@ router.get(
 	recipeMiddleware.checkCreator,
 	recipeController.getById
 );
-
 router.put(
 	"/:mongoId",
 	authMiddleware.isMongoIdValid,
@@ -36,9 +35,9 @@ router.put(
 router.patch(
 	"/moderation/:mongoId",
 	authMiddleware.isMongoIdValid,
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	recipeMiddleware.isModerated,
 	recipeController.moderate
 );

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const {authorController} = require("../controllers");
-const {authorMiddleware, authMiddleware} = require("../middlewares");
+const {authorMiddleware, authMiddleware, recipeMiddleware} = require("../middlewares");
 
 router.get(
 	"/",
@@ -57,6 +57,14 @@ router.patch(
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isLiked,
 	authorController.likeToggle
+);
+
+router.patch(
+	"/book-toggle/:mongoId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.isMongoIdValid,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	authorController.bookToggle
 );
 
 module.exports = router;

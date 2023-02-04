@@ -93,4 +93,10 @@ module.exports = {
 	unLike: async (fromId, toId) => {
 		await Author.findByIdAndUpdate(toId, {$pull: {"likes": fromId}});
 	},
+	addRecipeToBook: async (authorId, recipeId) => {
+		await Author.findByIdAndUpdate(authorId, {$push: {"book": recipeId}});
+	},
+	removeRecipeFromBook: async (authorId, recipeId) => {
+		await Author.findByIdAndUpdate(authorId, {$pull: {"book": recipeId}});
+	}
 };
