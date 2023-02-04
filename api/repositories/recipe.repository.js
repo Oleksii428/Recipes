@@ -118,7 +118,6 @@ module.exports = {
 						userName: 1,
 						avatar: 1
 					},
-					isModerated: 1,
 					createdAt: 1,
 					updatedAt: 1
 				}
@@ -146,5 +145,10 @@ module.exports = {
 	.populate("category")
 	.populate("kitchen")
 	.populate("creator"),
+	getModerationStatus: async (id) => {
+		const {isModerated} = await Recipe.findById(id).select("isModerated");
+		return isModerated;
+	},
+	moderate: async (id) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": true}}),
 	create: async (newRecipe) => Recipe.create(newRecipe)
 };

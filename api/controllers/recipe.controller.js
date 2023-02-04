@@ -54,5 +54,16 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	moderate: async (req, res, next) => {
+		try {
+			const {mongoId} = req.params;
+
+			const recipe = await recipeRepository.moderate(mongoId);
+
+			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
 	}
 };

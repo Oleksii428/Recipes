@@ -7,6 +7,13 @@ router.get(
 	"/",
 	recipeController.getByQuery
 );
+router.post(
+	"/",
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.isBodyCreateValid,
+	recipeController.create
+);
 
 router.get(
 	"/:mongoId",
@@ -14,12 +21,13 @@ router.get(
 	recipeController.getById
 );
 
-router.post(
-	"/",
+router.patch(
+	"/moderation/:mongoId",
+	authMiddleware.isMongoIdValid,
 	authMiddleware.checkAccessToken,
-	authorMiddleware.checkBanStatus,
-	recipeMiddleware.isBodyCreateValid,
-	recipeController.create
+	authorMiddleware.isAdmin,
+	recipeMiddleware.isModerated,
+	recipeController.moderate
 );
 
 module.exports = router;
