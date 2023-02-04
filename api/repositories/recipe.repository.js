@@ -149,6 +149,7 @@ module.exports = {
 		const {isModerated} = await Recipe.findById(id).select("isModerated");
 		return isModerated;
 	},
+	getOneByParams: async (filter = {}) => Recipe.findOne(filter),
 	moderate: async (id) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": true}}),
 	create: async (newRecipe) => Recipe.create(newRecipe)
 };

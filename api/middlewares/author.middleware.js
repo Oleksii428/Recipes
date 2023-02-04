@@ -34,7 +34,7 @@ module.exports = {
 	isAuthorExistsDynamically: (fieldName, from = "body", dbField = fieldName) => async (req, res, next) => {
 		try {
 			const fieldToSearch = req[from][fieldName];
-			console.log(fieldToSearch);
+
 			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
 
 			if (!author) {
@@ -87,21 +87,6 @@ module.exports = {
 			next(e);
 		}
 	},
-	// isMongoIdValid: async (req, res, next) => {
-	// 	try {
-	// 		const {authorId} = req.params;
-	//
-	// 		const validatedId = commonValidator.idValidator.validate(authorId);
-	//
-	// 		if (validatedId.error) {
-	// 			throw new ApiError(validatedId.error.message, 400);
-	// 		}
-	//
-	// 		next();
-	// 	} catch (e) {
-	// 		next(e);
-	// 	}
-	// },
 	isBlockTimeValid: async (req, res, next) => {
 		try {
 			const validatedTime = commonValidator.blockDaysValidator.validate(req.body);

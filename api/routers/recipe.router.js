@@ -18,12 +18,14 @@ router.post(
 router.get(
 	"/:mongoId",
 	authMiddleware.isMongoIdValid,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	recipeController.getById
 );
 
 router.patch(
 	"/moderation/:mongoId",
 	authMiddleware.isMongoIdValid,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
 	recipeMiddleware.isModerated,
