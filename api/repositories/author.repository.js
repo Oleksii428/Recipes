@@ -1,4 +1,5 @@
 const {Author} = require("../dataBases");
+const {subscriberPresenter} = require("../presenters");
 
 module.exports = {
 	getListByParams: async (query) => {
@@ -25,6 +26,26 @@ module.exports = {
 	getRoleOfAuthor: async (authorId) => {
 		const {role} = await Author.findById(authorId).populate("role");
 		return role;
+	},
+	getAdmins: async () => {
+		return Author.aggregate([
+			{
+				$lookup: {
+					from: "roles",
+					localField: "role",
+					foreignField: "_id",
+					as: "role"
+				}
+			},
+			{
+				$unwind: "$role"
+			},
+			{
+				$match: {
+					"role.title": "admin"
+				}
+			}
+		]);
 	},
 	create: async (newAuthor) => {
 		return Author.create(newAuthor);
@@ -56,8 +77,12 @@ module.exports = {
 		await Author.findByIdAndUpdate(authorId, {$pull: {"subscribers": subscriberId}});
 		await Author.findByIdAndUpdate(subscriberId, {$pull: {"subscriptions": authorId}});
 	},
-	getSubscribers: async (id) => {
+	getSubscribersId: async (id) => {
 		return Author.findById(id).select("subscribers -_id");
+	},
+	getSubscribers: async (id) => {
+		const author = await Author.findById(id).populate("subscribers").select("subscribers");
+		return subscriberPresenter.presentMany(author.subscribers);
 	},
 	getLikes: async (id) => {
 		return Author.findById(id).select("likes -_id");

@@ -39,6 +39,11 @@ module.exports = {
 
 		const recipes = await Recipe.aggregate([
 			{
+				$match: {
+					isModerated: true
+				}
+			},
+			{
 				$lookup: {
 					from: "categories",
 					localField: "category",

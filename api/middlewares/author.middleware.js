@@ -165,7 +165,7 @@ module.exports = {
 			const banStatus = await authorRepository.getBanStatus(author._id);
 
 			if (banStatus) {
-				throw new ApiError("you are banned", 400);
+				throw new ApiError(`you are banned until ${banStatus}`, 400);
 			}
 
 			next();
@@ -182,7 +182,7 @@ module.exports = {
 				throw new ApiError("you cant subscribe to yourself");
 			}
 
-			const {subscribers} = await authorRepository.getSubscribers(authorId);
+			const {subscribers} = await authorRepository.getSubscribersId(authorId);
 
 			req.subscribed = !!subscribers.includes(author._id);
 

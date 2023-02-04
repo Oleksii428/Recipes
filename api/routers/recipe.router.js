@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {authMiddleware, recipeMiddleware} = require("../middlewares");
+const {authMiddleware, recipeMiddleware, authorMiddleware} = require("../middlewares");
 const {recipeController} = require("../controllers");
 
 router.get(
@@ -11,6 +11,7 @@ router.get(
 router.post(
 	"/",
 	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
 	recipeMiddleware.isBodyCreateValid,
 	recipeController.create
 );
