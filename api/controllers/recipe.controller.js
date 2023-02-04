@@ -1,6 +1,15 @@
 const {recipeRepository} = require("../repositories");
 
 module.exports = {
+	getByQuery: async (req, res, next) => {
+		try {
+			const data = await recipeRepository.getByQuery(req.query);
+
+			res.json(data);
+		} catch (e) {
+			next(e);
+		}
+	},
 	create: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
