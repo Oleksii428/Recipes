@@ -8,6 +8,12 @@ router.get(
 	recipeController.getByQuery
 );
 
+router.get(
+	"/:mongoId",
+	authMiddleware.isMongoIdValid,
+	recipeController.getById
+);
+
 router.post(
 	"/",
 	authMiddleware.checkAccessToken,

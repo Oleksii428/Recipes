@@ -34,7 +34,7 @@ module.exports = {
 	isAuthorExistsDynamically: (fieldName, from = "body", dbField = fieldName) => async (req, res, next) => {
 		try {
 			const fieldToSearch = req[from][fieldName];
-
+			console.log(fieldToSearch);
 			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
 
 			if (!author) {
@@ -87,21 +87,21 @@ module.exports = {
 			next(e);
 		}
 	},
-	isMongoIdValid: async (req, res, next) => {
-		try {
-			const {authorId} = req.params;
-
-			const validatedId = commonValidator.idValidator.validate(authorId);
-
-			if (validatedId.error) {
-				throw new ApiError(validatedId.error.message, 400);
-			}
-
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
+	// isMongoIdValid: async (req, res, next) => {
+	// 	try {
+	// 		const {authorId} = req.params;
+	//
+	// 		const validatedId = commonValidator.idValidator.validate(authorId);
+	//
+	// 		if (validatedId.error) {
+	// 			throw new ApiError(validatedId.error.message, 400);
+	// 		}
+	//
+	// 		next();
+	// 	} catch (e) {
+	// 		next(e);
+	// 	}
+	// },
 	isBlockTimeValid: async (req, res, next) => {
 		try {
 			const validatedTime = commonValidator.blockDaysValidator.validate(req.body);
@@ -176,13 +176,13 @@ module.exports = {
 	isSubscribed: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
+			const {mongoId} = req.params;
 
-			if (author.id === authorId) {
+			if (author.id === mongoId) {
 				throw new ApiError("you cant subscribe to yourself");
 			}
 
-			const {subscribers} = await authorRepository.getSubscribersId(authorId);
+			const {subscribers} = await authorRepository.getSubscribersId(mongoId);
 
 			req.subscribed = !!subscribers.includes(author._id);
 
@@ -194,11 +194,11 @@ module.exports = {
 	isLiked: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
+			const {mongoId} = req.params;
 
-			const {likes} = await authorRepository.getLikes(authorId);
+			const {likes} = await authorRepository.getLikes(mongoId);
 
-			if (author.id === authorId) {
+			if (author.id === mongoId) {
 				throw new ApiError("you cant like yourself");
 			}
 

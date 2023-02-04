@@ -13,6 +13,15 @@ module.exports = {
 			next(e);
 		}
 	},
+	getById: async (req, res, next) => {
+		try {
+			const recipe = await recipeRepository.getById(req.params.mongoId);
+
+			res.json(recipe);
+		} catch (e) {
+			next(e);
+		}
+	},
 	create: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;

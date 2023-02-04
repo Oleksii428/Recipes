@@ -1,4 +1,4 @@
-const {authValidator} = require("../validators");
+const {authValidator, commonValidator} = require("../validators");
 const {ApiError} = require("../errors");
 const {authService} = require("../services");
 const {tokenTypes, tokenActions} = require("../enums");
@@ -122,5 +122,20 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
-	}
+	},
+	isMongoIdValid: async (req, res, next) => {
+		try {
+			const {mongoId} = req.params;
+
+			const validatedId = commonValidator.idValidator.validate(mongoId);
+
+			if (validatedId.error) {
+				throw new ApiError(validatedId.error.message, 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 };

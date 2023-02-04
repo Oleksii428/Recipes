@@ -29,31 +29,31 @@ router.patch(
 );
 
 router.patch(
-	"/block/:authorId",
+	"/block/:mongoId",
 	authorMiddleware.isBlockTimeValid,
-	authorMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid,
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
-	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
 	authorMiddleware.isBlockAuthorNotAdmin,
 	authorController.block
 );
 
 router.patch(
-	"/subscribe-toggle/:authorId",
-	authorMiddleware.isMongoIdValid,
+	"/subscribe-toggle/:mongoId",
+	authMiddleware.isMongoIdValid,
 	authMiddleware.checkAccessToken,
-	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isSubscribed,
 	authorController.subscribeToggle,
 );
 
 router.patch(
-	"/like-toggle/:authorId",
-	authorMiddleware.isMongoIdValid,
+	"/like-toggle/:mongoId",
+	authMiddleware.isMongoIdValid,
 	authMiddleware.checkAccessToken,
-	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isLiked,
 	authorController.likeToggle

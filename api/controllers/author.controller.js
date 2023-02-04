@@ -68,18 +68,18 @@ module.exports = {
 	subscribeToggle: async (req, res, next) => {
 		try {
 			const {author: subscriber} = req.tokenInfo;
-			const {authorId} = req.params;
+			const {mongoId} = req.params;
 			let action;
 
 			if (!req.subscribed) {
-				await authorRepository.subscribe(subscriber._id, authorId);
+				await authorRepository.subscribe(subscriber._id, mongoId);
 				action = "subscribed";
 				await emailService.sendEmail(req.author.email, NEW_SUBSCRIBER, {
 					userName: req.author.userName,
 					subscriber: subscriber.userName
 				});
 			} else {
-				await authorRepository.unSubscribe(subscriber._id, authorId);
+				await authorRepository.unSubscribe(subscriber._id, mongoId);
 				action = "unsubscribed";
 			}
 			res.status(200).json(action);
@@ -90,14 +90,14 @@ module.exports = {
 	likeToggle: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
+			const {mongoId} = req.params;
 			let action;
 
 			if (!req.liked) {
-				await authorRepository.like(author._id, authorId);
+				await authorRepository.like(author._id, mongoId);
 				action = "liked";
 			} else {
-				await authorRepository.unLike(author._id, authorId);
+				await authorRepository.unLike(author._id, mongoId);
 				action = "unliked";
 			}
 

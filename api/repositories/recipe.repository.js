@@ -141,5 +141,10 @@ module.exports = {
 			count
 		};
 	},
+	getById: async (id) => Recipe
+	.findById(id)
+	.populate("category")
+	.populate("kitchen")
+	.populate("creator"),
 	create: async (newRecipe) => Recipe.create(newRecipe)
 };
