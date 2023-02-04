@@ -132,7 +132,7 @@ module.exports = {
 				$limit: limit
 			}
 		]);
-		const count = await Recipe.count(findObj);
+		const count = await Recipe.count({...findObj, isModerated: true});
 
 		return {
 			recipes,
@@ -150,6 +150,8 @@ module.exports = {
 		return isModerated;
 	},
 	getOneByParams: async (filter = {}) => Recipe.findOne(filter),
-	moderate: async (id) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": true}}),
-	create: async (newRecipe) => Recipe.create(newRecipe)
+	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator"),
+	moderate: async (id, status) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}}),
+	create: async (newRecipe) => Recipe.create(newRecipe),
+	updateById: async (id, updateRecipe) => Recipe.findByIdAndUpdate(id, updateRecipe)
 };

@@ -19,7 +19,18 @@ router.get(
 	"/:mongoId",
 	authMiddleware.isMongoIdValid,
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	recipeMiddleware.checkCreator,
 	recipeController.getById
+);
+
+router.put(
+	"/:mongoId",
+	authMiddleware.isMongoIdValid,
+	authMiddleware.checkAccessToken,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	recipeMiddleware.checkCreator,
+	recipeMiddleware.isBodyUpdateValid,
+	recipeController.update
 );
 
 router.patch(

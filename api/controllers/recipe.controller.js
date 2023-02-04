@@ -1,6 +1,10 @@
 const {recipeRepository, authorRepository} = require("../repositories");
 const {emailService} = require("../services");
-const {RECIPE_MODERATION, NEW_SUBSCRIBED_RECIPE} = require("../enums/email.actions.enum");
+const {
+	CREATE_RECIPE_MODERATION,
+	NEW_SUBSCRIBED_RECIPE,
+	UPDATE_RECIPE_MODERATION
+} = require("../enums/email.actions.enum");
 const {config} = require("../configs");
 
 module.exports = {
@@ -35,7 +39,7 @@ module.exports = {
 
 			for (const admin of admins) {
 				console.log("send moderation request");
-				await emailService.sendEmail(admin.email, RECIPE_MODERATION, {
+				await emailService.sendEmail(admin.email, CREATE_RECIPE_MODERATION, {
 					userName: author.userName,
 					recipeDetails: `${config.FRONTEND_URL}/recipes/${createdRecipe._id}`
 				});
@@ -59,9 +63,33 @@ module.exports = {
 		try {
 			const {mongoId} = req.params;
 
-			const recipe = await recipeRepository.moderate(mongoId);
+			const recipe = await recipeRepository.moderate(mongoId, true);
 
 			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	update: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {recipe, updateRecipe} = req;
+
+			const [updatedRecipe, admins] = await Promise.all([
+				recipeRepository.updateById(recipe._id, updateRecipe),
+				authorRepository.getAdmins(),
+				recipeRepository.moderate(recipe._id, false),
+			]);
+
+			for (const admin of admins) {
+				console.log("send moderation request");
+				await emailService.sendEmail(admin.email, UPDATE_RECIPE_MODERATION, {
+					userName: author.userName,
+					recipeDetails: `${config.FRONTEND_URL}/recipes/${updatedRecipe._id}`
+				});
+			}
+
+			res.json("updated");
 		} catch (e) {
 			next(e);
 		}

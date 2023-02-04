@@ -5,8 +5,6 @@ const {recipeRepository} = require("../repositories");
 module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
-			const categoryInfo = req.body;
-
 			const validatedBody = recipeValidator.createRecipeValidator.validate(req.body);
 
 			if (validatedBody.error) {
@@ -14,6 +12,20 @@ module.exports = {
 			}
 
 			req.recipe = validatedBody.value;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isBodyUpdateValid: async (req, res, next) => {
+		try {
+			const validatedBody = recipeValidator.updateRecipeValidator.validate(req.body);
+
+			if (validatedBody.error) {
+				throw new ApiError(validatedBody.error.message, 400);
+			}
+
+			req.updateRecipe = validatedBody.value;
 			next();
 		} catch (e) {
 			next(e);
@@ -43,6 +55,21 @@ module.exports = {
 
 			if (moderationStatus) {
 				throw new ApiError("this recipe already moderated", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	checkCreator: async (req, res, next) => {
+		try {
+			const {recipe, tokenInfo} = req;
+
+			const recipeWithCreator = await recipeRepository.getByIdWithAuthor(recipe._id);
+
+			if (recipeWithCreator.creator.id !== tokenInfo.author.id) {
+				throw new ApiError("you can edit only your own recipes", 400);
 			}
 
 			next();
