@@ -170,5 +170,8 @@ module.exports = {
 		averageRating = Math.round(averageRating * 10) / 10;
 
 		return Recipe.findByIdAndUpdate(id, {$set: {rating: averageRating}});
+	},
+	deleteById: async (id) => {
+		await Recipe.findByIdAndDelete(id);
 	}
 };

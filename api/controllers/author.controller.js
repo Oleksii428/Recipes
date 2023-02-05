@@ -127,5 +127,17 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	bookRemove: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {mongoId: recipeId} = req.params;
+
+			await authorRepository.removeRecipeFromBook(author._id, recipeId);
+
+			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
 	}
 };

@@ -31,6 +31,16 @@ router.put(
 	recipeMiddleware.isBodyUpdateValid,
 	recipeController.update
 );
+router.delete(
+	"/:mongoId",
+	authMiddleware.isMongoIdValid,
+	authMiddleware.checkAccessToken,
+	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.checkCreator,
+	recipeController.delete
+);
+
 router.patch(
 	"/addReview/:mongoId",
 	authMiddleware.isMongoIdValid,

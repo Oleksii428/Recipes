@@ -66,5 +66,11 @@ router.patch(
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	authorController.bookToggle
 );
+router.delete(
+	"/book-remove/:mongoId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.isMongoIdValid,
+	authorController.bookRemove
+);
 
 module.exports = router;

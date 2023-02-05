@@ -50,9 +50,10 @@ module.exports = {
 	create: async (newAuthor) => {
 		return Author.create(newAuthor);
 	},
-	updateById: async (id, payload) => {
-		return Author.findByIdAndUpdate(id, payload, {new: true});
+	addRecipe: async (authorId, recipeId) => {
+		await Author.findByIdAndUpdate(authorId, {$push: {recipes: recipeId}});
 	},
+	updateById: async (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true}),
 	setBlock: async (authorId, date) => {
 		return Author.findByIdAndUpdate(authorId, {$set: {"block": date}});
 	},

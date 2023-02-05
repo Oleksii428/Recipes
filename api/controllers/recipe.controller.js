@@ -37,6 +37,8 @@ module.exports = {
 				authorRepository.getSubscribers(author._id)
 			]);
 
+			await authorRepository.addRecipe(author._id, createdRecipe._id);
+
 			for (const admin of admins) {
 				console.log("send moderation request");
 				await emailService.sendEmail(admin.email, CREATE_RECIPE_MODERATION, {
@@ -104,6 +106,15 @@ module.exports = {
 				recipeRepository.addReview(recipe._id, newReview._id),
 				recipeRepository.setRating(recipe._id)
 			]);
+
+			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	delete: async (req, res, next) => {
+		try {
+			await recipeRepository.deleteById(req.recipe._id);
 
 			res.sendStatus(204);
 		} catch (e) {
