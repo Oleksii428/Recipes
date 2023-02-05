@@ -29,7 +29,7 @@ router.patch(
 );
 
 router.patch(
-	"/complain/:authorId",
+	"/:authorId/complain",
 	authMiddleware.isMongoIdValid("authorId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.checkBanStatus,
@@ -39,47 +39,48 @@ router.patch(
 );
 
 router.patch(
-	"/block/:mongoId",
+	"/:authorId/block",
 	authorMiddleware.isBlockTimeValid,
-	authMiddleware.isMongoIdValid(),
+	authMiddleware.isMongoIdValid("authorId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
-	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
 	authorMiddleware.isBlockAuthorNotAdmin,
 	authorController.block
 );
 
 router.patch(
-	"/subscribe-toggle/:mongoId",
-	authMiddleware.isMongoIdValid(),
+	"/:authorId/subscribe-toggle",
+	authMiddleware.isMongoIdValid("authorId"),
 	authMiddleware.checkAccessToken,
-	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isSubscribed,
 	authorController.subscribeToggle,
 );
 
 router.patch(
-	"/like-toggle/:mongoId",
-	authMiddleware.isMongoIdValid(),
+	"/:authorId/like-toggle",
+	authMiddleware.isMongoIdValid("authorId"),
 	authMiddleware.checkAccessToken,
-	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isLiked,
 	authorController.likeToggle
 );
 
 router.patch(
-	"/book-toggle/:mongoId",
+	"/:authorId/book-toggle",
 	authMiddleware.checkAccessToken,
-	authMiddleware.isMongoIdValid(),
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	authMiddleware.isMongoIdValid("authorId"),
+	recipeMiddleware.isRecipeExistsDynamically("authorId", "params", "_id"),
 	authorController.bookToggle
 );
+
 router.delete(
-	"/book-remove/:mongoId",
+	"/:recipeId/book-remove",
 	authMiddleware.checkAccessToken,
-	authMiddleware.isMongoIdValid(),
+	authMiddleware.isMongoIdValid("recipeId"),
 	authorController.bookRemove
 );
 

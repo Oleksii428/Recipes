@@ -19,9 +19,7 @@ module.exports = {
 	},
 	getById: async (req, res, next) => {
 		try {
-			const recipe = await recipeRepository.getById(req.params.mongoId);
-
-			res.json(recipe);
+			res.json(req.recipe);
 		} catch (e) {
 			next(e);
 		}
@@ -63,9 +61,9 @@ module.exports = {
 	},
 	moderate: async (req, res, next) => {
 		try {
-			const {mongoId} = req.params;
+			const {recipeId} = req.params;
 
-			const recipe = await recipeRepository.moderate(mongoId, true);
+			const recipe = await recipeRepository.moderate(recipeId, true);
 
 			res.sendStatus(204);
 		} catch (e) {

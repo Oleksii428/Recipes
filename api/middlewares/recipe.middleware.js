@@ -49,11 +49,9 @@ module.exports = {
 	},
 	isModerated: async (req, res, next) => {
 		try {
-			const {mongoId} = req.params;
+			const {isModerated} = req.recipe
 
-			const moderationStatus = await recipeRepository.getModerationStatus(mongoId);
-
-			if (moderationStatus) {
+			if (isModerated) {
 				throw new ApiError("this recipe already moderated", 400);
 			}
 

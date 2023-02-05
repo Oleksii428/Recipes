@@ -70,18 +70,18 @@ module.exports = {
 	subscribeToggle: async (req, res, next) => {
 		try {
 			const {author: subscriber} = req.tokenInfo;
-			const {mongoId} = req.params;
+			const {authorId} = req.params;
 			let action;
 
 			if (!req.subscribed) {
-				await authorRepository.subscribe(subscriber._id, mongoId);
+				await authorRepository.subscribe(subscriber._id, authorId);
 				action = "subscribed";
 				await emailService.sendEmail(req.author.email, NEW_SUBSCRIBER, {
 					userName: req.author.userName,
 					subscriber: subscriber.userName
 				});
 			} else {
-				await authorRepository.unSubscribe(subscriber._id, mongoId);
+				await authorRepository.unSubscribe(subscriber._id, authorId);
 				action = "unsubscribed";
 			}
 			res.status(200).json(action);
@@ -92,14 +92,14 @@ module.exports = {
 	likeToggle: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {mongoId} = req.params;
+			const {authorId} = req.params;
 			let action;
 
 			if (!req.liked) {
-				await authorRepository.like(author._id, mongoId);
+				await authorRepository.like(author._id, authorId);
 				action = "liked";
 			} else {
-				await authorRepository.unLike(author._id, mongoId);
+				await authorRepository.unLike(author._id, authorId);
 				action = "unliked";
 			}
 
@@ -132,7 +132,7 @@ module.exports = {
 	bookRemove: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {mongoId: recipeId} = req.params;
+			const {recipeId} = req.params;
 
 			await authorRepository.removeRecipeFromBook(author._id, recipeId);
 

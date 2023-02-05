@@ -140,15 +140,6 @@ module.exports = {
 			count
 		};
 	},
-	getById: async (id) => Recipe
-	.findById(id)
-	.populate("category")
-	.populate("kitchen")
-	.populate("creator"),
-	getModerationStatus: async (id) => {
-		const {isModerated} = await Recipe.findById(id).select("isModerated");
-		return isModerated;
-	},
 	getOneByParams: async (filter = {}) => Recipe.findOne(filter),
 	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator"),
 	moderate: async (id, status) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}}),

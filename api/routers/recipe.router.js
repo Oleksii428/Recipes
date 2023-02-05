@@ -16,32 +16,32 @@ router.post(
 );
 
 router.get(
-	"/:mongoId",
-	authMiddleware.isMongoIdValid(),
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	"/:recipeId",
+	authMiddleware.isMongoIdValid("recipeId"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeController.getById
 );
 router.put(
-	"/:mongoId",
-	authMiddleware.isMongoIdValid(),
+	"/:recipeId",
 	authMiddleware.checkAccessToken,
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
-	recipeMiddleware.checkCreator,
+	authMiddleware.isMongoIdValid("recipeId"),
 	recipeMiddleware.isBodyUpdateValid,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeMiddleware.checkCreator,
 	recipeController.update
 );
 router.delete(
-	"/:mongoId",
-	authMiddleware.isMongoIdValid(),
+	"/:recipeId",
+	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessToken,
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
 	recipeMiddleware.checkCreator,
 	recipeController.delete
 );
 
 router.post(
-	"/addReview/:recipeId",
+	"/:recipeId/addReview",
 	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.checkBanStatus,
@@ -50,7 +50,7 @@ router.post(
 	recipeController.addReview
 );
 router.delete(
-	"/removeReview/:recipeId/:reviewId",
+	"/:recipeId/removeReview/:reviewId",
 	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.isMongoIdValid("reviewId"),
 	authMiddleware.checkAccessToken,
@@ -62,11 +62,11 @@ router.delete(
 );
 
 router.patch(
-	"/moderation/:mongoId",
-	authMiddleware.isMongoIdValid(),
+	"/:recipeId/moderation",
+	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeMiddleware.isModerated,
 	recipeController.moderate
 );

@@ -3,6 +3,7 @@ const {ApiError} = require("../errors");
 const {authorValidator, commonValidator,} = require("../validators");
 const {authorRepository, roleRepository} = require("../repositories");
 const {dateHelper} = require("../helpers");
+const {authorRoles} = require("../enums");
 
 module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
@@ -107,7 +108,7 @@ module.exports = {
 			const authorId = req.tokenInfo.author._id;
 			const role = await authorRepository.getRoleOfAuthor(authorId);
 
-			if (role.title !== "admin") {
+			if (role.title !== authorRoles.ADMIN) {
 				throw new ApiError("You are not an admin", 401);
 			}
 
@@ -134,7 +135,7 @@ module.exports = {
 		try {
 			const roleOfBlockAuthor = await authorRepository.getRoleOfAuthor(req.author._id);
 
-			if (roleOfBlockAuthor.title === "admin") {
+			if (roleOfBlockAuthor.title === authorRoles.ADMIN) {
 				throw new ApiError("you cant block admins", 400);
 			}
 
@@ -161,13 +162,13 @@ module.exports = {
 	isSubscribed: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {mongoId} = req.params;
+			const {authorId} = req.params;
 
-			if (author.id === mongoId) {
+			if (author.id === authorId) {
 				throw new ApiError("you cant subscribe to yourself");
 			}
 
-			const {subscribers} = await authorRepository.getSubscribersId(mongoId);
+			const {subscribers} = await authorRepository.getSubscribersId(authorId);
 
 			req.subscribed = !!subscribers.includes(author._id);
 
@@ -179,11 +180,11 @@ module.exports = {
 	isLiked: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {mongoId} = req.params;
+			const {authorId} = req.params;
 
-			const {likes} = await authorRepository.getLikes(mongoId);
+			const {likes} = await authorRepository.getLikes(authorId);
 
-			if (author.id === mongoId) {
+			if (author.id === authorId) {
 				throw new ApiError("you cant like yourself");
 			}
 
