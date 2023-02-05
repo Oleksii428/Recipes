@@ -155,5 +155,20 @@ module.exports = {
 	create: async (newRecipe) => Recipe.create(newRecipe),
 	updateById: async (id, updateRecipe) => Recipe.findByIdAndUpdate(id, updateRecipe),
 	setBookCount: async (id, number) => Recipe.findByIdAndUpdate(id, {$inc: {"bookCount": number}}),
-	addReview: async (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {reviews: reviewId}})
+	addReview: async (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {reviews: reviewId}}),
+	setRating: async (id) => {
+		const {reviews} = await Recipe.findById(id).populate("reviews").select("reviews -_id");
+
+		const oneStarReviews = reviews.filter(review => review.rating === 1).length;
+		const twoStarReviews = reviews.filter(review => review.rating === 2).length;
+		const threeStarReviews = reviews.filter(review => review.rating === 3).length;
+		const fourStarReviews = reviews.filter(review => review.rating === 4).length;
+		const fiveStarReviews = reviews.filter(review => review.rating === 5).length;
+		const totalNumberOfRatings = oneStarReviews + twoStarReviews + threeStarReviews + fourStarReviews + fiveStarReviews;
+
+		let averageRating = (1 * oneStarReviews + 2 * twoStarReviews + 3 * threeStarReviews + 4 * fourStarReviews + 5 * fiveStarReviews) / totalNumberOfRatings;
+		averageRating = Math.round(averageRating * 10) / 10;
+
+		return Recipe.findByIdAndUpdate(id, {$set: {rating: averageRating}});
+	}
 };

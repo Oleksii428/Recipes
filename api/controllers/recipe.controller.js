@@ -99,7 +99,11 @@ module.exports = {
 			const recipe = req.recipe;
 
 			const newReview = await reviewRepository.create(req.review);
-			const updatedRecipe = await recipeRepository.addReview(recipe._id, newReview._id);
+
+			await Promise.all([
+				recipeRepository.addReview(recipe._id, newReview._id),
+				recipeRepository.setRating(recipe._id)
+			]);
 
 			res.sendStatus(204);
 		} catch (e) {
