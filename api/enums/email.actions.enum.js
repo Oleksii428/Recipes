@@ -4,5 +4,6 @@ module.exports = {
 	NEW_SUBSCRIBER: "new_subscriber",
 	CREATE_RECIPE_MODERATION: "create_recipe_moderation",
 	UPDATE_RECIPE_MODERATION: "update_recipe_moderation",
-	NEW_SUBSCRIBED_RECIPE: "new_subscribed_recipe"
+	NEW_SUBSCRIBED_RECIPE: "new_subscribed_recipe",
+	COMPLAIN: "complain"
 };

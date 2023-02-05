@@ -29,9 +29,19 @@ router.patch(
 );
 
 router.patch(
+	"/complain/:authorId",
+	authMiddleware.isMongoIdValid("authorId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.isBodyComplainValid,
+	authorController.sendComplain
+);
+
+router.patch(
 	"/block/:mongoId",
 	authorMiddleware.isBlockTimeValid,
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
 	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
@@ -41,7 +51,7 @@ router.patch(
 
 router.patch(
 	"/subscribe-toggle/:mongoId",
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
@@ -51,7 +61,7 @@ router.patch(
 
 router.patch(
 	"/like-toggle/:mongoId",
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAuthorExistsDynamically("mongoId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
@@ -62,14 +72,14 @@ router.patch(
 router.patch(
 	"/book-toggle/:mongoId",
 	authMiddleware.checkAccessToken,
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	authorController.bookToggle
 );
 router.delete(
 	"/book-remove/:mongoId",
 	authMiddleware.checkAccessToken,
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authorController.bookRemove
 );
 

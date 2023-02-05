@@ -4,7 +4,8 @@ const {
 	NEW_SUBSCRIBER,
 	CREATE_RECIPE_MODERATION,
 	UPDATE_RECIPE_MODERATION,
-	NEW_SUBSCRIBED_RECIPE
+	NEW_SUBSCRIBED_RECIPE,
+	COMPLAIN
 } = require("../enums/email.actions.enum");
 
 module.exports = {
@@ -31,5 +32,9 @@ module.exports = {
 	[UPDATE_RECIPE_MODERATION]: {
 		subject: "Updated recipe needs moderation",
 		templateName: "update_recipe_moderation"
+	},
+	[COMPLAIN]: {
+		subject: "New complain",
+		templateName: "complain"
 	}
 };

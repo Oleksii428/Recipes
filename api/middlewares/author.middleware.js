@@ -40,8 +40,8 @@ module.exports = {
 			if (!author) {
 				throw new ApiError(`author width ${dbField} ${fieldToSearch} not found`, 400);
 			}
-			req.author = author;
 
+			req.author = author;
 			next();
 		} catch (e) {
 			next(e);
@@ -189,6 +189,22 @@ module.exports = {
 
 			req.liked = !!likes.includes(author._id);
 
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isBodyComplainValid: async (req, res, next) => {
+		try {
+			const complainText = req.body;
+
+			const validatedComplain = authorValidator.complainValidator.validate(complainText);
+
+			if (validatedComplain.error) {
+				throw new ApiError(validatedComplain.error.message, 400);
+			}
+
+			req.complain = validatedComplain.value;
 			next();
 		} catch (e) {
 			next(e);

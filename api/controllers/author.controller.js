@@ -3,8 +3,9 @@ const {authService, emailService} = require("../services");
 const {emailActions} = require("../enums");
 const {dateHelper} = require("../helpers");
 const {authorPresenter} = require("../presenters");
-const {WELCOME, NEW_SUBSCRIBER} = require("../enums/email.actions.enum");
+const {WELCOME, NEW_SUBSCRIBER, COMPLAIN} = require("../enums/email.actions.enum");
 const {ApiError} = require("../errors");
+const {config} = require("../configs");
 
 module.exports = {
 	getByParams: async (req, res, next) => {
@@ -136,6 +137,27 @@ module.exports = {
 			await authorRepository.removeRecipeFromBook(author._id, recipeId);
 
 			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	sendComplain: async (req, res, next) => {
+		try {
+			const {complain, author, tokenInfo} = req;
+
+			const admins = await authorRepository.getAdmins();
+
+			for (const admin of admins) {
+				console.log("sending complain email...");
+				await emailService.sendEmail(admin.email, COMPLAIN, {
+					sender: tokenInfo.author.userName,
+					authorLink: `${config.FRONTEND_URL}/recipes/${author._id}`,
+					authorName: author.userName,
+					complain: complain.text
+				});
+			}
+
+			res.json("complain sent");
 		} catch (e) {
 			next(e);
 		}

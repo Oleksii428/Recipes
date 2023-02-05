@@ -19,5 +19,8 @@ module.exports = {
 	}),
 	userNameValidator: Joi.object({
 		userName: Joi.string().regex(regex.USERNAME).trim().required()
+	}),
+	complainValidator: Joi.object({
+		text: Joi.string().min(5).max(200).required()
 	})
 };
