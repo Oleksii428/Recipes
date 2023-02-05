@@ -68,7 +68,7 @@ module.exports = {
 
 			const recipeWithCreator = await recipeRepository.getByIdWithAuthor(recipe._id);
 
-			if (recipeWithCreator.creator.id !== tokenInfo.author.id) {
+			if (!recipeWithCreator.creator._id.equals(tokenInfo.author._id)) {
 				throw new ApiError("that recipe not yours", 400);
 			}
 

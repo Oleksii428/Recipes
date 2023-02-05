@@ -102,10 +102,20 @@ module.exports = {
 
 			const newReview = await reviewRepository.create(req.review);
 
-			await Promise.all([
-				recipeRepository.addReview(recipe._id, newReview._id),
-				recipeRepository.setRating(recipe._id)
-			]);
+			await recipeRepository.addReview(recipe._id, newReview._id);
+			await recipeRepository.setRating(recipe._id);
+
+			res.sendStatus(201);
+		} catch (e) {
+			next(e);
+		}
+	},
+	deleteReview: async (req, res, next) => {
+		try {
+			const {recipe, review} = req;
+
+			const updatedRecipe = await recipeRepository.removeReview(recipe._id, review._id);
+			await recipeRepository.setRating(updatedRecipe._id);
 
 			res.sendStatus(204);
 		} catch (e) {

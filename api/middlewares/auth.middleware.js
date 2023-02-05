@@ -123,11 +123,11 @@ module.exports = {
 			next(e);
 		}
 	},
-	isMongoIdValid: async (req, res, next) => {
+	isMongoIdValid: (fieldName = "mongoId") => async (req, res, next) => {
 		try {
-			const {mongoId} = req.params;
+			const fieldToSearch = req.params[fieldName];
 
-			const validatedId = commonValidator.idValidator.validate(mongoId);
+			const validatedId = commonValidator.idValidator.validate(fieldToSearch);
 
 			if (validatedId.error) {
 				throw new ApiError(validatedId.error.message, 400);

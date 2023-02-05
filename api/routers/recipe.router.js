@@ -17,14 +17,13 @@ router.post(
 
 router.get(
 	"/:mongoId",
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
-	recipeMiddleware.checkCreator,
 	recipeController.getById
 );
 router.put(
 	"/:mongoId",
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authMiddleware.checkAccessToken,
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	recipeMiddleware.checkCreator,
@@ -33,7 +32,7 @@ router.put(
 );
 router.delete(
 	"/:mongoId",
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authMiddleware.checkAccessToken,
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
 	authorMiddleware.checkBanStatus,
@@ -41,19 +40,30 @@ router.delete(
 	recipeController.delete
 );
 
-router.patch(
-	"/addReview/:mongoId",
-	authMiddleware.isMongoIdValid,
+router.post(
+	"/addReview/:recipeId",
+	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.checkBanStatus,
-	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	reviewMiddleware.isBodyCreateValid,
 	recipeController.addReview
+);
+router.delete(
+	"/removeReview/:recipeId/:reviewId",
+	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.isMongoIdValid("reviewId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	reviewMiddleware.isReviewExistsDynamically("reviewId", "params", "_id"),
+	reviewMiddleware.checkOwner,
+	recipeController.deleteReview
 );
 
 router.patch(
 	"/moderation/:mongoId",
-	authMiddleware.isMongoIdValid,
+	authMiddleware.isMongoIdValid(),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
 	recipeMiddleware.isRecipeExistsDynamically("mongoId", "params", "_id"),
