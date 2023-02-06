@@ -58,6 +58,16 @@ router.patch(
 	recipeMiddleware.checkCreator,
 	recipeController.addPhotos
 );
+router.patch(
+	"/:recipeId/addVideo",
+	mediaMiddleware.checkVideo,
+	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeMiddleware.checkCreator,
+	recipeController.addVideo
+);
 router.post(
 	"/:recipeId/addReview",
 	mediaMiddleware.checkPhoto,

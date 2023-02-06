@@ -8,7 +8,7 @@ module.exports = {
 				const imagesToUpload = Object.values(req.files);
 
 				if (imagesToUpload.length > 1) {
-					throw new ApiError("for each stage only one photo");
+					throw new ApiError("only one photo allowed");
 				}
 
 				const image = imagesToUpload[0];
@@ -53,5 +53,35 @@ module.exports = {
 			next(e);
 		}
 	},
+	checkVideo: async (req, res, next) => {
+		try {
+			if (!req.files) {
+				throw new ApiError("no files to upload", 400);
+			}
+
+			const imagesToUpload = Object.values(req.files);
+
+			if (imagesToUpload.length > 1) {
+				throw new ApiError("only one video allowed");
+			}
+
+			for (const photo of imagesToUpload) {
+				const {size, mimetype, name} = photo;
+
+				if (size > fileUploadConfig.VIDEO_MAX_SIZE) {
+					throw new ApiError(`file ${name} too big`, 400);
+				}
+
+				if (!fileUploadConfig.VIDEO_MIMETYPES.includes(mimetype)) {
+					throw new ApiError(`file ${name} has invalid format`, 400);
+				}
+			}
+
+			req.video = imagesToUpload[0];
+			next();
+		} catch (e) {
+			next(e);
+		}
+	}
 }
 ;

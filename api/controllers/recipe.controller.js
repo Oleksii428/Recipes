@@ -21,8 +21,22 @@ module.exports = {
 				const fileName = fileHelper.buildFileName(photo.name, uploadFileTypes.RECIPES, recipe.id);
 				const newMedia = await mediaRepository.create({"path": fileName});
 				await photo.mv(path.join(process.cwd(), "uploads", fileName));
-				await recipeRepository.addPhoto(recipe._id, newMedia._id);
+				await recipeRepository.addMedia(recipe._id, newMedia._id);
 			}
+
+			res.json("ok");
+		} catch (e) {
+			next(e);
+		}
+	},
+	addVideo: async (req, res, next) => {
+		try {
+			const {recipe, video} = req;
+
+			const fileName = fileHelper.buildFileName(video.name, uploadFileTypes.RECIPES, recipe.id);
+			const newMedia = await mediaRepository.create({"path": fileName});
+			await video.mv(path.join(process.cwd(), "uploads", fileName));
+			await recipeRepository.addMedia(recipe._id, newMedia._id);
 
 			res.json("ok");
 		} catch (e) {
