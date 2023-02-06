@@ -4,7 +4,7 @@ const {dateHelper} = require("../helpers");
 const {authorRepository} = require("../repositories");
 
 module.exports = new CronJob(
-	// every hour
+	// each hour
 	"0 0 * * * *",
 	async function () {
 		try {

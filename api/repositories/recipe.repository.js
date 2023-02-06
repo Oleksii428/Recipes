@@ -91,6 +91,14 @@ module.exports = {
 				}
 			},
 			{
+				$lookup: {
+					from: "media",
+					localField: "gallery",
+					foreignField: "_id",
+					as: "gallery"
+				}
+			},
+			{
 				$unwind: "$category"
 			},
 			{
