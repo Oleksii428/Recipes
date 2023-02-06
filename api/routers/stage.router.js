@@ -1,11 +1,11 @@
 const router = require("express").Router();
 
 const {stageController} = require("../controllers");
-const {authMiddleware, stageMiddleware} = require("../middlewares");
+const {authMiddleware, stageMiddleware, mediaMiddleware} = require("../middlewares");
 
 router.post(
 	"/",
-	stageMiddleware.checkPhoto,
+	mediaMiddleware.checkPhoto,
 	authMiddleware.checkAccessToken,
 	stageMiddleware.isBodyCreateValid,
 	stageController.create

@@ -5,7 +5,7 @@ const {
 	recipeMiddleware,
 	authorMiddleware,
 	reviewMiddleware,
-	kitchenMiddleware, categoryMiddleware, stageMiddleware
+	kitchenMiddleware, categoryMiddleware, stageMiddleware, mediaMiddleware
 } = require("../middlewares");
 const {recipeController} = require("../controllers");
 
@@ -51,6 +51,7 @@ router.delete(
 
 router.post(
 	"/:recipeId/addReview",
+	mediaMiddleware.checkPhoto,
 	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.checkBanStatus,

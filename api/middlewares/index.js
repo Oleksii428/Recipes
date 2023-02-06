@@ -1,9 +1,10 @@
 module.exports = {
-	authorMiddleware: require("./author.middleware"),
 	authMiddleware: require("./auth.middleware"),
+	authorMiddleware: require("./author.middleware"),
 	categoryMiddleware: require("./category.middleware"),
+	kitchenMiddleware: require("./kitchen.middleware"),
+	mediaMiddleware: require("./media.middleware"),
 	recipeMiddleware: require("./recipe.middleware"),
 	reviewMiddleware: require("./review.middleware"),
-	kitchenMiddleware: require("./kitchen.middleware"),
 	stageMiddleware: require("./stage.middleware")
 };

@@ -22,15 +22,16 @@ module.exports = {
 	},
 	isBodyCreateValid: async (req, res, next) => {
 		try {
-			const reviewInfo = req.body;
+			let reviewInfo = JSON.parse(req.body.review);
+			reviewInfo = {...reviewInfo, owner: req.tokenInfo.author.id};
 
-			const validatedBody = reviewValidator.createReviewValidator.validate(req.body);
+			const validatedBody = reviewValidator.createReviewValidator.validate(reviewInfo);
 
 			if (validatedBody.error) {
 				throw new ApiError(validatedBody.error.message, 400);
 			}
 
-			req.review = {...validatedBody.value, owner: req.tokenInfo.author._id};
+			req.review = validatedBody.value;
 			next();
 		} catch (e) {
 			next(e);

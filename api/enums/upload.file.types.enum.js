@@ -1,4 +1,5 @@
 module.exports = {
 	AUTHORS: "authors",
-	STAGES: "stages"
+	STAGES: "stages",
+	REVIEWS: "reviews"
 };

@@ -1,4 +1,4 @@
-const {recipeRepository, authorRepository, reviewRepository} = require("../repositories");
+const {recipeRepository, authorRepository, reviewRepository, mediaRepository} = require("../repositories");
 const {emailService} = require("../services");
 const {
 	CREATE_RECIPE_MODERATION,
@@ -6,6 +6,9 @@ const {
 	UPDATE_RECIPE_MODERATION
 } = require("../enums/email.actions.enum");
 const {config} = require("../configs");
+const {fileHelper} = require("../helpers");
+const {uploadFileTypes} = require("../enums");
+const path = require("node:path");
 
 module.exports = {
 	getByQuery: async (req, res, next) => {
@@ -99,11 +102,20 @@ module.exports = {
 			const recipe = req.recipe;
 
 			const newReview = await reviewRepository.create(req.review);
+			let newReviewWithPhoto;
 
 			await recipeRepository.addReview(recipe._id, newReview._id);
 			await recipeRepository.setRating(recipe._id);
 
-			res.sendStatus(201);
+			if (req.photo) {
+				const fileName = fileHelper.buildFileName(req.photo.name, uploadFileTypes.REVIEWS, newReview.id);
+
+				const newMedia = await mediaRepository.create({path: fileName});
+				await req.photo.mv(path.join(process.cwd(), "uploads", fileName));
+				newReviewWithPhoto = await reviewRepository.addPhoto(newReview._id, newMedia._id);
+			}
+
+			res.status(201).json(req.files ? newReviewWithPhoto : newReview);
 		} catch (e) {
 			next(e);
 		}
