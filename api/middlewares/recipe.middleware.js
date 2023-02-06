@@ -3,6 +3,21 @@ const {recipeValidator} = require("../validators");
 const {recipeRepository} = require("../repositories");
 
 module.exports = {
+	checkCreator: async (req, res, next) => {
+		try {
+			const {recipe, tokenInfo} = req;
+
+			const recipeWithCreator = await recipeRepository.getByIdWithAuthor(recipe._id);
+
+			if (!recipeWithCreator.creator._id.equals(tokenInfo.author._id)) {
+				throw new ApiError("that recipe not yours", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 	isBodyCreateValid: async (req, res, next) => {
 		try {
 			const validatedBody = recipeValidator.createRecipeValidator.validate(req.body);
@@ -31,6 +46,19 @@ module.exports = {
 			next(e);
 		}
 	},
+	isModerated: async (req, res, next) => {
+		try {
+			const {isModerated} = req.recipe;
+
+			if (isModerated) {
+				throw new ApiError("this recipe already moderated", 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 	isRecipeExistsDynamically: (fieldName, from = "body", dbField = fieldName) => async (req, res, next) => {
 		try {
 			const fieldToSearch = req[from][fieldName];
@@ -42,34 +70,6 @@ module.exports = {
 			}
 
 			req.recipe = recipe;
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	isModerated: async (req, res, next) => {
-		try {
-			const {isModerated} = req.recipe
-
-			if (isModerated) {
-				throw new ApiError("this recipe already moderated", 400);
-			}
-
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	checkCreator: async (req, res, next) => {
-		try {
-			const {recipe, tokenInfo} = req;
-
-			const recipeWithCreator = await recipeRepository.getByIdWithAuthor(recipe._id);
-
-			if (!recipeWithCreator.creator._id.equals(tokenInfo.author._id)) {
-				throw new ApiError("that recipe not yours", 400);
-			}
-
 			next();
 		} catch (e) {
 			next(e);

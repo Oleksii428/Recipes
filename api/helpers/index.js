@@ -1,3 +1,4 @@
 module.exports = {
-	dateHelper: require("./date.helper")
+	dateHelper: require("./date.helper"),
+	fileHelper: require("./file.helper")
 };

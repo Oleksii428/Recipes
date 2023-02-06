@@ -1,37 +1,13 @@
-const {authorRepository, recipeRepository} = require("../repositories");
+const {authorRepository, recipeRepository, mediaRepository} = require("../repositories");
 const {authService, emailService} = require("../services");
-const {emailActions} = require("../enums");
-const {dateHelper} = require("../helpers");
+const {emailActions, uploadFileTypes} = require("../enums");
+const {dateHelper, fileHelper} = require("../helpers");
 const {authorPresenter} = require("../presenters");
-const {WELCOME, NEW_SUBSCRIBER, COMPLAIN} = require("../enums/email.actions.enum");
 const {ApiError} = require("../errors");
 const {config} = require("../configs");
+const path = require("node:path");
 
 module.exports = {
-	getByParams: async (req, res, next) => {
-		try {
-			const data = await authorRepository.getListByParams(req.query);
-
-			const presentAuthors = authorPresenter.presentMany(data.authors);
-
-			res.json({authors: presentAuthors, page: data.page});
-		} catch (e) {
-			next(e);
-		}
-	},
-	create: async (req, res, next) => {
-		try {
-			const {author} = req;
-
-			const hashPassword = await authService.hashPassword(author.password);
-			const newAuthor = await authorRepository.create({...author, password: hashPassword});
-
-			res.status(201).json(authorPresenter.present(newAuthor));
-			await emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
-		} catch (e) {
-			next(e);
-		}
-	},
 	block: async (req, res, next) => {
 		try {
 			const {author, date} = req;
@@ -44,66 +20,14 @@ module.exports = {
 			next(e);
 		}
 	},
-	changeUserName: async (req, res, next) => {
-		try {
-			const {userName} = req.body;
-			const {author} = req.tokenInfo;
-
-			await authorRepository.updateById(author._id, {userName});
-
-			res.status(201).json(`userName has been changed to ${userName}`);
-		} catch (e) {
-			next(e);
-		}
-	},
-	delete: async (req, res, next) => {
+	bookRemove: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
+			const {recipeId} = req.params;
 
-			await authorRepository.deleteById(author._id);
+			await authorRepository.removeRecipeFromBook(author._id, recipeId);
 
 			res.sendStatus(204);
-		} catch (e) {
-			next(e);
-		}
-	},
-	subscribeToggle: async (req, res, next) => {
-		try {
-			const {author: subscriber} = req.tokenInfo;
-			const {authorId} = req.params;
-			let action;
-
-			if (!req.subscribed) {
-				await authorRepository.subscribe(subscriber._id, authorId);
-				action = "subscribed";
-				await emailService.sendEmail(req.author.email, NEW_SUBSCRIBER, {
-					userName: req.author.userName,
-					subscriber: subscriber.userName
-				});
-			} else {
-				await authorRepository.unSubscribe(subscriber._id, authorId);
-				action = "unsubscribed";
-			}
-			res.status(200).json(action);
-		} catch (e) {
-			next(e);
-		}
-	},
-	likeToggle: async (req, res, next) => {
-		try {
-			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
-			let action;
-
-			if (!req.liked) {
-				await authorRepository.like(author._id, authorId);
-				action = "liked";
-			} else {
-				await authorRepository.unLike(author._id, authorId);
-				action = "unliked";
-			}
-
-			res.status(200).json(action);
 		} catch (e) {
 			next(e);
 		}
@@ -129,14 +53,68 @@ module.exports = {
 			next(e);
 		}
 	},
-	bookRemove: async (req, res, next) => {
+	changeUserName: async (req, res, next) => {
+		try {
+			const {userName} = req.body;
+			const {author} = req.tokenInfo;
+
+			await authorRepository.updateById(author._id, {userName});
+
+			res.status(201).json(`userName has been changed to ${userName}`);
+		} catch (e) {
+			next(e);
+		}
+	},
+	create: async (req, res, next) => {
+		try {
+			const {author} = req;
+
+			const hashPassword = await authService.hashPassword(author.password);
+			const newAuthor = await authorRepository.create({...author, password: hashPassword});
+
+			res.status(201).json(authorPresenter.present(newAuthor));
+			await emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
+		} catch (e) {
+			next(e);
+		}
+	},
+	delete: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
-			const {recipeId} = req.params;
 
-			await authorRepository.removeRecipeFromBook(author._id, recipeId);
+			await authorRepository.deleteById(author._id);
 
 			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	getByParams: async (req, res, next) => {
+		try {
+			const data = await authorRepository.getListByParams(req.query);
+
+			const presentAuthors = authorPresenter.presentMany(data.authors);
+
+			res.json({authors: presentAuthors, page: data.page});
+		} catch (e) {
+			next(e);
+		}
+	},
+	likeToggle: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+			let action;
+
+			if (!req.liked) {
+				await authorRepository.like(author._id, authorId);
+				action = "liked";
+			} else {
+				await authorRepository.unLike(author._id, authorId);
+				action = "unliked";
+			}
+
+			res.status(200).json(action);
 		} catch (e) {
 			next(e);
 		}
@@ -149,7 +127,7 @@ module.exports = {
 
 			for (const admin of admins) {
 				console.log("sending complain email...");
-				await emailService.sendEmail(admin.email, COMPLAIN, {
+				await emailService.sendEmail(admin.email, emailActions.COMPLAIN, {
 					sender: tokenInfo.author.userName,
 					authorLink: `${config.FRONTEND_URL}/recipes/${author._id}`,
 					authorName: author.userName,
@@ -158,6 +136,44 @@ module.exports = {
 			}
 
 			res.json("complain sent");
+		} catch (e) {
+			next(e);
+		}
+	},
+	subscribeToggle: async (req, res, next) => {
+		try {
+			const {author: subscriber} = req.tokenInfo;
+			const {authorId} = req.params;
+			let action;
+
+			if (!req.subscribed) {
+				await authorRepository.subscribe(subscriber._id, authorId);
+				action = "subscribed";
+				await emailService.sendEmail(req.author.email, emailActions.NEW_SUBSCRIBER, {
+					userName: req.author.userName,
+					subscriber: subscriber.userName
+				});
+			} else {
+				await authorRepository.unSubscribe(subscriber._id, authorId);
+				action = "unsubscribed";
+			}
+			res.status(200).json(action);
+		} catch (e) {
+			next(e);
+		}
+	},
+	uploadAvatar: async (req, res, next) => {
+		try {
+			const {avatar} = req.files;
+			const {author} = req.tokenInfo;
+
+			const fileName = fileHelper.buildFileName(avatar.name, uploadFileTypes.AUTHORS, "63da04aeaa1a22713b0ac93d");
+
+			await avatar.mv(path.join(process.cwd(), "uploads", fileName));
+			const newMedia = await mediaRepository.create({path: fileName});
+			await authorRepository.setAvatar(author._id, newMedia._id);
+
+			res.json("uploaded");
 		} catch (e) {
 			next(e);
 		}

@@ -4,6 +4,9 @@ const Joi = require("joi");
 const {regex} = require("../enums");
 
 module.exports = {
+	complainValidator: Joi.object({
+		text: Joi.string().min(5).max(200).required()
+	}),
 	createAuthorValidator: Joi.object({
 		userName: Joi.string().regex(regex.USERNAME).trim().required(),
 		email: Joi.string().regex(regex.EMAIL).lowercase().trim().required(),
@@ -19,8 +22,5 @@ module.exports = {
 	}),
 	userNameValidator: Joi.object({
 		userName: Joi.string().regex(regex.USERNAME).trim().required()
-	}),
-	complainValidator: Joi.object({
-		text: Joi.string().min(5).max(200).required()
 	})
 };

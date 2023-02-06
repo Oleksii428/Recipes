@@ -1,6 +1,8 @@
 const {Kitchen} = require("../dataBases");
 
 module.exports = {
+	create: async (newKitchen) => Kitchen.create(newKitchen),
+	findOne: async (filter = {}) => Kitchen.findOne(filter),
 	getByParams: async (query = {}) => {
 		const {title} = query;
 		let findObj = {};
@@ -12,7 +14,5 @@ module.exports = {
 		}
 
 		return Kitchen.find(findObj).sort("title");
-	},
-	create: async (newKitchen) => Kitchen.create(newKitchen),
-	findOne: async (filter = {}) => Kitchen.findOne(filter)
+	}
 };

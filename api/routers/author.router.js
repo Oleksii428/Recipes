@@ -28,6 +28,15 @@ router.patch(
 	authorController.changeUserName
 );
 
+router.post(
+	"/upload-avatar",
+	authorMiddleware.checkUploadImage,
+	authMiddleware.isMongoIdValid("authorId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	authorController.uploadAvatar
+);
+
 router.patch(
 	"/:authorId/complain",
 	authMiddleware.isMongoIdValid("authorId"),

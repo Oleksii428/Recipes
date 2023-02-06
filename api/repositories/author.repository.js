@@ -2,6 +2,48 @@ const {Author} = require("../dataBases");
 const {subscriberPresenter} = require("../presenters");
 
 module.exports = {
+	addRecipe: async (authorId, recipeId) => {
+		await Author.findByIdAndUpdate(authorId, {$push: {recipes: recipeId}});
+	},
+	addRecipeToBook: async (authorId, recipeId) => {
+		await Author.findByIdAndUpdate(authorId, {$push: {"book": recipeId}});
+	},
+	create: async (newAuthor) => {
+		return Author.create(newAuthor);
+	},
+	deleteById: async (authorId) => {
+		return Author.deleteOne({_id: authorId});
+	},
+	getAdmins: async () => {
+		return Author.aggregate([
+			{
+				$lookup: {
+					from: "roles",
+					localField: "role",
+					foreignField: "_id",
+					as: "role"
+				}
+			},
+			{
+				$unwind: "$role"
+			},
+			{
+				$match: {
+					"role.title": "admin"
+				}
+			}
+		]);
+	},
+	getBanStatus: async (id) => {
+		const {block} = await Author.findById(id).select("block -_id");
+		return block;
+	},
+	getBlockedAuthors: async () => {
+		return Author.find({block: {$ne: ""}});
+	},
+	getLikes: async (id) => {
+		return Author.findById(id).select("likes -_id");
+	},
 	getListByParams: async (query) => {
 		const {page = "1", name} = query;
 
@@ -27,77 +69,38 @@ module.exports = {
 		const {role} = await Author.findById(authorId).populate("role");
 		return role;
 	},
-	getAdmins: async () => {
-		return Author.aggregate([
-			{
-				$lookup: {
-					from: "roles",
-					localField: "role",
-					foreignField: "_id",
-					as: "role"
-				}
-			},
-			{
-				$unwind: "$role"
-			},
-			{
-				$match: {
-					"role.title": "admin"
-				}
-			}
-		]);
+	getSubscribers: async (id) => {
+		const author = await Author.findById(id).populate("subscribers").select("subscribers");
+		return subscriberPresenter.presentMany(author.subscribers);
 	},
-	create: async (newAuthor) => {
-		return Author.create(newAuthor);
+	getSubscribersId: async (id) => {
+		return Author.findById(id).select("subscribers -_id");
 	},
-	addRecipe: async (authorId, recipeId) => {
-		await Author.findByIdAndUpdate(authorId, {$push: {recipes: recipeId}});
+	like: async (fromId, toId) => {
+		await Author.findByIdAndUpdate(toId, {$push: {"likes": fromId}});
 	},
-	updateById: async (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true}),
+	removeRecipeFromBook: async (authorId, recipeId) => {
+		await Author.findByIdAndUpdate(authorId, {$pull: {"book": recipeId}});
+	},
+	setAvatar: async (authorId, avatar) => {
+		return Author.findByIdAndUpdate(authorId, {$set: {"avatar": avatar}});
+	},
 	setBlock: async (authorId, date) => {
 		return Author.findByIdAndUpdate(authorId, {$set: {"block": date}});
-	},
-	getBlockedAuthors: async () => {
-		return Author.find({block: {$ne: ""}});
-	},
-	unlock: async (authorId) => {
-		return Author.findByIdAndUpdate(authorId, {$set: {"block": ""}});
-	},
-	deleteById: async (authorId) => {
-		return Author.deleteOne({_id: authorId});
-	},
-	getBanStatus: async (id) => {
-		const {block} = await Author.findById(id).select("block -_id");
-		return block;
 	},
 	subscribe: async (subscriberId, authorId) => {
 		await Author.findByIdAndUpdate(authorId, {$push: {"subscribers": subscriberId}});
 		await Author.findByIdAndUpdate(subscriberId, {$push: {"subscriptions": authorId}});
 	},
+	unLike: async (fromId, toId) => {
+		await Author.findByIdAndUpdate(toId, {$pull: {"likes": fromId}});
+	},
 	unSubscribe: async (subscriberId, authorId) => {
 		await Author.findByIdAndUpdate(authorId, {$pull: {"subscribers": subscriberId}});
 		await Author.findByIdAndUpdate(subscriberId, {$pull: {"subscriptions": authorId}});
 	},
-	getSubscribersId: async (id) => {
-		return Author.findById(id).select("subscribers -_id");
+	unlock: async (authorId) => {
+		return Author.findByIdAndUpdate(authorId, {$set: {"block": ""}});
 	},
-	getSubscribers: async (id) => {
-		const author = await Author.findById(id).populate("subscribers").select("subscribers");
-		return subscriberPresenter.presentMany(author.subscribers);
-	},
-	getLikes: async (id) => {
-		return Author.findById(id).select("likes -_id");
-	},
-	like: async (fromId, toId) => {
-		await Author.findByIdAndUpdate(toId, {$push: {"likes": fromId}});
-	},
-	unLike: async (fromId, toId) => {
-		await Author.findByIdAndUpdate(toId, {$pull: {"likes": fromId}});
-	},
-	addRecipeToBook: async (authorId, recipeId) => {
-		await Author.findByIdAndUpdate(authorId, {$push: {"book": recipeId}});
-	},
-	removeRecipeFromBook: async (authorId, recipeId) => {
-		await Author.findByIdAndUpdate(authorId, {$pull: {"book": recipeId}});
-	}
+	updateById: async (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true})
 };

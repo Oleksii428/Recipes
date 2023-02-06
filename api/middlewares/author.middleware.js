@@ -1,4 +1,4 @@
-const {config} = require("../configs");
+const {config, fileUploadConfig} = require("../configs");
 const {ApiError} = require("../errors");
 const {authorValidator, commonValidator,} = require("../validators");
 const {authorRepository, roleRepository} = require("../repositories");
@@ -6,56 +6,53 @@ const {dateHelper} = require("../helpers");
 const {authorRoles} = require("../enums");
 
 module.exports = {
-	isBodyCreateValid: async (req, res, next) => {
+	checkBanStatus: async (req, res, next) => {
 		try {
-			const authorInfo = req.body;
-			const {adminKey} = req.query;
+			const {author} = req.tokenInfo;
 
-			if (adminKey) {
-				if (adminKey === config.CREATE_ADMIN_KEY) {
-					authorInfo.role = await roleRepository.getRoleId("admin");
-				} else {
-					throw new ApiError("Not valid admin key", 400);
+			const banStatus = await authorRepository.getBanStatus(author._id);
+
+			if (banStatus) {
+				throw new ApiError(`you are banned until ${banStatus}`, 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	checkUploadImage: async (req, res, next) => {
+		try {
+			if (!req.files) {
+				throw new ApiError("no files to upload", 400);
+			}
+
+			const imagesToUpload = Object.values(req.files);
+
+			for (const image of imagesToUpload) {
+				const {size, mimetype, name} = image;
+
+				if (size > fileUploadConfig.IMAGE_MAX_SIZE) {
+					throw new ApiError(`file ${name} too big`, 400);
 				}
-			} else {
-				authorInfo.role = await roleRepository.getRoleId();
-			}
-			const validatedAuthor = authorValidator.createAuthorValidator.validate(authorInfo);
 
-			if (validatedAuthor.error) {
-				throw new ApiError(validatedAuthor.error.message, 400);
+				if (!fileUploadConfig.IMAGE_MIMETYPES.includes(mimetype)) {
+					throw new ApiError(`file ${name} has invalid format`, 400);
+				}
 			}
 
-			req.author = validatedAuthor.value;
 			next();
 		} catch (e) {
 			next(e);
 		}
 	},
-	isAuthorExistsDynamically: (fieldName, from = "body", dbField = fieldName) => async (req, res, next) => {
+	isAdmin: async (req, res, next) => {
 		try {
-			const fieldToSearch = req[from][fieldName];
+			const authorId = req.tokenInfo.author._id;
+			const role = await authorRepository.getRoleOfAuthor(authorId);
 
-			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
-
-			if (!author) {
-				throw new ApiError(`author width ${dbField} ${fieldToSearch} not found`, 400);
-			}
-
-			req.author = author;
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	isFieldUniqueDynamically: (field, from = "body", dbField = field) => async (req, res, next) => {
-		try {
-			const searchValue = req[from][field];
-
-			const author = await authorRepository.getOneByParams({[dbField]: searchValue});
-
-			if (author) {
-				throw new ApiError(`User with this ${field} already exists`, 400);
+			if (role.title !== authorRoles.ADMIN) {
+				throw new ApiError("You are not an admin", 401);
 			}
 
 			next();
@@ -88,44 +85,17 @@ module.exports = {
 			next(e);
 		}
 	},
-	isBlockTimeValid: async (req, res, next) => {
+	isAuthorExistsDynamically: (fieldName, from = "body", dbField = fieldName) => async (req, res, next) => {
 		try {
-			const validatedTime = commonValidator.blockDaysValidator.validate(req.body);
+			const fieldToSearch = req[from][fieldName];
 
-			if (validatedTime.error) {
-				throw new ApiError(validatedTime.error.message, 400);
-			}
-			const {days} = validatedTime.value;
+			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
 
-			req.date = await dateHelper.getSomeDaysLaterIso(days);
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	isAdmin: async (req, res, next) => {
-		try {
-			const authorId = req.tokenInfo.author._id;
-			const role = await authorRepository.getRoleOfAuthor(authorId);
-
-			if (role.title !== authorRoles.ADMIN) {
-				throw new ApiError("You are not an admin", 401);
+			if (!author) {
+				throw new ApiError(`author width ${dbField} ${fieldToSearch} not found`, 400);
 			}
 
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	isUpdateUserNameValid: async (req, res, next) => {
-		try {
-			const validatedUserName = authorValidator.userNameValidator.validate(req.body);
-
-			if (validatedUserName.error) {
-				throw new ApiError(validatedUserName.error.message, 400);
-			}
-
-			req.body.userName = validatedUserName.value.userName;
+			req.author = author;
 			next();
 		} catch (e) {
 			next(e);
@@ -144,33 +114,73 @@ module.exports = {
 			next(e);
 		}
 	},
-	checkBanStatus: async (req, res, next) => {
+	isBlockTimeValid: async (req, res, next) => {
 		try {
-			const {author} = req.tokenInfo;
+			const validatedTime = commonValidator.blockDaysValidator.validate(req.body);
 
-			const banStatus = await authorRepository.getBanStatus(author._id);
-
-			if (banStatus) {
-				throw new ApiError(`you are banned until ${banStatus}`, 400);
+			if (validatedTime.error) {
+				throw new ApiError(validatedTime.error.message, 400);
 			}
+			const {days} = validatedTime.value;
 
+			req.date = await dateHelper.getSomeDaysLaterIso(days);
 			next();
 		} catch (e) {
 			next(e);
 		}
 	},
-	isSubscribed: async (req, res, next) => {
+	isBodyComplainValid: async (req, res, next) => {
 		try {
-			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
+			const complainText = req.body;
 
-			if (author.id === authorId) {
-				throw new ApiError("you cant subscribe to yourself");
+			const validatedComplain = authorValidator.complainValidator.validate(complainText);
+
+			if (validatedComplain.error) {
+				throw new ApiError(validatedComplain.error.message, 400);
 			}
 
-			const {subscribers} = await authorRepository.getSubscribersId(authorId);
+			req.complain = validatedComplain.value;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isBodyCreateValid: async (req, res, next) => {
+		try {
+			const authorInfo = req.body;
+			const adminKey = req.get("Admin-key");
+			console.log(adminKey);
 
-			req.subscribed = !!subscribers.includes(author._id);
+			if (adminKey) {
+				if (adminKey === config.CREATE_ADMIN_KEY) {
+					authorInfo.role = await roleRepository.getRoleId("admin");
+				} else {
+					throw new ApiError("Not valid admin key", 400);
+				}
+			} else {
+				authorInfo.role = await roleRepository.getRoleId();
+			}
+			const validatedAuthor = authorValidator.createAuthorValidator.validate(authorInfo);
+
+			if (validatedAuthor.error) {
+				throw new ApiError(validatedAuthor.error.message, 400);
+			}
+
+			req.author = validatedAuthor.value;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isFieldUniqueDynamically: (field, from = "body", dbField = field) => async (req, res, next) => {
+		try {
+			const searchValue = req[from][field];
+
+			const author = await authorRepository.getOneByParams({[dbField]: searchValue});
+
+			if (author) {
+				throw new ApiError(`User with this ${field} already exists`, 400);
+			}
 
 			next();
 		} catch (e) {
@@ -195,17 +205,33 @@ module.exports = {
 			next(e);
 		}
 	},
-	isBodyComplainValid: async (req, res, next) => {
+	isSubscribed: async (req, res, next) => {
 		try {
-			const complainText = req.body;
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
 
-			const validatedComplain = authorValidator.complainValidator.validate(complainText);
-
-			if (validatedComplain.error) {
-				throw new ApiError(validatedComplain.error.message, 400);
+			if (author.id === authorId) {
+				throw new ApiError("you cant subscribe to yourself");
 			}
 
-			req.complain = validatedComplain.value;
+			const {subscribers} = await authorRepository.getSubscribersId(authorId);
+
+			req.subscribed = !!subscribers.includes(author._id);
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isUpdateUserNameValid: async (req, res, next) => {
+		try {
+			const validatedUserName = authorValidator.userNameValidator.validate(req.body);
+
+			if (validatedUserName.error) {
+				throw new ApiError(validatedUserName.error.message, 400);
+			}
+
+			req.body.userName = validatedUserName.value.userName;
 			next();
 		} catch (e) {
 			next(e);

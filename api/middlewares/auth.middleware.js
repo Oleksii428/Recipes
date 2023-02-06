@@ -5,43 +5,27 @@ const {tokenTypes, tokenActions} = require("../enums");
 const {authRepository, actionTokenRepository} = require("../repositories");
 
 module.exports = {
-	isBodyLoginValid: async (req, res, next) => {
+	checkAccessToken: async (req, res, next) => {
 		try {
-			const validatedBody = authValidator.createAuthValidator.validate(req.body);
+			const accessToken = req.get("Authorization");
 
-			if (validatedBody.error) {
-				throw new ApiError(validatedBody.error.message, 404);
+			if (!accessToken) {
+				throw new ApiError("No token", 401);
 			}
 
-			req.body = validatedBody.value;
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	isBodyForgotValid: async (req, res, next) => {
-		try {
-			const validatedBody = authValidator.createForgotValidator.validate(req.body);
+			authService.checkToken(accessToken, tokenTypes.accessToken);
 
-			if (validatedBody.error) {
-				throw new ApiError(validatedBody.error.message, 404);
+			const tokenInfo = await authRepository.findOneWidthAuthor({accessToken});
+
+			if (!tokenInfo) {
+				throw new ApiError("No token in data base", 401);
 			}
 
-			req.body = validatedBody.value;
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
-	isPasswordValid: async (req, res, next) => {
-		try {
-			const validatedBody = authValidator.createPasswordValidator.validate(req.body);
-
-			if (validatedBody.error) {
-				throw new ApiError(validatedBody.error.message, 401);
+			if (!tokenInfo.author) {
+				throw new ApiError("Unauthorized", 401);
 			}
 
-			req.body.password = validatedBody.value.password;
+			req.tokenInfo = tokenInfo;
 			next();
 		} catch (e) {
 			next(e);
@@ -75,32 +59,6 @@ module.exports = {
 			next(e);
 		}
 	},
-	checkAccessToken: async (req, res, next) => {
-		try {
-			const accessToken = req.get("Authorization");
-
-			if (!accessToken) {
-				throw new ApiError("No token", 401);
-			}
-
-			authService.checkToken(accessToken, tokenTypes.accessToken);
-
-			const tokenInfo = await authRepository.findOneWidthAuthor({accessToken});
-
-			if (!tokenInfo) {
-				throw new ApiError("No token in data base", 401);
-			}
-
-			if (!tokenInfo.author) {
-				throw new ApiError("Unauthorized", 401);
-			}
-
-			req.tokenInfo = tokenInfo;
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
 	checkRefreshToken: async (req, res, next) => {
 		try {
 			const refreshToken = req.get("Authorization");
@@ -123,6 +81,34 @@ module.exports = {
 			next(e);
 		}
 	},
+	isBodyForgotValid: async (req, res, next) => {
+		try {
+			const validatedBody = authValidator.forgotValidator.validate(req.body);
+
+			if (validatedBody.error) {
+				throw new ApiError(validatedBody.error.message, 404);
+			}
+
+			req.body = validatedBody.value;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isBodyLoginValid: async (req, res, next) => {
+		try {
+			const validatedBody = authValidator.createAuthValidator.validate(req.body);
+
+			if (validatedBody.error) {
+				throw new ApiError(validatedBody.error.message, 404);
+			}
+
+			req.body = validatedBody.value;
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 	isMongoIdValid: (fieldName = "mongoId") => async (req, res, next) => {
 		try {
 			const fieldToSearch = req.params[fieldName];
@@ -133,6 +119,20 @@ module.exports = {
 				throw new ApiError(validatedId.error.message, 400);
 			}
 
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	isPasswordValid: async (req, res, next) => {
+		try {
+			const validatedBody = authValidator.passwordValidator.validate(req.body);
+
+			if (validatedBody.error) {
+				throw new ApiError(validatedBody.error.message, 401);
+			}
+
+			req.body.password = validatedBody.value.password;
 			next();
 		} catch (e) {
 			next(e);

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const fileUpload = require("express-fileupload");
 const swaggerUI = require("swagger-ui-express");
 const mongoose = require("mongoose");
 
@@ -19,6 +20,7 @@ const swaggerJson = require("./swagger.json");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(fileUpload());
 
 app.get("/", (req, res) => {
 	res.json(`Listening port: ${PORT}`);

@@ -8,11 +8,11 @@ module.exports = {
 		email: Joi.string().regex(regex.EMAIL).lowercase().trim(),
 		password: Joi.string()
 	}).xor("userName", "email"),
-	createForgotValidator: Joi.object({
+	forgotValidator: Joi.object({
 		userName: Joi.string().trim(),
 		email: Joi.string().regex(regex.EMAIL).lowercase().trim()
 	}).xor("userName", "email"),
-	createPasswordValidator: Joi.object({
+	passwordValidator: Joi.object({
 		password: Joi.string().regex(regex.PASSWORD).required()
 	})
 };

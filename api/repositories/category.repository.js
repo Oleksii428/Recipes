@@ -1,6 +1,8 @@
 const {Category} = require("../dataBases");
 
 module.exports = {
+	create: async (newCategory) => Category.create(newCategory),
+	findOne: async (filter = {}) => Category.findOne(filter),
 	getByParams: async (query = {}) => {
 		const {title} = query;
 		let findObj = {};
@@ -11,8 +13,6 @@ module.exports = {
 			};
 		}
 
-		return Category.find(findObj).sort("title")
-	},
-	create: async (newCategory) => Category.create(newCategory),
-	findOne: async (filter = {}) => Category.findOne(filter)
+		return Category.find(findObj).sort("title");
+	}
 };
