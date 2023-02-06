@@ -149,7 +149,6 @@ module.exports = {
 		try {
 			const authorInfo = req.body;
 			const adminKey = req.get("Admin-key");
-			console.log(adminKey);
 
 			if (adminKey) {
 				if (adminKey === config.CREATE_ADMIN_KEY) {

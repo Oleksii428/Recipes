@@ -5,6 +5,7 @@ const {authMiddleware, stageMiddleware} = require("../middlewares");
 
 router.post(
 	"/",
+	stageMiddleware.checkPhoto,
 	authMiddleware.checkAccessToken,
 	stageMiddleware.isBodyCreateValid,
 	stageController.create

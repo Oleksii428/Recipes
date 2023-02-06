@@ -1,3 +1,4 @@
 module.exports = {
-	AUTHORS: "authors"
+	AUTHORS: "authors",
+	STAGES: "stages"
 };

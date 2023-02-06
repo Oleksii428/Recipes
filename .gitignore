@@ -3,3 +3,4 @@ Recipes.iml
 api/node_modules
 api/package-lock.json
 api/.env
+/api/uploads/

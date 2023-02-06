@@ -167,7 +167,7 @@ module.exports = {
 			const {avatar} = req.files;
 			const {author} = req.tokenInfo;
 
-			const fileName = fileHelper.buildFileName(avatar.name, uploadFileTypes.AUTHORS, "63da04aeaa1a22713b0ac93d");
+			const fileName = fileHelper.buildFileName(avatar.name, uploadFileTypes.AUTHORS, author.id);
 
 			await avatar.mv(path.join(process.cwd(), "uploads", fileName));
 			const newMedia = await mediaRepository.create({path: fileName});
