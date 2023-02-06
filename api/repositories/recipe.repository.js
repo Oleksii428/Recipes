@@ -1,6 +1,7 @@
 const {Recipe} = require("../dataBases");
 
 module.exports = {
+	addPhoto: async (recipeId, mediaId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"gallery": mediaId}}, {new: true}),
 	addReview: async (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {reviews: reviewId}}),
 	create: async (newRecipe) => Recipe.create(newRecipe),
 	deleteById: async (id) => {

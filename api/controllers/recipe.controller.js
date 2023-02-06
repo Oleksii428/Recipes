@@ -11,6 +11,24 @@ const {uploadFileTypes} = require("../enums");
 const path = require("node:path");
 
 module.exports = {
+	addPhotos: async (req, res, next) => {
+		try {
+			const {recipe, files} = req;
+
+			const imagesToUpload = Object.values(files);
+
+			for (const photo of imagesToUpload) {
+				const fileName = fileHelper.buildFileName(photo.name, uploadFileTypes.RECIPES, recipe.id);
+				const newMedia = await mediaRepository.create({"path": fileName});
+				await photo.mv(path.join(process.cwd(), "uploads", fileName));
+				await recipeRepository.addPhoto(recipe._id, newMedia._id);
+			}
+
+			res.json("ok");
+		} catch (e) {
+			next(e);
+		}
+	},
 	getByQuery: async (req, res, next) => {
 		try {
 			const data = await recipeRepository.getByQuery(req.query);

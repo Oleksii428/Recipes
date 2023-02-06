@@ -48,7 +48,16 @@ router.delete(
 	recipeMiddleware.checkCreator,
 	recipeController.delete
 );
-
+router.patch(
+	"/:recipeId/addPhotos",
+	mediaMiddleware.checkPhotos,
+	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeMiddleware.checkCreator,
+	recipeController.addPhotos
+);
 router.post(
 	"/:recipeId/addReview",
 	mediaMiddleware.checkPhoto,
