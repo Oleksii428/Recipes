@@ -33,5 +33,19 @@ module.exports = {
 		} catch (e) {
 			next(e);
 		}
+	},
+	isExists: async (req, res, next) => {
+		try {
+			const {category} = req.recipe;
+			const findCategory = await categoryRepository.findOne({_id: category});
+
+			if (!findCategory) {
+				throw new ApiError(`category ${req.category} not found`, 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
 	}
 };

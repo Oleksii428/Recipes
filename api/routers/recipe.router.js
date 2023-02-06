@@ -1,6 +1,12 @@
 const router = require("express").Router();
 
-const {authMiddleware, recipeMiddleware, authorMiddleware, reviewMiddleware} = require("../middlewares");
+const {
+	authMiddleware,
+	recipeMiddleware,
+	authorMiddleware,
+	reviewMiddleware,
+	kitchenMiddleware, categoryMiddleware, stageMiddleware
+} = require("../middlewares");
 const {recipeController} = require("../controllers");
 
 router.get(
@@ -12,6 +18,9 @@ router.post(
 	authMiddleware.checkAccessToken,
 	authorMiddleware.checkBanStatus,
 	recipeMiddleware.isBodyCreateValid,
+	kitchenMiddleware.isExists,
+	categoryMiddleware.isExists,
+	stageMiddleware.isExistsMany,
 	recipeController.create
 );
 
