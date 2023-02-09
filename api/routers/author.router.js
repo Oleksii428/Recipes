@@ -31,10 +31,27 @@ router.patch(
 router.post(
 	"/upload-avatar",
 	authorMiddleware.checkUploadImage,
-	authMiddleware.isMongoIdValid("authorId"),
 	authMiddleware.checkAccessToken,
 	authorMiddleware.checkBanStatus,
 	authorController.uploadAvatar
+);
+
+router.get(
+	"/subscribers",
+	authMiddleware.checkAccessToken,
+	authorController.getSubscribers
+);
+
+router.get(
+	"/recipes",
+	authMiddleware.checkAccessToken,
+	authorController.getRecipes
+);
+
+router.get(
+	"/book",
+	authMiddleware.checkAccessToken,
+	authorController.getBook
 );
 
 router.patch(

@@ -2,10 +2,21 @@ const {Recipe} = require("../dataBases");
 
 module.exports = {
 	addMedia: async (recipeId, mediaId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"gallery": mediaId}}, {new: true}),
-	addReview: async (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {reviews: reviewId}}),
+	addReview: async (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"reviews": reviewId}}),
 	create: async (newRecipe) => Recipe.create(newRecipe),
 	deleteById: async (id) => {
 		await Recipe.findByIdAndDelete(id);
+	},
+	getById: async (id) => Recipe.findById(id).populate("category").populate("kitchen").populate("gallery").populate("stages"),
+	getReviews: async (id) => {
+		const {reviews} = await Recipe.findById(id).select("reviews").populate({
+			path: "reviews",
+			populate: {
+				path: "photo owner",
+				select: "path userName avatar"
+			},
+		});
+		return reviews;
 	},
 	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator"),
 	getByQuery: async (query) => {
@@ -155,11 +166,10 @@ module.exports = {
 			count
 		};
 	},
+	getByAuthorId: async (authorId) => Recipe.find({creator: authorId}).populate("category").populate("kitchen").populate("gallery").populate("stages"),
 	getOneByParams: async (filter = {}) => Recipe.findOne(filter),
 	moderate: async (id, status) => Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}}),
-	removeReview: async (recipeId, reviewId) => {
-		return Recipe.findByIdAndUpdate(recipeId, {$pull: {reviews: reviewId}});
-	},
+	removeReview: async (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$pull: {reviews: reviewId}}),
 	setBookCount: async (id, number) => Recipe.findByIdAndUpdate(id, {$inc: {"bookCount": number}}),
 	setRating: async (id) => {
 		const {reviews} = await Recipe.findById(id).populate("reviews").select("reviews -_id");

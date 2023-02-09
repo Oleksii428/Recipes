@@ -2,10 +2,10 @@ const {authorRepository, recipeRepository, mediaRepository} = require("../reposi
 const {authService, emailService} = require("../services");
 const {emailActions, uploadFileTypes} = require("../enums");
 const {dateHelper, fileHelper} = require("../helpers");
-const {authorPresenter} = require("../presenters");
 const {ApiError} = require("../errors");
 const {config} = require("../configs");
 const path = require("node:path");
+const {recipePresenter, authorPresenter, bookPresenter} = require("../presenters");
 
 module.exports = {
 	block: async (req, res, next) => {
@@ -89,13 +89,39 @@ module.exports = {
 			next(e);
 		}
 	},
+	getBook: async (req, res, next) => {
+		try {
+			const book = await authorRepository.getBook(req.tokenInfo.author._id);
+
+			res.json(bookPresenter.presentMany(book));
+		} catch (e) {
+			next(e);
+		}
+	},
 	getByParams: async (req, res, next) => {
 		try {
 			const data = await authorRepository.getListByParams(req.query);
+			const {authors, page, count} = data;
 
-			const presentAuthors = authorPresenter.presentMany(data.authors);
+			res.json({authors, page, count});
+		} catch (e) {
+			next(e);
+		}
+	},
+	getRecipes: async (req, res, next) => {
+		try {
+			let recipes = await recipeRepository.getByAuthorId(req.tokenInfo.author._id);
+			recipes = recipePresenter.presentMany(recipes);
+			res.json(recipes);
+		} catch (e) {
+			next(e);
+		}
+	},
+	getSubscribers: async (req, res, next) => {
+		try {
+			const subscribers = await authorRepository.getSubscribers(req.tokenInfo.author._id);
 
-			res.json({authors: presentAuthors, page: data.page});
+			res.json(subscribers);
 		} catch (e) {
 			next(e);
 		}

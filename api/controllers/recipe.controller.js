@@ -9,6 +9,7 @@ const {config} = require("../configs");
 const {fileHelper} = require("../helpers");
 const {uploadFileTypes} = require("../enums");
 const path = require("node:path");
+const {recipePresenter} = require("../presenters");
 
 module.exports = {
 	addPhotos: async (req, res, next) => {
@@ -54,7 +55,18 @@ module.exports = {
 	},
 	getById: async (req, res, next) => {
 		try {
-			res.json(req.recipe);
+			const recipe = await recipeRepository.getById(req.params.recipeId);
+
+			res.json(recipePresenter.present(recipe));
+		} catch (e) {
+			next(e);
+		}
+	},
+	getReviews: async (req, res, next) => {
+		try {
+			const reviews = await recipeRepository.getReviews(req.params.recipeId);
+
+			res.json(reviews);
 		} catch (e) {
 			next(e);
 		}

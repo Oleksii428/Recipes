@@ -2,7 +2,8 @@ const present = (subscriber) => {
 	return {
 		_id: subscriber._id,
 		userName: subscriber.userName,
-		email: subscriber.email
+		email: subscriber.email,
+		avatar: subscriber.avatar
 	};
 };
 

@@ -38,6 +38,21 @@ module.exports = {
 		const {block} = await Author.findById(id).select("block -_id");
 		return block;
 	},
+	getBook: async (id) => {
+		const {book} = await Author.findById(id).select("book -_id").populate({
+			path: "book",
+			populate: {
+				path: "category kitchen gallery stages",
+				select: "title number photo description",
+				populate: {
+					strictPopulate: false,
+					path: "photo",
+					select: "-_id path"
+				}
+			}
+		});
+		return book;
+	},
 	getBlockedAuthors: async () => {
 		return Author.find({block: {$ne: ""}});
 	},
@@ -47,30 +62,78 @@ module.exports = {
 	getListByParams: async (query) => {
 		const {page = "1", name} = query;
 
+		const limit = 5;
 		let findObj = {};
 
 		if (name) {
 			findObj = {
-				...findObj,
 				userName: new RegExp(name)
 			};
 		}
 
-		const authors = await Author.find(findObj).limit(5).skip((+page - 1) * 5);
+		const authors = await Author.aggregate([
+			{
+				$match: findObj
+			},
+			{
+				$limit: limit
+			},
+			{
+				$skip: (+page - 1) * limit
+			},
+			{
+				$lookup: {
+					from: "roles",
+					localField: "role",
+					foreignField: "_id",
+					as: "role"
+				}
+			},
+			{
+				$unwind: "$role"
+			},
+			{
+				$addFields: {
+					totalLikes: {$size: "$likes"},
+					totalSubscriptions: {$size: "$subscriptions"},
+					totalSubscribers: {$size: "$subscribers"},
+					totalRecipes: {$size: "$recipes"},
+					totalBook: {$size: "$book"},
+				}
+			},
+			{
+				$project: {
+					userName: 1,
+					email: 1,
+					avatar: 1,
+					role: "$role.title",
+					totalLikes: 1,
+					totalSubscriptions: 1,
+					totalSubscribers: 1,
+					totalRecipes: 1,
+					totalBook: 1,
+					block: 1,
+					createdAt: 1,
+				}
+			},
+		]);
+
+		const count = await Author.count(findObj);
 		return {
 			authors,
-			page
+			page,
+			count
 		};
 	},
 	getOneByParams: async (filter) => {
 		return Author.findOne(filter);
 	},
 	getRoleOfAuthor: async (authorId) => {
-		const {role} = await Author.findById(authorId).populate("role");
+		const {role} = await Author.findById(authorId).populate("role").lean();
 		return role;
 	},
 	getSubscribers: async (id) => {
-		const author = await Author.findById(id).populate("subscribers").select("subscribers");
+		const author = await Author.findById(id).populate("subscribers").select("subscribers").lean();
 		return subscriberPresenter.presentMany(author.subscribers);
 	},
 	getSubscribersId: async (id) => {

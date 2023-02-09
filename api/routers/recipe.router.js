@@ -27,9 +27,15 @@ router.post(
 router.get(
 	"/:recipeId",
 	authMiddleware.isMongoIdValid("recipeId"),
-	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeController.getById
 );
+
+router.get(
+	"/:recipeId/reviews",
+	authMiddleware.isMongoIdValid("recipeId"),
+	recipeController.getReviews
+);
+
 router.put(
 	"/:recipeId",
 	authMiddleware.checkAccessToken,
