@@ -5,7 +5,8 @@ const OAuthSchema = new Schema({
 	refreshToken: String,
 	author: {type: Schema.Types.ObjectId, ref: "Author"}
 }, {
-	timestamps: true
+	timestamps: true,
+	versionKey: false
 });
 
 module.exports = model("Auth", OAuthSchema);

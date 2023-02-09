@@ -5,7 +5,8 @@ const ActionTokenSchema = new Schema({
 	tokenType: {type: String},
 	author: {type: Schema.Types.ObjectId, ref: "Author"}
 }, {
-	timestamps: true
+	timestamps: true,
+	versionKey: false
 });
 
 module.exports = model("Action_Token", ActionTokenSchema);
