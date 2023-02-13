@@ -1,0 +1,1918 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Recipes",
+    "description": "Site where people can shares recipes"
+  },
+  "definitions": {
+    "ApiError": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "error text"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 400
+        }
+      }
+    },
+    "MongoId": {
+      "type": "string",
+      "example": "63db2a91751809b97f5a7e12"
+    },
+    "Author": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "$ref": "#/definitions/MongoId"
+        },
+        "userName": {
+          "type": "string",
+          "example": "john_01"
+        },
+        "email": {
+          "type": "string",
+          "example": "john1999@mail.com"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "https://www.google.com/image"
+        },
+        "block": {
+          "type": "string",
+          "example": "2023-02-10T12:45:02.129Z"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-02-06T12:32:16.369Z"
+        },
+        "totalLikes": {
+          "type": "number",
+          "example": 1
+        },
+        "totalSubscriptions": {
+          "type": "number",
+          "example": 1
+        },
+        "totalSubscribers": {
+          "type": "number",
+          "example": 1
+        },
+        "totalRecipes": {
+          "type": "number",
+          "example": 1
+        },
+        "totalBook": {
+          "type": "number",
+          "example": 1
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        }
+      }
+    },
+    "Recipe": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "$ref": "#/definitions/MongoId"
+        },
+        "title": {
+          "type": "string",
+          "example": "borsh"
+        },
+        "time": {
+          "type": "number",
+          "example": 90
+        },
+        "servings": {
+          "type": "number",
+          "example": 3
+        },
+        "description": {
+          "type": "string",
+          "example": "meal description"
+        },
+        "category": {
+          "type": "string",
+          "example": "lunch"
+        },
+        "kitchen": {
+          "type": "string",
+          "example": "ukrainian"
+        },
+        "ingredients": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "1 cabbage"
+          }
+        },
+        "gallery": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "recipes/63e0f73b03a811f4473b065b/1675687868399.jpg"
+          }
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "number": {
+                "type": "number",
+                "example": 1
+              },
+              "photo": {
+                "type": "string",
+                "example": "stages/63e0f73b03a811f4473b065b/1675687868399.jpg"
+              },
+              "descriptions": {
+                "type": "string",
+                "example": "stage description text"
+              }
+            }
+          }
+        },
+        "rating": {
+          "type": "number",
+          "example": 4
+        },
+        "bookCount": {
+          "type": "number",
+          "example": 1
+        },
+        "reviewsCount": {
+          "type": "number",
+          "example": 2
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-02-06T12:48:59.671Z"
+        }
+      }
+    },
+    "TokenInfo": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImJhb2JhYl8wMSIsImlhdCI6MTY3NjEzMTY2NiwiZXhwIjoxNjc2MTMyNTY2fQ.BkAVPOzOj40iY7bGrSQp4lgKv5Txc4QbZuYszJ5f5P4"
+        },
+        "refreshToken": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImJhb2JhYl8wMSIsImlhdCI6MTY3NjEzMTY2NiwiZXhwIjoxNjc4NzIzNjY2fQ.lzEFuKEiLU52pRHZaUHOs-mX6WCfIsE5Z6weWPwZgk0"
+        },
+        "author": {
+          "type": "string",
+          "example": "63e7bd52d285a02386e85f55"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-02-11T16:07:46.751Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-02-11T16:07:46.751Z"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "description": "login",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Login",
+        "parameters": [
+          {
+            "name": "userName",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TokenInfo"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "description": "logout",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Logout",
+        "parameters": [
+          {
+            "name": "accessToken",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 204
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "description": "refresh",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Refresh",
+        "parameters": [
+          {
+            "name": "accessToken",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TokenInfo"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/forgot": {
+      "post": {
+        "description": "Send forgot email",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "ForgotPassword",
+        "parameters": [
+          {
+            "name": "email",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "userName",
+            "type": "string",
+            "in": "formData",
+            "required": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Check your email"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Change password",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "SetPassword",
+        "parameters": [
+          {
+            "name": "token",
+            "type": "string",
+            "in": "query",
+            "required": true
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Password has been restored. Try to login again"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors": {
+      "get": {
+        "description": "Get authors by params",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "GetAuthorsByParams",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "authors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Author"
+                  }
+                },
+                "page": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "count": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create author",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "CreateAuthor",
+        "parameters": [
+          {
+            "name": "AdminKey",
+            "type": "string",
+            "in": "header"
+          },
+          {
+            "name": "userName",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "user_name_01"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "useremail@email.com"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2023-02-10T08:34:45.782Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete author",
+        "tags": [
+          "Author"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No content",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No Content"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 204
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/userName": {
+      "patch": {
+        "description": "change userName",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "UserName",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "userName",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "userName has been changed to new_userName"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/upload-avatar": {
+      "post": {
+        "description": "Upload avatar",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "UploadAvatar",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "avatar",
+            "type": "file",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "uploaded"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/subscribers": {
+      "get": {
+        "description": "Get author's subscribers",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "GetSubscribers",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "_id": {
+                  "$ref": "#/definitions/MongoId"
+                },
+                "userName": {
+                  "type": "string",
+                  "example": "john_01"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john1999@mail.com"
+                },
+                "avatar": {
+                  "type": "string",
+                  "example": "https://www.google.com/image"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/recipes": {
+      "get": {
+        "description": "Get author's recipes",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "GetRecipesOfAuthor",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Recipe"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/book": {
+      "get": {
+        "description": "Get recipes in author's book",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "GetBook",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "borsh"
+                  },
+                  "time": {
+                    "type": "number",
+                    "example": 90
+                  },
+                  "servings": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "meal description"
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "lunch"
+                  },
+                  "kitchen": {
+                    "type": "string",
+                    "example": "ukrainian"
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "1 cabbage"
+                    }
+                  },
+                  "gallery": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "recipes/63e0f73b03a811f4473b065b/1675687868399.jpg"
+                    }
+                  },
+                  "stages": {
+                    "type": "array",
+                    "items": {
+                      "properties": {
+                        "number": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "photo": {
+                          "type": "string",
+                          "example": "stages/63e0f73b03a811f4473b065b/1675687868399.jpg"
+                        },
+                        "descriptions": {
+                          "type": "string",
+                          "example": "stage description text"
+                        }
+                      }
+                    }
+                  },
+                  "rating": {
+                    "type": "number",
+                    "example": 4
+                  },
+                  "bookCount": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "example": "2023-02-06T12:48:59.671Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/{authorId}/block": {
+      "patch": {
+        "description": "Block author",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "BlockAuthor",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "days",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "author user_name_01 has been baned until Feb 11, 2023 11:05 AM"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/{authorId}/subscribe-toggle": {
+      "patch": {
+        "description": "Subscribe or unsubscribe",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "SubscribeToggle",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "subscribed"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/{authorId}/like-toggle": {
+      "patch": {
+        "description": "Like or unlike author",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "likeToggle",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "liked"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/{authorId}/book-toggle": {
+      "patch": {
+        "description": "Add recipe to book or remove",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "BookToggle",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "recipe has been added to book"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/authors/{authorId}/complain": {
+      "patch": {
+        "description": "Complain to author",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "Complain",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "complain sent"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes": {
+      "get": {
+        "description": "Get moderated recipes by query",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "GetRecipesByQuery",
+        "parameters": [
+          {
+            "name": "page",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "category",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "kitchen",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "ingredients",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "sort",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "sortType",
+            "type": "string",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "recipes": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Recipe"
+                  }
+                },
+                "page": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "count": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create recipe",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "CreateRecipe",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "time",
+            "type": "number",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "servings",
+            "type": "number",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "category",
+            "type": "string",
+            "format": "mongoId",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "kitchen",
+            "type": "string",
+            "format": "mongoId",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "ingredients",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "stages",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "massage": {
+                  "type": "string",
+                  "example": "Created"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 201
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}": {
+      "get": {
+        "description": "Get recipes by id",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "GetRecipesById",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Recipe"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update recipe by id",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "UpdateRecipesById",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "time",
+            "type": "number",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "servings",
+            "type": "number",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "ingredients",
+            "type": "array",
+            "in": "formData",
+            "items": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "stages",
+            "type": "array",
+            "in": "formData",
+            "items": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "updated"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete recipe by id",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "DeleteRecipesById",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 204
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}/addPhotos": {
+      "patch": {
+        "description": "Add photos to recipe gallery",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "AddPhotoToGallery",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "photo",
+            "type": "file",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}/addVideo": {
+      "patch": {
+        "description": "Add video to recipe gallery",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "AddVideoToGallery",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "video",
+            "type": "file",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}/moderation": {
+      "patch": {
+        "description": "Moderate recipe as admin",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "ModerateRecipe",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "ok"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/reviews": {
+      "get": {
+        "description": "Get reviews by recipe id",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "GetReviews",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "_id": {
+                  "$ref": "#/definitions/MongoId"
+                },
+                "text": {
+                  "type": "string",
+                  "example": "review text"
+                },
+                "photo": {
+                  "type": "string",
+                  "example": "reviews/63e0f76a03a811f4473b0664/1675687786936.jpg"
+                },
+                "owner": {
+                  "properties": {
+                    "userName": {
+                      "type": "string",
+                      "example": "user_name"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": "authors/63e0f3ab03a811f4473b05dc/1676022066729.jpg"
+                    }
+                  }
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2023-02-06T12:49:46.923Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}/addReview": {
+      "post": {
+        "description": "Add review to recipe by id",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "AddReview",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "photo",
+            "type": "file",
+            "in": "formData",
+            "required": false
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "rating",
+            "type": "number",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/{recipeId}/removeReview/{reviewId}": {
+      "delete": {
+        "description": "Delete review from recipe by id",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "DeleteReviewById",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "reviewId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/stages/": {
+      "post": {
+        "description": "Create stage",
+        "tags": [
+          "Stage"
+        ],
+        "operationId": "CreateStage",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "image",
+            "type": "file",
+            "in": "formData",
+            "required": false
+          },
+          {
+            "name": "number",
+            "type": "number",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Bad request",
+            "schema": {
+              "properties": {
+                "_id": {
+                  "$ref": "#/definitions/MongoId"
+                },
+                "number": {
+                  "type": "number",
+                  "example": 1
+                },
+                "photo": {
+                  "type": "string",
+                  "example": "63e9eaf06038c07b443ae796"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "description text"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/kitchens": {
+      "get": {
+        "description": "Get kitchens",
+        "tags": [
+          "Kitchen"
+        ],
+        "operationId": "GetKitchens",
+        "parameters": [
+          {
+            "name": "title",
+            "type": "string",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "ukrainian"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create kitchen",
+        "tags": [
+          "Kitchen"
+        ],
+        "operationId": "CreateKitchen",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "ukrainian"
+                },
+                "_id": {
+                  "$ref": "#/definitions/MongoId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "description": "Get categories",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "GetCategories",
+        "parameters": [
+          {
+            "name": "title",
+            "type": "string",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "lunch"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create category",
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CreateCategory",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "ukrainian"
+                },
+                "_id": {
+                  "$ref": "#/definitions/MongoId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    }
+  }
+}
