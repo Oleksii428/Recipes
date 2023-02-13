@@ -15,7 +15,7 @@ module.exports = {
 				const {size, mimetype, name} = image;
 
 				if (size > fileUploadConfig.IMAGE_MAX_SIZE) {
-					throw new ApiError(`file ${name} too big`, 400);
+					throw new ApiError(`file ${name} too big. Max size: ${fileUploadConfig.IMAGE_MAX_SIZE / 1024 / 1024}mb`, 400);
 				}
 
 				if (!fileUploadConfig.IMAGE_MIMETYPES.includes(mimetype)) {
@@ -40,7 +40,7 @@ module.exports = {
 				const {size, mimetype, name} = photo;
 
 				if (size > fileUploadConfig.IMAGE_MAX_SIZE) {
-					throw new ApiError(`file ${name} too big`, 400);
+					throw new ApiError(`file ${name} too big. Max size: ${fileUploadConfig.IMAGE_MAX_SIZE / 1024 / 1024}mb`, 400);
 				}
 
 				if (!fileUploadConfig.IMAGE_MIMETYPES.includes(mimetype)) {
@@ -68,7 +68,7 @@ module.exports = {
 			const {size, mimetype, name} = imagesToUpload[0];
 
 			if (size > fileUploadConfig.VIDEO_MAX_SIZE) {
-				throw new ApiError(`file ${name} too big`, 400);
+				throw new ApiError(`file ${name} too big. Max size: ${fileUploadConfig.VIDEO_MAX_SIZE / 1024 / 1024}mb`, 400);
 			}
 
 			if (!fileUploadConfig.VIDEO_MIMETYPES.includes(mimetype)) {

@@ -33,7 +33,7 @@ module.exports = {
 				const {size, mimetype, name} = image;
 
 				if (size > fileUploadConfig.IMAGE_MAX_SIZE) {
-					throw new ApiError(`file ${name} too big`, 400);
+					throw new ApiError(`file ${name} too big. Max size: ${fileUploadConfig.IMAGE_MAX_SIZE / 1024 / 1024}mb`, 400);
 				}
 
 				if (!fileUploadConfig.IMAGE_MIMETYPES.includes(mimetype)) {
