@@ -1,4 +1,5 @@
 const {Recipe} = require("../dataBases");
+const {recipePresenter} = require("../presenters");
 
 module.exports = {
 	addMedia: async (recipeId, mediaId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"gallery": mediaId}}, {new: true}),
@@ -13,14 +14,18 @@ module.exports = {
 			path: "reviews",
 			populate: {
 				path: "photo owner",
-				select: "path userName avatar"
+				select: "path userName avatar",
+				populate: {
+					strictPopulate: false,
+					path: "avatar"
+				}
 			},
 		});
 		return reviews;
 	},
-	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator"),
+	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator").lean(),
 	getByQuery: async (query) => {
-		const {page = 1, title, category, kitchen, ingredients, sort = "rating", sortType = 1} = query;
+		const {page = "1", title, category, kitchen, ingredients, sort = "rating", sortType = "1"} = query;
 
 		const limit = 5;
 		let findObj = {};
@@ -55,7 +60,7 @@ module.exports = {
 			};
 		}
 
-		const recipes = await Recipe.aggregate([
+		let recipes = await Recipe.aggregate([
 			{
 				$match: {
 					isModerated: true
@@ -87,14 +92,6 @@ module.exports = {
 			},
 			{
 				$lookup: {
-					from: "reviews",
-					localField: "reviews",
-					foreignField: "_id",
-					as: "reviews"
-				}
-			},
-			{
-				$lookup: {
 					from: "authors",
 					localField: "creator",
 					foreignField: "_id",
@@ -119,17 +116,26 @@ module.exports = {
 				$unwind: "$creator"
 			},
 			{
+				$match: findObj
+			},
+			{
+				$sort: {
+					[sort]: +sortType
+				}
+			},
+			{
+				$addFields: {
+					totalReviews: {$size: "$reviews"}
+				}
+			},
+			{
 				$project: {
 					title: 1,
 					time: 1,
 					servings: 1,
-					descriptions: 1,
-					category: {
-						title: 1
-					},
-					kitchen: {
-						title: 1
-					},
+					description: 1,
+					category: "$category.title",
+					kitchen: "$kitchen.title",
 					ingredients: 1,
 					gallery: 1,
 					stages: {
@@ -139,17 +145,13 @@ module.exports = {
 					},
 					rating: 1,
 					bookCount: 1,
-					reviews: 1,
+					reviewsCount: 1,
 					creator: {
 						userName: 1,
 						avatar: 1
 					},
-					createdAt: 1,
-					updatedAt: 1
+					createdAt: 1
 				}
-			},
-			{
-				$match: findObj
 			},
 			{
 				$skip: (+page - 1) * limit

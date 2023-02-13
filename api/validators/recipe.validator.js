@@ -5,7 +5,7 @@ const {regex} = require("../enums");
 module.exports = {
 	createRecipeValidator: Joi.object({
 		title: Joi.string().trim().min(2).max(20).required().lowercase(),
-		time: Joi.number().min(1).max(500).required(),
+		time: Joi.number().integer().min(1).max(500).required(),
 		servings: Joi.number().min(1).max(50).required(),
 		description: Joi.string().min(10).max(300).required(),
 		category: Joi.string().regex(regex.MONGO_ID).required(),

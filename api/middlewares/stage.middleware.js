@@ -6,8 +6,7 @@ const {stageRepository} = require("../repositories");
 module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
-			const stageInfo = JSON.parse(req.body.stage);
-			const validatedBody = stageValidator.createStageValidator.validate(stageInfo);
+			const validatedBody = stageValidator.createStageValidator.validate(req.body);
 
 			if (validatedBody.error) {
 				throw new ApiError(validatedBody.error.message, 400);

@@ -22,7 +22,7 @@ module.exports = {
 	},
 	isBodyCreateValid: async (req, res, next) => {
 		try {
-			let reviewInfo = JSON.parse(req.body.review);
+			let reviewInfo = req.body;
 			reviewInfo = {...reviewInfo, owner: req.tokenInfo.author.id};
 
 			const validatedBody = reviewValidator.createReviewValidator.validate(reviewInfo);

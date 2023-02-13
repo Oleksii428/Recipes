@@ -60,8 +60,7 @@ module.exports = {
 		return Author.findById(id).select("likes -_id");
 	},
 	getListByParams: async (query) => {
-		const {page = "1", name} = query;
-
+		const {page = "1", name, sort = "totalLikes"} = query;
 		const limit = 5;
 		let findObj = {};
 
@@ -99,6 +98,11 @@ module.exports = {
 					totalSubscribers: {$size: "$subscribers"},
 					totalRecipes: {$size: "$recipes"},
 					totalBook: {$size: "$book"},
+				}
+			},
+			{
+				$sort: {
+					[sort]: -1
 				}
 			},
 			{

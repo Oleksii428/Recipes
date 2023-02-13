@@ -13,6 +13,7 @@ router.get(
 	"/",
 	recipeController.getByQuery
 );
+
 router.post(
 	"/",
 	authMiddleware.checkAccessToken,
@@ -30,12 +31,6 @@ router.get(
 	recipeController.getById
 );
 
-router.get(
-	"/:recipeId/reviews",
-	authMiddleware.isMongoIdValid("recipeId"),
-	recipeController.getReviews
-);
-
 router.put(
 	"/:recipeId",
 	authMiddleware.checkAccessToken,
@@ -45,6 +40,7 @@ router.put(
 	recipeMiddleware.checkCreator,
 	recipeController.update
 );
+
 router.delete(
 	"/:recipeId",
 	authMiddleware.isMongoIdValid("recipeId"),
@@ -54,6 +50,13 @@ router.delete(
 	recipeMiddleware.checkCreator,
 	recipeController.delete
 );
+
+router.get(
+	"/:recipeId/reviews",
+	authMiddleware.isMongoIdValid("recipeId"),
+	recipeController.getReviews
+);
+
 router.patch(
 	"/:recipeId/addPhotos",
 	mediaMiddleware.checkPhotos,
@@ -64,6 +67,7 @@ router.patch(
 	recipeMiddleware.checkCreator,
 	recipeController.addPhotos
 );
+
 router.patch(
 	"/:recipeId/addVideo",
 	mediaMiddleware.checkVideo,
@@ -74,6 +78,17 @@ router.patch(
 	recipeMiddleware.checkCreator,
 	recipeController.addVideo
 );
+
+router.patch(
+	"/:recipeId/moderation",
+	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.isAdmin,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeMiddleware.isModerated,
+	recipeController.moderate
+);
+
 router.post(
 	"/:recipeId/addReview",
 	mediaMiddleware.checkPhoto,
@@ -84,6 +99,7 @@ router.post(
 	reviewMiddleware.isBodyCreateValid,
 	recipeController.addReview
 );
+
 router.delete(
 	"/:recipeId/removeReview/:reviewId",
 	authMiddleware.isMongoIdValid("recipeId"),
@@ -94,16 +110,6 @@ router.delete(
 	reviewMiddleware.isReviewExistsDynamically("reviewId", "params", "_id"),
 	reviewMiddleware.checkOwner,
 	recipeController.deleteReview
-);
-
-router.patch(
-	"/:recipeId/moderation",
-	authMiddleware.isMongoIdValid("recipeId"),
-	authMiddleware.checkAccessToken,
-	authorMiddleware.isAdmin,
-	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
-	recipeMiddleware.isModerated,
-	recipeController.moderate
 );
 
 module.exports = router;

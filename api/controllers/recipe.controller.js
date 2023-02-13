@@ -9,7 +9,7 @@ const {config} = require("../configs");
 const {fileHelper} = require("../helpers");
 const {uploadFileTypes} = require("../enums");
 const path = require("node:path");
-const {recipePresenter} = require("../presenters");
+const {recipePresenter, reviewPresenter} = require("../presenters");
 
 module.exports = {
 	addPhotos: async (req, res, next) => {
@@ -64,7 +64,8 @@ module.exports = {
 	},
 	getReviews: async (req, res, next) => {
 		try {
-			const reviews = await recipeRepository.getReviews(req.params.recipeId);
+			let reviews = await recipeRepository.getReviews(req.params.recipeId);
+			reviews = reviewPresenter.presentMany(reviews);
 
 			res.json(reviews);
 		} catch (e) {
@@ -146,7 +147,6 @@ module.exports = {
 			const recipe = req.recipe;
 
 			const newReview = await reviewRepository.create(req.review);
-			let newReviewWithPhoto;
 
 			await recipeRepository.addReview(recipe._id, newReview._id);
 			await recipeRepository.setRating(recipe._id);
@@ -156,10 +156,9 @@ module.exports = {
 
 				const newMedia = await mediaRepository.create({path: fileName});
 				await req.photo.mv(path.join(process.cwd(), "uploads", fileName));
-				newReviewWithPhoto = await reviewRepository.addPhoto(newReview._id, newMedia._id);
 			}
 
-			res.status(201).json(req.files ? newReviewWithPhoto : newReview);
+			res.sendStatus(201);
 		} catch (e) {
 			next(e);
 		}

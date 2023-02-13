@@ -18,7 +18,7 @@ const present = (recipe) => {
 		}),
 		rating: recipe.rating,
 		bookCount: recipe.bookCount,
-		reviews: recipe.reviews.length,
+		reviewsCount: recipe.reviews.length,
 		createdAt: recipe.createdAt,
 	};
 };

@@ -65,17 +65,16 @@ module.exports = {
 				throw new ApiError("only one video allowed");
 			}
 
-			for (const photo of imagesToUpload) {
-				const {size, mimetype, name} = photo;
+			const {size, mimetype, name} = imagesToUpload[0];
 
-				if (size > fileUploadConfig.VIDEO_MAX_SIZE) {
-					throw new ApiError(`file ${name} too big`, 400);
-				}
-
-				if (!fileUploadConfig.VIDEO_MIMETYPES.includes(mimetype)) {
-					throw new ApiError(`file ${name} has invalid format`, 400);
-				}
+			if (size > fileUploadConfig.VIDEO_MAX_SIZE) {
+				throw new ApiError(`file ${name} too big`, 400);
 			}
+
+			if (!fileUploadConfig.VIDEO_MIMETYPES.includes(mimetype)) {
+				throw new ApiError(`file ${name} has invalid format`, 400);
+			}
+
 
 			req.video = imagesToUpload[0];
 			next();
