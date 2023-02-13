@@ -2,10 +2,10 @@ const present = (review) => {
 	return {
 		_id: review._id,
 		text: review.text,
-		photo: review.photo.path,
+		photo: review.photo?.path ? review.photo.path : null,
 		owner: {
 			userName: review.owner.userName,
-			avatar: review.owner.avatar.path
+			avatar: review.owner.avatar
 		},
 		createdAt: review.createdAt
 	};

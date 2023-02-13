@@ -8,9 +8,7 @@ module.exports = {
 	addRecipeToBook: async (authorId, recipeId) => {
 		await Author.findByIdAndUpdate(authorId, {$push: {"book": recipeId}});
 	},
-	create: async (newAuthor) => {
-		return Author.create(newAuthor);
-	},
+	create: async (newAuthor) => Author.create(newAuthor),
 	deleteById: async (authorId) => {
 		return Author.deleteOne({_id: authorId});
 	},
@@ -35,7 +33,7 @@ module.exports = {
 		]);
 	},
 	getBanStatus: async (id) => {
-		const {block} = await Author.findById(id).select("block -_id");
+		const {block} = await Author.findById(id).select("block -_id").lean();
 		return block;
 	},
 	getBook: async (id) => {
@@ -141,7 +139,7 @@ module.exports = {
 		return subscriberPresenter.presentMany(author.subscribers);
 	},
 	getSubscribersId: async (id) => {
-		return Author.findById(id).select("subscribers -_id");
+		return Author.findById(id).select("subscribers -_id").lean();
 	},
 	like: async (fromId, toId) => {
 		await Author.findByIdAndUpdate(toId, {$push: {"likes": fromId}});
@@ -169,5 +167,5 @@ module.exports = {
 	unlock: async (authorId) => {
 		return Author.findByIdAndUpdate(authorId, {$set: {"block": ""}});
 	},
-	updateById: async (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true})
+	updateById: async (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true}).lean()
 };

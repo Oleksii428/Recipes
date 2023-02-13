@@ -8,19 +8,15 @@ module.exports = {
 	deleteById: async (id) => {
 		await Recipe.findByIdAndDelete(id);
 	},
-	getById: async (id) => Recipe.findById(id).populate("category").populate("kitchen").populate("gallery").populate("stages"),
+	getById: async (id) => Recipe.findById(id).populate("category").populate("kitchen").populate("stages").populate("gallery").lean(),
 	getReviews: async (id) => {
 		const {reviews} = await Recipe.findById(id).select("reviews").populate({
 			path: "reviews",
 			populate: {
 				path: "photo owner",
-				select: "path userName avatar",
-				populate: {
-					strictPopulate: false,
-					path: "avatar"
-				}
-			},
-		});
+				select: "userName avatar path"
+			}
+		}).lean();
 		return reviews;
 	},
 	getByIdWithAuthor: async (id) => Recipe.findById(id).populate("creator").lean(),

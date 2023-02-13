@@ -55,9 +55,10 @@ module.exports = {
 	},
 	getById: async (req, res, next) => {
 		try {
-			const recipe = await recipeRepository.getById(req.params.recipeId);
+			let recipe = await recipeRepository.getById(req.params.recipeId);
+			recipe = recipePresenter.present(recipe);
 
-			res.json(recipePresenter.present(recipe));
+			res.json(recipe);
 		} catch (e) {
 			next(e);
 		}
@@ -153,8 +154,8 @@ module.exports = {
 
 			if (req.photo) {
 				const fileName = fileHelper.buildFileName(req.photo.name, uploadFileTypes.REVIEWS, newReview.id);
-
 				const newMedia = await mediaRepository.create({path: fileName});
+				await reviewRepository.addPhoto(newReview._id, newMedia._id);
 				await req.photo.mv(path.join(process.cwd(), "uploads", fileName));
 			}
 
