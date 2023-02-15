@@ -7,7 +7,7 @@ const emailTemplates = require("../email_templates");
 const {ApiError} = require("../errors");
 
 
-const sendEmail = async (receiverEmail, emailAction, locals = {}) => {
+const sendEmail = (receiverEmail, emailAction, locals = {}) => {
 	const transporter = nodemailer.createTransport({
 		service: "gmail",
 		auth: {

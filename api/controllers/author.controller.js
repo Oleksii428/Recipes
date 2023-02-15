@@ -77,7 +77,7 @@ module.exports = {
 			const newAuthor = await authorRepository.create({...author, password: hashPassword});
 
 			res.status(201).json(authorPresenter.present(newAuthor));
-			emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName}).then();
+			emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
 		} catch (e) {
 			next(e);
 		}
@@ -163,7 +163,7 @@ module.exports = {
 					authorLink: `${config.FRONTEND_URL}/recipes/${author._id}`,
 					authorName: author.userName,
 					complain: complain.text
-				}).then();
+				});
 			}
 
 			res.json("complain sent");
@@ -183,7 +183,7 @@ module.exports = {
 				emailService.sendEmail(req.author.email, emailActions.NEW_SUBSCRIBER, {
 					userName: req.author.userName,
 					subscriber: subscriber.userName
-				}).then();
+				});
 			} else {
 				await authorRepository.unSubscribe(subscriber._id, authorId);
 				action = "unsubscribed";

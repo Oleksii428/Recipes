@@ -94,14 +94,14 @@ module.exports = {
 				emailService.sendEmail(admin.email, CREATE_RECIPE_MODERATION, {
 					userName: author.userName,
 					recipeDetails: `${config.FRONTEND_URL}/recipes/${createdRecipe._id}`
-				}).then();
+				});
 			}
 			if (subscribers) {
 				for (const subscriber of subscribers) {
 					emailService.sendEmail(subscriber.email, NEW_SUBSCRIBED_RECIPE, {
 						userName: author.userName,
 						recipeDetails: `${config.FRONTEND_URL}/recipes/${createdRecipe._id}`
-					}).then();
+					});
 				}
 			}
 
@@ -136,7 +136,7 @@ module.exports = {
 				emailService.sendEmail(admin.email, UPDATE_RECIPE_MODERATION, {
 					userName: author.userName,
 					recipeDetails: `${config.FRONTEND_URL}/recipes/${updatedRecipe._id}`
-				}).then();
+				});
 			}
 
 			res.json("updated");
