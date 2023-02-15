@@ -6,9 +6,7 @@ const present = (author) => {
 	};
 };
 
-const presentMany = (authors) => {
-	return authors.map(author => present(author));
-};
+const presentMany = (authors) => authors.map(author => present(author));
 
 module.exports = {
 	present,

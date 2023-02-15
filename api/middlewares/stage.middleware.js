@@ -1,10 +1,9 @@
 const {ApiError} = require("../errors");
 const {stageValidator} = require("../validators");
-const {fileUploadConfig} = require("../configs");
 const {stageRepository} = require("../repositories");
 
 module.exports = {
-	isBodyCreateValid: async (req, res, next) => {
+	isBodyCreateValid: (req, res, next) => {
 		try {
 			const validatedBody = stageValidator.createStageValidator.validate(req.body);
 
@@ -28,6 +27,7 @@ module.exports = {
 					throw new ApiError(`stage ${stage} not found`);
 				}
 			}
+
 			next();
 		} catch (e) {
 			next(e);

@@ -2,7 +2,7 @@ const {ApiError} = require("../errors");
 const {fileUploadConfig} = require("../configs");
 
 module.exports = {
-	checkPhoto: async (req, res, next) => {
+	checkPhoto: (req, res, next) => {
 		try {
 			if (req.files) {
 				const imagesToUpload = Object.values(req.files);
@@ -29,7 +29,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	checkPhotos: async (req, res, next) => {
+	checkPhotos: (req, res, next) => {
 		try {
 			if (!req.files) {
 				throw new ApiError("no files to upload", 400);
@@ -53,7 +53,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	checkVideo: async (req, res, next) => {
+	checkVideo: (req, res, next) => {
 		try {
 			if (!req.files) {
 				throw new ApiError("no files to upload", 400);

@@ -20,7 +20,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	isBodyCreateValid: async (req, res, next) => {
+	isBodyCreateValid: (req, res, next) => {
 		try {
 			let reviewInfo = req.body;
 			reviewInfo = {...reviewInfo, owner: req.tokenInfo.author.id};

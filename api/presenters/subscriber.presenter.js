@@ -3,13 +3,11 @@ const present = (subscriber) => {
 		_id: subscriber._id,
 		userName: subscriber.userName,
 		email: subscriber.email,
-		avatar: subscriber.avatar
+		avatar: subscriber.avatar?.path ? subscriber.avatar.path : null
 	};
 };
 
-const presentMany = (subscribers) => {
-	return subscribers.map(subscriber => present(subscriber));
-};
+const presentMany = (subscribers) => subscribers.map(subscriber => present(subscriber));
 
 module.exports = {
 	present,

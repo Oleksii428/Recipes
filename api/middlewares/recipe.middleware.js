@@ -18,7 +18,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	isBodyCreateValid: async (req, res, next) => {
+	isBodyCreateValid: (req, res, next) => {
 		try {
 			const validatedBody = recipeValidator.createRecipeValidator.validate(req.body);
 
@@ -32,7 +32,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	isBodyUpdateValid: async (req, res, next) => {
+	isBodyUpdateValid: (req, res, next) => {
 		try {
 			const validatedBody = recipeValidator.updateRecipeValidator.validate(req.body);
 
@@ -46,7 +46,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	isModerated: async (req, res, next) => {
+	isModerated: (req, res, next) => {
 		try {
 			const {isModerated} = req.recipe;
 

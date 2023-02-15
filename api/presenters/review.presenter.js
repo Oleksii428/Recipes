@@ -12,9 +12,7 @@ const present = (review) => {
 	};
 };
 
-const presentMany = (reviews) => {
-	return reviews.map(review => present(review));
-};
+const presentMany = (reviews) => reviews.map(review => present(review));
 
 module.exports = {
 	present,

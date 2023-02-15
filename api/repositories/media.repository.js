@@ -1,5 +1,5 @@
 const {Media} = require("../dataBases");
 
 module.exports = {
-	create: async (newMedia) => Media.create(newMedia)
+	create: (newMedia) => Media.create(newMedia)
 };

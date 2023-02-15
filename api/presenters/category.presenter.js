@@ -4,9 +4,7 @@ const present = (category) => {
 	};
 };
 
-const presentMany = (categories) => {
-	return categories.map(category => present(category));
-};
+const presentMany = (categories) => categories.map(category => present(category));
 
 module.exports = {
 	present,

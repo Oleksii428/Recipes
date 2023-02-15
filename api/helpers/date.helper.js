@@ -6,13 +6,7 @@ dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
 module.exports = {
-	getSomeDaysLaterIso: async (daysLater) => {
-		return dayjs().add(daysLater, "day").toISOString();
-	},
-	getPrettyDate: async (date) => {
-		return dayjs(date).format("lll");
-	},
-	isAfterDate: async (date) => {
-		return dayjs().isAfter(date);
-	}
+	getSomeDaysLaterIso: (daysLater) => dayjs().add(daysLater, "day").toISOString(),
+	getPrettyDate: (date) => dayjs(date).format("lll"),
+	isAfterDate: (date) => dayjs().isAfter(date)
 };

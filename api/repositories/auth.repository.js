@@ -1,12 +1,8 @@
 const {Auth} = require("../dataBases");
 
 module.exports = {
-	create: async (tokenPair, authorId) => {
-		return Auth.create({...tokenPair, author: authorId});
-	},
-	deleteOne: async (filter) => Auth.deleteOne(filter),
-	findOne: async (filter = {}) => Auth.findOne(filter).lean(),
-	findOneWidthAuthor: async (filter = {}) => {
-		return Auth.findOne(filter).populate("author");
-	}
+	create: (tokenPair, authorId) => Auth.create({...tokenPair, author: authorId}),
+	deleteOne: (filter) => Auth.deleteOne(filter),
+	findOne: (filter = {}) => Auth.findOne(filter).lean(),
+	findOneWidthAuthor: (filter = {}) => Auth.findOne(filter).populate("author")
 };

@@ -1,11 +1,11 @@
+const path = require("node:path");
+
 const {authorRepository, recipeRepository, mediaRepository} = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions, uploadFileTypes} = require("../enums");
 const {dateHelper, fileHelper} = require("../helpers");
-const {ApiError} = require("../errors");
 const {config} = require("../configs");
-const path = require("node:path");
-const {recipePresenter, authorPresenter, bookPresenter} = require("../presenters");
+const {recipePresenter, authorPresenter, bookPresenter, subscriberPresenter} = require("../presenters");
 
 module.exports = {
 	block: async (req, res, next) => {
@@ -39,12 +39,16 @@ module.exports = {
 			let action;
 
 			if (!tokenInfo.author.book.includes(recipe.id)) {
-				await authorRepository.addRecipeToBook(author._id, recipe._id);
-				await recipeRepository.setBookCount(recipe._id, 1);
+				await Promise.all([
+					authorRepository.addRecipeToBook(author._id, recipe._id),
+					recipeRepository.setBookCount(recipe._id, 1)
+				]);
 				action = "recipe has been added to book";
 			} else {
-				await authorRepository.removeRecipeFromBook(author._id, recipe._id);
-				await recipeRepository.setBookCount(recipe._id, -1);
+				await Promise.all([
+					authorRepository.removeRecipeFromBook(author._id, recipe._id),
+					recipeRepository.setBookCount(recipe._id, -1)
+				]);
 				action = "recipe has been removed from book";
 			}
 
@@ -73,7 +77,7 @@ module.exports = {
 			const newAuthor = await authorRepository.create({...author, password: hashPassword});
 
 			res.status(201).json(authorPresenter.present(newAuthor));
-			await emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
+			emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName}).then();
 		} catch (e) {
 			next(e);
 		}
@@ -119,7 +123,8 @@ module.exports = {
 	},
 	getSubscribers: async (req, res, next) => {
 		try {
-			const subscribers = await authorRepository.getSubscribers(req.tokenInfo.author._id);
+			let subscribers = await authorRepository.getSubscribers(req.tokenInfo.author._id);
+			subscribers = subscriberPresenter.presentMany(subscribers);
 
 			res.json(subscribers);
 		} catch (e) {
@@ -153,12 +158,12 @@ module.exports = {
 
 			for (const admin of admins) {
 				console.log("sending complain email...");
-				await emailService.sendEmail(admin.email, emailActions.COMPLAIN, {
+				emailService.sendEmail(admin.email, emailActions.COMPLAIN, {
 					sender: tokenInfo.author.userName,
 					authorLink: `${config.FRONTEND_URL}/recipes/${author._id}`,
 					authorName: author.userName,
 					complain: complain.text
-				});
+				}).then();
 			}
 
 			res.json("complain sent");
@@ -175,10 +180,10 @@ module.exports = {
 			if (!req.subscribed) {
 				await authorRepository.subscribe(subscriber._id, authorId);
 				action = "subscribed";
-				await emailService.sendEmail(req.author.email, emailActions.NEW_SUBSCRIBER, {
+				emailService.sendEmail(req.author.email, emailActions.NEW_SUBSCRIBER, {
 					userName: req.author.userName,
 					subscriber: subscriber.userName
-				});
+				}).then();
 			} else {
 				await authorRepository.unSubscribe(subscriber._id, authorId);
 				action = "unsubscribed";
@@ -195,8 +200,10 @@ module.exports = {
 
 			const fileName = fileHelper.buildFileName(avatar.name, uploadFileTypes.AUTHORS, author.id);
 
-			await avatar.mv(path.join(process.cwd(), "uploads", fileName));
-			const newMedia = await mediaRepository.create({path: fileName});
+			const [newMedia] = await Promise.all([
+				mediaRepository.create({path: fileName}),
+				avatar.mv(path.join(process.cwd(), "uploads", fileName))
+			]);
 			await authorRepository.setAvatar(author._id, newMedia._id);
 
 			res.json("uploaded");

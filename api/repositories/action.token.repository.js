@@ -1,9 +1,7 @@
 const {ActionToken} = require("../dataBases");
 
 module.exports = {
-	create: async (newToken = {}) => ActionToken.create(newToken),
-	deleteOne: async (filter = {}) => ActionToken.deleteOne(filter),
-	findOne: async (filter = {}) => {
-		return ActionToken.findOne(filter);
-	}
+	create: (newToken = {}) => ActionToken.create(newToken),
+	deleteOne: (filter = {}) => ActionToken.deleteOne(filter),
+	findOne: (filter = {}) => ActionToken.findOne(filter)
 };

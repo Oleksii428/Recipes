@@ -1,9 +1,9 @@
 const {Category} = require("../dataBases");
 
 module.exports = {
-	create: async (newCategory) => Category.create(newCategory),
-	findOne: async (filter = {}) => Category.findOne(filter),
-	getByParams: async (query = {}) => {
+	create: (newCategory) => Category.create(newCategory),
+	findOne: (filter = {}) => Category.findOne(filter),
+	getByParams: (query = {}) => {
 		const {title} = query;
 		let findObj = {};
 

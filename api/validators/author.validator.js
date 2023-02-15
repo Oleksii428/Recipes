@@ -1,4 +1,3 @@
-const {Schema} = require("mongoose");
 const Joi = require("joi");
 
 const {regex} = require("../enums");

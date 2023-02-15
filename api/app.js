@@ -12,7 +12,6 @@ const {
 	kitchenRouter,
 	recipeRouter,
 	stageRouter,
-	reviewRouter,
 } = require("./routers");
 const {cronRunner} = require("./crons");
 const swaggerJson = require("./swagger.json");

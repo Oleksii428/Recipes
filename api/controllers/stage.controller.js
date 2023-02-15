@@ -1,18 +1,19 @@
+const path = require("node:path");
+
 const {stageRepository, mediaRepository} = require("../repositories");
 const {fileHelper} = require("../helpers");
 const {uploadFileTypes} = require("../enums");
-const path = require("node:path");
 
 module.exports = {
 	create: async (req, res, next) => {
 		try {
-			const stage = req.stage;
+			const {files, stage} = req;
 
-			const newStage = await stageRepository.create(req.stage);
+			const newStage = await stageRepository.create(stage);
 			let newStageWithPhoto;
 
-			if (req.files) {
-				const {image} = req.files;
+			if (files) {
+				const {image} = files;
 
 				const fileName = fileHelper.buildFileName(image.name, uploadFileTypes.STAGES, newStage.id);
 
@@ -21,7 +22,7 @@ module.exports = {
 				newStageWithPhoto = await stageRepository.addPhoto(newStage._id, newMedia._id);
 			}
 
-			res.status(201).json(req.files ? newStageWithPhoto : newStage);
+			res.status(201).json(files ? newStageWithPhoto : newStage);
 		} catch (e) {
 			next(e);
 		}

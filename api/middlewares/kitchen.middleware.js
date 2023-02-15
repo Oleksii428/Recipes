@@ -3,10 +3,8 @@ const {ApiError} = require("../errors");
 const {kitchenRepository} = require("../repositories");
 
 module.exports = {
-	isBodyCreateValid: async (req, res, next) => {
+	isBodyCreateValid: (req, res, next) => {
 		try {
-			const categoryInfo = req.body;
-
 			const validatedBody = kitchenValidator.createKitchenValidator.validate(req.body);
 
 			if (validatedBody.error) {

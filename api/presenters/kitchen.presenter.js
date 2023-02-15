@@ -4,9 +4,7 @@ const present = (kitchen) => {
 	};
 };
 
-const presentMany = (kitchens) => {
-	return kitchens.map(kitchen => present(kitchen));
-};
+const presentMany = (kitchens) => kitchens.map(kitchen => present(kitchen));
 
 module.exports = {
 	present,

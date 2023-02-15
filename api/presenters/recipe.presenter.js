@@ -23,9 +23,7 @@ const present = (recipe) => {
 	};
 };
 
-const presentMany = (recipes) => {
-	return recipes.map(recipe => present(recipe));
-};
+const presentMany = (recipes) => recipes.map(recipe => present(recipe));
 
 module.exports = {
 	present,

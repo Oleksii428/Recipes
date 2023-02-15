@@ -21,9 +21,7 @@ const present = (recipe) => {
 	};
 };
 
-const presentMany = (book) => {
-	return book.map(recipe => present(recipe));
-};
+const presentMany = (book) => book.map(recipe => present(recipe));
 
 module.exports = {
 	present,

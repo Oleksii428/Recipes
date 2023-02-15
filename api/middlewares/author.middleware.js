@@ -21,7 +21,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	checkUploadImage: async (req, res, next) => {
+	checkUploadImage: (req, res, next) => {
 		try {
 			if (!req.files) {
 				throw new ApiError("no files to upload", 400);
@@ -129,7 +129,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	isBodyComplainValid: async (req, res, next) => {
+	isBodyComplainValid: (req, res, next) => {
 		try {
 			const complainText = req.body;
 
@@ -222,7 +222,7 @@ module.exports = {
 			next(e);
 		}
 	},
-	isUpdateUserNameValid: async (req, res, next) => {
+	isUpdateUserNameValid: (req, res, next) => {
 		try {
 			const validatedUserName = authorValidator.userNameValidator.validate(req.body);
 

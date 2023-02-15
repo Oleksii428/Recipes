@@ -15,9 +15,7 @@ module.exports = new CronJob(
 				const isAfter = await dateHelper.isAfterDate(block);
 
 				if (isAfter) {
-					console.log("Start unlocking author...");
 					await authorRepository.unlock(_id);
-					console.log("Finished unlocking author.");
 				}
 			}
 		} catch (e) {
