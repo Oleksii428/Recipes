@@ -77,9 +77,8 @@ module.exports = {
 		}).select("subscribers").lean();
 		return subscribers;
 	},
-	getSubscribersId: (id) => Author.findById(id).select("subscribers -_id").lean(),
 	incTotalLikes: async (fromId, toId) => {
-		Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": 1}});
+		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": 1}});
 	},
 	removeRecipeFromBook: async (authorId, recipeId) => {
 		await Author.findByIdAndUpdate(authorId, {$pull: {"book": recipeId}});
@@ -88,8 +87,8 @@ module.exports = {
 	setBlock: (authorId, date) => Author.findByIdAndUpdate(authorId, {$set: {"block": date}}),
 	subscribe: async (subscriberId, authorId) => {
 		await Promise.all([
-			Author.findByIdAndUpdate(authorId, {$push: {"subscribers": subscriberId}}),
-			Author.findByIdAndUpdate(subscriberId, {$push: {"subscriptions": authorId}})
+			Author.findByIdAndUpdate(subscriberId, {$inc: {"totalSubscriptions": 1}}),
+			Author.findByIdAndUpdate(authorId, {$inc: {"totalSubscribers": 1}})
 		]);
 	},
 	decTotalLikes: async (fromId, toId) => {
@@ -97,8 +96,8 @@ module.exports = {
 	},
 	unSubscribe: async (subscriberId, authorId) => {
 		await Promise.all([
-			Author.findByIdAndUpdate(authorId, {$pull: {"subscribers": subscriberId}}),
-			Author.findByIdAndUpdate(subscriberId, {$pull: {"subscriptions": authorId}})
+			Author.findByIdAndUpdate(subscriberId, {$inc: {"totalSubscriptions": -1}}),
+			Author.findByIdAndUpdate(authorId, {$inc: {"totalSubscribers": -1}})
 		]);
 	},
 	unlock: (authorId) => Author.findByIdAndUpdate(authorId, {$set: {"block": ""}}),

@@ -8,8 +8,8 @@ const present = (author) => {
 		recipes: author.recipes,
 		likes: author.likes,
 		totalLikes: author.totalLikes,
-		subscriptions: author.subscriptions,
-		subscribers: author.subscribers,
+		totalSubscriptions: author.totalSubscriptions,
+		totalSubscribers: author.totalSubscribers,
 		book: author.book,
 		block: author.block,
 		createdAt: author.createdAt

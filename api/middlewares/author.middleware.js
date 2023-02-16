@@ -1,7 +1,12 @@
 const {config, fileUploadConfig} = require("../configs");
 const {ApiError} = require("../errors");
 const {authorValidator, commonValidator,} = require("../validators");
-const {authorRepository, roleRepository, likeRepository} = require("../repositories");
+const {
+	authorRepository,
+	roleRepository,
+	likeRepository,
+	subscriptionRepository
+} = require("../repositories");
 const {dateHelper} = require("../helpers");
 const {authorRoles} = require("../enums");
 
@@ -213,9 +218,9 @@ module.exports = {
 				throw new ApiError("you cant subscribe to yourself");
 			}
 
-			const {subscribers} = await authorRepository.getSubscribersId(authorId);
+			const isSubscribed = await subscriptionRepository.findOne(author._id, authorId);
 
-			req.subscribed = !!subscribers.includes(author._id);
+			req.subscribed = !!isSubscribed;
 
 			next();
 		} catch (e) {

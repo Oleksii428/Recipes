@@ -13,8 +13,8 @@ module.exports = {
 		avatar: Joi.string().regex(regex.MONGO_ID).optional().default(null),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
 		totalLikes: Joi.number().integer().default(0),
-		subscriptions: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),
-		subscribers: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),
+		totalSubscriptions: Joi.number().integer().default(0),
+		totalSubscribers: Joi.number().integer().default(0),
 		book: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		block: Joi.string().isoDate().default("")
 	}),

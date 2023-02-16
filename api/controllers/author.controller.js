@@ -1,6 +1,12 @@
 const path = require("node:path");
 
-const {authorRepository, recipeRepository, mediaRepository, likeRepository} = require("../repositories");
+const {
+	authorRepository,
+	recipeRepository,
+	mediaRepository,
+	likeRepository,
+	subscriptionRepository, subscriberRepository
+} = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions, uploadFileTypes} = require("../enums");
 const {dateHelper, fileHelper} = require("../helpers");
@@ -185,16 +191,28 @@ module.exports = {
 			let action;
 
 			if (!req.subscribed) {
-				await authorRepository.subscribe(subscriber._id, authorId);
-				action = "subscribed";
+				await Promise.all([
+					authorRepository.subscribe(subscriber._id, authorId),
+					subscriptionRepository.create(subscriber._id, authorId),
+					subscriberRepository.create(subscriber._id, authorId)
+				]);
+
 				emailService.sendEmail(req.author.email, emailActions.NEW_SUBSCRIBER, {
 					userName: req.author.userName,
 					subscriber: subscriber.userName
 				});
+
+				action = "subscribed";
 			} else {
-				await authorRepository.unSubscribe(subscriber._id, authorId);
+				await Promise.all([
+					authorRepository.unSubscribe(subscriber._id, authorId),
+					subscriptionRepository.delete(subscriber._id, authorId),
+					subscriberRepository.delete(subscriber._id, authorId)
+				]);
+
 				action = "unsubscribed";
 			}
+
 			res.status(200).json(action);
 		} catch (e) {
 			next(e);

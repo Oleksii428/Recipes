@@ -9,5 +9,7 @@ module.exports = {
 	Recipe: require("./Recipe"),
 	Review: require("./Review"),
 	Role: require("./Role"),
-	Stage: require("./Stage")
+	Stage: require("./Stage"),
+	Subscription: require("./Subscription"),
+	Subscriber: require("./Subscriber")
 };

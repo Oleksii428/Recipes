@@ -1,6 +1,12 @@
 const path = require("node:path");
 
-const {recipeRepository, authorRepository, reviewRepository, mediaRepository} = require("../repositories");
+const {
+	recipeRepository,
+	authorRepository,
+	reviewRepository,
+	mediaRepository,
+	subscriberRepository
+} = require("../repositories");
 const {emailService} = require("../services");
 const {
 	CREATE_RECIPE_MODERATION,
@@ -86,7 +92,7 @@ module.exports = {
 			const [createdRecipe, admins, subscribers] = await Promise.all([
 				recipeRepository.create({...newRecipe, creator: author._id}),
 				authorRepository.getAdmins(),
-				authorRepository.getSubscribers(author._id)
+				subscriberRepository.getSubscribers(author._id)
 			]);
 
 			for (const admin of admins) {

@@ -9,5 +9,7 @@ module.exports = {
 	recipeRepository: require("./recipe.repository"),
 	reviewRepository: require("./review.repository"),
 	roleRepository: require("./role.repository"),
-	stageRepository: require("./stage.repository")
+	stageRepository: require("./stage.repository"),
+	subscriptionRepository: require("./subscription.repository"),
+	subscriberRepository: require("./subscriber.repository")
 };
