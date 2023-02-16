@@ -1,9 +1,6 @@
 const {Author} = require("../dataBases");
 
 module.exports = {
-	addRecipe: async (authorId, recipeId) => {
-		await Author.findByIdAndUpdate(authorId, {$push: {recipes: recipeId}});
-	},
 	addRecipeToBook: async (authorId, recipeId) => {
 		await Author.findByIdAndUpdate(authorId, {$push: {"book": recipeId}});
 	},
@@ -60,58 +57,7 @@ module.exports = {
 				userName: new RegExp(name)
 			};
 		}
-
-		const authors = await Author.aggregate([
-			{
-				$match: findObj
-			},
-			{
-				$limit: limit
-			},
-			{
-				$skip: (+page - 1) * limit
-			},
-			{
-				$lookup: {
-					from: "roles",
-					localField: "role",
-					foreignField: "_id",
-					as: "role"
-				}
-			},
-			{
-				$unwind: "$role"
-			},
-			{
-				$addFields: {
-					totalLikes: {$size: "$likes"},
-					totalSubscriptions: {$size: "$subscriptions"},
-					totalSubscribers: {$size: "$subscribers"},
-					totalRecipes: {$size: "$recipes"},
-					totalBook: {$size: "$book"},
-				}
-			},
-			{
-				$sort: {
-					[sort]: -1
-				}
-			},
-			{
-				$project: {
-					userName: 1,
-					email: 1,
-					avatar: 1,
-					role: "$role.title",
-					totalLikes: 1,
-					totalSubscriptions: 1,
-					totalSubscribers: 1,
-					totalRecipes: 1,
-					totalBook: 1,
-					block: 1,
-					createdAt: 1,
-				}
-			},
-		]);
+		const authors = await Author.find(findObj).limit(limit).skip((page - 1) * limit).populate("role avatar recipes").sort({[sort]: -1}).lean();
 
 		const count = await Author.count(findObj);
 		return {

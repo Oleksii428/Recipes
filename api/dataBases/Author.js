@@ -11,11 +11,19 @@ const AuthorSchema = new Schema({
 	likes: [{type: Schema.Types.ObjectId, ref: "Author"}],
 	subscriptions: [{type: Schema.Types.ObjectId, ref: "Author"}],
 	subscribers: [{type: Schema.Types.ObjectId, ref: "Author"}],
-	recipes: [{type: Schema.Types.ObjectId, ref: "Recipe"}],
 	book: [{type: Schema.Types.ObjectId, ref: "Recipe"}],
 	block: {type: Date, default: ""}
 }, {
-	timestamps: true
+	timestamps: true,
+	toJSON: {virtuals: true},
+	toObject: {virtuals: true}
+});
+
+AuthorSchema.virtual("recipes", {
+	ref: "Recipe",
+	localField: "_id",
+	foreignField: "creator",
+	count: true
 });
 
 AuthorSchema.methods = {

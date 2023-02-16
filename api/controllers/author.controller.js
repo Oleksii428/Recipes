@@ -74,9 +74,9 @@ module.exports = {
 			const {author} = req;
 
 			const hashPassword = await authService.hashPassword(author.password);
-			const newAuthor = await authorRepository.create({...author, password: hashPassword});
+			await authorRepository.create({...author, password: hashPassword});
 
-			res.status(201).json(authorPresenter.present(newAuthor));
+			res.status(201);
 			emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
 		} catch (e) {
 			next(e);
@@ -106,8 +106,9 @@ module.exports = {
 		try {
 			const data = await authorRepository.getListByParams(req.query);
 			const {authors, page, count} = data;
+			const presentAuthors = authorPresenter.presentMany(authors);
 
-			res.json({authors, page, count});
+			res.json({presentAuthors, page, count});
 		} catch (e) {
 			next(e);
 		}

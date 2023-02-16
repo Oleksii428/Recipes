@@ -89,7 +89,6 @@ module.exports = {
 				authorRepository.getSubscribers(author._id)
 			]);
 
-			await authorRepository.addRecipe(author._id, createdRecipe._id);
 			for (const admin of admins) {
 				emailService.sendEmail(admin.email, CREATE_RECIPE_MODERATION, {
 					userName: author.userName,
