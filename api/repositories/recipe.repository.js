@@ -9,9 +9,16 @@ module.exports = {
 	getReviews: async (id) => {
 		const {reviews} = await Recipe.findById(id).select("reviews").populate({
 			path: "reviews",
+			model: "Review",
 			populate: {
 				path: "photo owner",
-				select: "userName avatar path"
+				select: "-_id path userName avatar",
+				populate: {
+					path: "avatar",
+					select: "-_id path",
+					model: "Media",
+					strictPopulate: false
+				}
 			}
 		}).lean();
 		return reviews;
