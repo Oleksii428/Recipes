@@ -4,6 +4,7 @@ module.exports = {
 	Auth: require("./Auth"),
 	Category: require("./Category"),
 	Kitchen: require("./Kitchen"),
+	Like: require("./Like"),
 	Media: require("./Media"),
 	Recipe: require("./Recipe"),
 	Review: require("./Review"),

@@ -1,6 +1,6 @@
 const path = require("node:path");
 
-const {authorRepository, recipeRepository, mediaRepository} = require("../repositories");
+const {authorRepository, recipeRepository, mediaRepository, likeRepository} = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions, uploadFileTypes} = require("../enums");
 const {dateHelper, fileHelper} = require("../helpers");
@@ -76,7 +76,7 @@ module.exports = {
 			const hashPassword = await authService.hashPassword(author.password);
 			await authorRepository.create({...author, password: hashPassword});
 
-			res.status(201);
+			res.sendStatus(201);
 			emailService.sendEmail(author.email, emailActions.WELCOME, {userName: author.userName});
 		} catch (e) {
 			next(e);
@@ -139,10 +139,16 @@ module.exports = {
 			let action;
 
 			if (!req.liked) {
-				await authorRepository.like(author._id, authorId);
+				await Promise.all([
+					likeRepository.create(author._id, authorId),
+					authorRepository.incTotalLikes(author._id, authorId)
+				]);
 				action = "liked";
 			} else {
-				await authorRepository.unLike(author._id, authorId);
+				await Promise.all([
+					likeRepository.delete(author._id, authorId),
+					authorRepository.decTotalLikes(author._id, authorId)
+				]);
 				action = "unliked";
 			}
 

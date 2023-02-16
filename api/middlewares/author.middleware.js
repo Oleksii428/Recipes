@@ -1,7 +1,7 @@
 const {config, fileUploadConfig} = require("../configs");
 const {ApiError} = require("../errors");
 const {authorValidator, commonValidator,} = require("../validators");
-const {authorRepository, roleRepository} = require("../repositories");
+const {authorRepository, roleRepository, likeRepository} = require("../repositories");
 const {dateHelper} = require("../helpers");
 const {authorRoles} = require("../enums");
 
@@ -191,13 +191,13 @@ module.exports = {
 			const {author} = req.tokenInfo;
 			const {authorId} = req.params;
 
-			const {likes} = await authorRepository.getLikes(authorId);
-
 			if (author.id === authorId) {
 				throw new ApiError("you cant like yourself");
 			}
 
-			req.liked = !!likes.includes(author._id);
+			const like = await likeRepository.findOne(author._id, authorId);
+
+			req.liked = !!like;
 
 			next();
 		} catch (e) {

@@ -12,7 +12,7 @@ module.exports = {
 		password: Joi.string().regex(regex.PASSWORD).required(),
 		avatar: Joi.string().regex(regex.MONGO_ID).optional().default(null),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
-		likes: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
+		totalLikes: Joi.number().integer().default(0),
 		subscriptions: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),
 		subscribers: Joi.array().items(Joi.string().regex(regex.MONGO_ID).optional().default([])),
 		book: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),

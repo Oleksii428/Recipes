@@ -46,7 +46,6 @@ module.exports = {
 		return book;
 	},
 	getBlockedAuthors: () => Author.find({block: {$ne: ""}}),
-	getLikes: (id) => Author.findById(id).select("likes -_id"),
 	getListByParams: async (query) => {
 		const {page = "1", name, sort = "totalLikes"} = query;
 		const limit = 5;
@@ -79,8 +78,8 @@ module.exports = {
 		return subscribers;
 	},
 	getSubscribersId: (id) => Author.findById(id).select("subscribers -_id").lean(),
-	like: async (fromId, toId) => {
-		await Author.findByIdAndUpdate(toId, {$push: {"likes": fromId}});
+	incTotalLikes: async (fromId, toId) => {
+		Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": 1}});
 	},
 	removeRecipeFromBook: async (authorId, recipeId) => {
 		await Author.findByIdAndUpdate(authorId, {$pull: {"book": recipeId}});
@@ -93,8 +92,8 @@ module.exports = {
 			Author.findByIdAndUpdate(subscriberId, {$push: {"subscriptions": authorId}})
 		]);
 	},
-	unLike: async (fromId, toId) => {
-		await Author.findByIdAndUpdate(toId, {$pull: {"likes": fromId}});
+	decTotalLikes: async (fromId, toId) => {
+		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": -1}});
 	},
 	unSubscribe: async (subscriberId, authorId) => {
 		await Promise.all([

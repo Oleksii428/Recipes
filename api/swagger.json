@@ -60,7 +60,7 @@
           "type": "number",
           "example": 1
         },
-        "totalRecipes": {
+        "recipes": {
           "type": "number",
           "example": 1
         },

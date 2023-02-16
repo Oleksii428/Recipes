@@ -7,6 +7,7 @@ const present = (author) => {
 		role: author.role.title,
 		recipes: author.recipes,
 		likes: author.likes,
+		totalLikes: author.totalLikes,
 		subscriptions: author.subscriptions,
 		subscribers: author.subscribers,
 		book: author.book,

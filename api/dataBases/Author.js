@@ -8,7 +8,7 @@ const AuthorSchema = new Schema({
 	password: String,
 	avatar: {type: Schema.Types.ObjectId, ref: "Media", default: null},
 	role: {type: Schema.Types.ObjectId, ref: "Role"},
-	likes: [{type: Schema.Types.ObjectId, ref: "Author"}],
+	totalLikes: {type: Number, default: 0},
 	subscriptions: [{type: Schema.Types.ObjectId, ref: "Author"}],
 	subscribers: [{type: Schema.Types.ObjectId, ref: "Author"}],
 	book: [{type: Schema.Types.ObjectId, ref: "Recipe"}],
