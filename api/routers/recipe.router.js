@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {recipeController} = require("../controllers");
+const {recipeController, stageController} = require("../controllers");
 const {
 	authMiddleware,
 	recipeMiddleware,
@@ -24,13 +24,13 @@ router.post(
 	recipeMiddleware.isBodyCreateValid,
 	kitchenMiddleware.isExists,
 	categoryMiddleware.isExists,
-	stageMiddleware.isExistsMany,
 	recipeController.create
 );
 
 router.get(
 	"/:recipeId",
 	authMiddleware.isMongoIdValid("recipeId"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeController.getById
 );
 
@@ -67,6 +67,17 @@ router.patch(
 	authMiddleware.isMongoIdValid("recipeId"),
 	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeController.bookToggle
+);
+
+router.patch(
+	"/:recipeId/addStage",
+	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.checkAccessToken,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeMiddleware.checkCreator,
+	mediaMiddleware.checkPhoto,
+	stageMiddleware.isBodyCreateValid,
+	stageController.create
 );
 
 router.patch(

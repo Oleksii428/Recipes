@@ -9,14 +9,21 @@ const RecipeSchema = new Schema({
 	kitchen: {type: Schema.Types.ObjectId, ref: "Kitchen", require: true},
 	ingredients: [{type: String, require: true}],
 	gallery: [{type: Schema.Types.ObjectId, ref: "Media"}],
-	stages: [{type: Schema.Types.ObjectId, ref: "Stage", require: true}],
 	rating: {type: Number, default: 0},
 	bookCount: {type: Number, default: 0},
 	reviews: [{type: Schema.Types.ObjectId, ref: "Review"}],
 	creator: {type: Schema.Types.ObjectId, ref: "Author"},
 	isModerated: {type: Boolean, default: false}
 }, {
-	timestamps: true
+	timestamps: true,
+	toJSON: {virtuals: true},
+	toObject: {virtuals: true}
+});
+
+RecipeSchema.virtual("stages", {
+	ref: "Stage",
+	localField: "_id",
+	foreignField: "recipe"
 });
 
 module.exports = model("Recipe", RecipeSchema);
