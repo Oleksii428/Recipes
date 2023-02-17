@@ -80,7 +80,7 @@ module.exports = {
 			const {authors, page, count} = data;
 			const presentAuthors = authorPresenter.presentMany(authors);
 
-			res.json({presentAuthors, page, count});
+			res.json({authors: presentAuthors, page, count});
 		} catch (e) {
 			next(e);
 		}

@@ -57,6 +57,7 @@ router.delete(
 router.get(
 	"/:recipeId/reviews",
 	authMiddleware.isMongoIdValid("recipeId"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeController.getReviews
 );
 

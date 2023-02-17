@@ -86,8 +86,9 @@ module.exports = {
 	getByQuery: async (req, res, next) => {
 		try {
 			const data = await recipeRepository.getByQuery(req.query);
+			const presentRecipes = recipePresenter.presentManyWithCreator(data.recipes);
 
-			res.json(data);
+			res.json({...data, recipes: presentRecipes});
 		} catch (e) {
 			next(e);
 		}
@@ -95,7 +96,7 @@ module.exports = {
 	getById: async (req, res, next) => {
 		try {
 			let recipe = await recipeRepository.getById(req.params.recipeId);
-			recipe = recipePresenter.present(recipe);
+			recipe = recipePresenter.presentWithCreator(recipe);
 
 			res.json(recipe);
 		} catch (e) {

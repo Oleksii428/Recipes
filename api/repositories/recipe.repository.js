@@ -5,7 +5,13 @@ module.exports = {
 	addReview: (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"reviews": reviewId}}),
 	create: (newRecipe) => Recipe.create(newRecipe),
 	deleteById: (id) => Recipe.findByIdAndDelete(id).lean(),
-	getById: (id) => Recipe.findById(id).populate("category").populate("kitchen").populate("stages").populate("gallery").lean(),
+	getById: (id) => Recipe.findById(id).populate({
+		path: "category kitchen creator gallery stages",
+		populate: {
+			path: "avatar photo",
+			strictPopulate: false
+		}
+	}).lean(),
 	getReviews: async (id) => {
 		const {reviews} = await Recipe.findById(id).select("reviews").populate({
 			path: "reviews",
@@ -23,12 +29,15 @@ module.exports = {
 		}).lean();
 		return reviews;
 	},
-	getByIdWithAuthor: (id) => Recipe.findById(id).populate("creator").lean(),
 	getByQuery: async (query) => {
 		const {page = "1", title, category, kitchen, ingredients, sort = "rating", sortType = "1"} = query;
 
 		const limit = 5;
 		let findObj = {};
+		let sortObj = {
+			[sort]: +sortType
+
+		};
 		let findByIngredients = [];
 
 		if (title) {
@@ -60,106 +69,13 @@ module.exports = {
 			};
 		}
 
-		let recipes = await Recipe.aggregate([
-			{
-				$match: {
-					isModerated: true
-				}
-			},
-			{
-				$lookup: {
-					from: "categories",
-					localField: "category",
-					foreignField: "_id",
-					as: "category"
-				}
-			},
-			{
-				$lookup: {
-					from: "kitchens",
-					localField: "kitchen",
-					foreignField: "_id",
-					as: "kitchen"
-				}
-			},
-			{
-				$lookup: {
-					from: "stages",
-					localField: "stages",
-					foreignField: "_id",
-					as: "stages"
-				}
-			},
-			{
-				$lookup: {
-					from: "authors",
-					localField: "creator",
-					foreignField: "_id",
-					as: "creator"
-				}
-			},
-			{
-				$lookup: {
-					from: "media",
-					localField: "gallery",
-					foreignField: "_id",
-					as: "gallery"
-				}
-			},
-			{
-				$unwind: "$category"
-			},
-			{
-				$unwind: "$kitchen"
-			},
-			{
-				$unwind: "$creator"
-			},
-			{
-				$match: findObj
-			},
-			{
-				$sort: {
-					[sort]: +sortType
-				}
-			},
-			{
-				$addFields: {
-					totalReviews: {$size: "$reviews"}
-				}
-			},
-			{
-				$project: {
-					title: 1,
-					time: 1,
-					servings: 1,
-					description: 1,
-					category: "$category.title",
-					kitchen: "$kitchen.title",
-					ingredients: 1,
-					gallery: 1,
-					stages: {
-						number: 1,
-						photo: 1,
-						description: 1
-					},
-					rating: 1,
-					bookCount: 1,
-					reviewsCount: 1,
-					creator: {
-						userName: 1,
-						avatar: 1
-					},
-					createdAt: 1
-				}
-			},
-			{
-				$skip: (+page - 1) * limit
-			},
-			{
-				$limit: limit
+		const recipes = await Recipe.find({isModerated: true}).populate({
+			path: "category kitchen creator gallery stages",
+			populate: {
+				path: "avatar photo",
+				strictPopulate: false
 			}
-		]);
+		}).find(findObj).sort(sortObj).skip((+page - 1) * limit).limit(limit);
 		const count = await Recipe.count({...findObj, isModerated: true});
 
 		return {
@@ -168,7 +84,7 @@ module.exports = {
 			count
 		};
 	},
-	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate("category").populate("kitchen").populate("gallery").populate("stages"),
+	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate("category kitchen gallery stages").lean(),
 	getOneByParams: (filter = {}) => Recipe.findOne(filter),
 	setModerateStatus: async (id, status) => {
 		await Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}});
