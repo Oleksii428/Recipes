@@ -23,7 +23,7 @@ module.exports = {
 	isBodyCreateValid: (req, res, next) => {
 		try {
 			let reviewInfo = req.body;
-			reviewInfo = {...reviewInfo, owner: req.tokenInfo.author.id};
+			reviewInfo = {...reviewInfo, owner: req.tokenInfo.author.id, recipe: req.params.recipeId};
 
 			const validatedBody = reviewValidator.createReviewValidator.validate(reviewInfo);
 

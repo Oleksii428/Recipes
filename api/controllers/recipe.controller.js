@@ -185,7 +185,7 @@ module.exports = {
 			const newReview = await reviewRepository.create(req.review);
 
 			await Promise.all([
-				recipeRepository.addReview(recipe._id, newReview._id),
+				// recipeRepository.addReview(recipe._id, newReview._id),
 				recipeRepository.setRating(recipe._id)
 			]);
 

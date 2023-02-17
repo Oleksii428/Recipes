@@ -7,6 +7,7 @@ module.exports = {
 		text: Joi.string().min(2).max(200).required(),
 		rating: Joi.number().integer().min(1).max(5).required(),
 		photo: Joi.string().regex(regex.MONGO_ID).optional().default(null),
-		owner: Joi.string().regex(regex.MONGO_ID).required()
+		owner: Joi.string().regex(regex.MONGO_ID).required(),
+		recipe: Joi.string().regex(regex.MONGO_ID).required()
 	})
 };
