@@ -27,7 +27,7 @@ module.exports = {
 		const {block} = await Author.findById(id).select("block -_id").lean();
 		return block;
 	},
-	getBlockedAuthors: () => Author.find({block: {$ne: ""}}),
+	getBlockedAuthors: () => Author.find({block: {$ne: null}}).lean(),
 	getListByParams: async (query) => {
 		const {page = "1", name, sort = "totalLikes"} = query;
 		const limit = 5;
@@ -42,7 +42,7 @@ module.exports = {
 		.find(findObj)
 		.limit(limit)
 		.skip((page - 1) * limit)
-		.populate("role avatar recipes totalBook")
+		.populate("role avatar recipes totalBook totalSubscriptions totalSubscribers")
 		.sort({[sort]: -1})
 		.lean();
 
@@ -58,33 +58,14 @@ module.exports = {
 		const {role} = await Author.findById(authorId).populate("role").lean();
 		return role;
 	},
-	getSubscribers: async (id) => {
-		const {subscribers} = await Author.findById(id).populate({
-			path: "subscribers",
-			populate: {path: "avatar"}
-		}).select("subscribers").lean();
-		return subscribers;
-	},
 	incTotalLikes: async (fromId, toId) => {
 		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": 1}});
 	},
 	setAvatar: (authorId, avatar) => Author.findByIdAndUpdate(authorId, {$set: {"avatar": avatar}}),
 	setBlock: (authorId, date) => Author.findByIdAndUpdate(authorId, {$set: {"block": date}}),
-	subscribe: async (subscriberId, authorId) => {
-		await Promise.all([
-			Author.findByIdAndUpdate(subscriberId, {$inc: {"totalSubscriptions": 1}}),
-			Author.findByIdAndUpdate(authorId, {$inc: {"totalSubscribers": 1}})
-		]);
-	},
 	decTotalLikes: async (fromId, toId) => {
 		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": -1}});
 	},
-	unSubscribe: async (subscriberId, authorId) => {
-		await Promise.all([
-			Author.findByIdAndUpdate(subscriberId, {$inc: {"totalSubscriptions": -1}}),
-			Author.findByIdAndUpdate(authorId, {$inc: {"totalSubscribers": -1}})
-		]);
-	},
-	unlock: (authorId) => Author.findByIdAndUpdate(authorId, {$set: {"block": ""}}),
+	unlock: (authorId) => Author.findByIdAndUpdate(authorId, {$set: {"block": null}}),
 	updateById: (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true}).lean()
 };

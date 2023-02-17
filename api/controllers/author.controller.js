@@ -96,7 +96,7 @@ module.exports = {
 	},
 	getSubscribers: async (req, res, next) => {
 		try {
-			let subscribers = await authorRepository.getSubscribers(req.tokenInfo.author._id);
+			let subscribers = await subscriberRepository.getSubscribers(req.tokenInfo.author._id);
 			subscribers = subscriberPresenter.presentMany(subscribers);
 
 			res.json(subscribers);
@@ -158,7 +158,6 @@ module.exports = {
 
 			if (!req.subscribed) {
 				await Promise.all([
-					authorRepository.subscribe(subscriber._id, authorId),
 					subscriptionRepository.create(subscriber._id, authorId),
 					subscriberRepository.create(subscriber._id, authorId)
 				]);
@@ -171,7 +170,6 @@ module.exports = {
 				action = "subscribed";
 			} else {
 				await Promise.all([
-					authorRepository.unSubscribe(subscriber._id, authorId),
 					subscriptionRepository.delete(subscriber._id, authorId),
 					subscriberRepository.delete(subscriber._id, authorId)
 				]);

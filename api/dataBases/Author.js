@@ -9,8 +9,6 @@ const AuthorSchema = new Schema({
 	avatar: {type: Schema.Types.ObjectId, ref: "Media", default: null},
 	role: {type: Schema.Types.ObjectId, ref: "Role"},
 	totalLikes: {type: Number, default: 0},
-	totalSubscriptions: {type: Number, require: true, default: 0},
-	totalSubscribers: {type: Number, require: true, default: 0},
 	block: {type: Date, default: ""}
 }, {
 	timestamps: true,
@@ -29,6 +27,20 @@ AuthorSchema.virtual("totalBook", {
 	ref: "Book",
 	localField: "_id",
 	foreignField: "author",
+	count: true
+});
+
+AuthorSchema.virtual("totalSubscriptions", {
+	ref: "Subscription",
+	localField: "_id",
+	foreignField: "subscriber",
+	count: true
+});
+
+AuthorSchema.virtual("totalSubscribers", {
+	ref: "Subscriber",
+	localField: "_id",
+	foreignField: "subscription",
 	count: true
 });
 

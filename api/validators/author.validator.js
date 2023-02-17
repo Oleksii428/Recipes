@@ -13,9 +13,7 @@ module.exports = {
 		avatar: Joi.string().regex(regex.MONGO_ID).optional().default(null),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
 		totalLikes: Joi.number().integer().default(0),
-		totalSubscriptions: Joi.number().integer().default(0),
-		totalSubscribers: Joi.number().integer().default(0),
-		block: Joi.string().isoDate().default("")
+		block: Joi.string().isoDate().default(null)
 	}),
 	userNameValidator: Joi.object({
 		userName: Joi.string().regex(regex.USERNAME).trim().required()
