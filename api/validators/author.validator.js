@@ -15,7 +15,6 @@ module.exports = {
 		totalLikes: Joi.number().integer().default(0),
 		totalSubscriptions: Joi.number().integer().default(0),
 		totalSubscribers: Joi.number().integer().default(0),
-		book: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		block: Joi.string().isoDate().default("")
 	}),
 	userNameValidator: Joi.object({

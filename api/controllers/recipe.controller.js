@@ -5,14 +5,15 @@ const {
 	authorRepository,
 	reviewRepository,
 	mediaRepository,
-	subscriberRepository
+	subscriberRepository,
+	bookRepository
 } = require("../repositories");
-const {emailService} = require("../services");
 const {
 	CREATE_RECIPE_MODERATION,
 	NEW_SUBSCRIBED_RECIPE,
 	UPDATE_RECIPE_MODERATION
 } = require("../enums/email.actions.enum");
+const {emailService} = require("../services");
 const {config} = require("../configs");
 const {fileHelper} = require("../helpers");
 const {uploadFileTypes} = require("../enums");
@@ -51,6 +52,33 @@ module.exports = {
 			await recipeRepository.addMedia(recipe._id, newMedia._id);
 
 			res.json("ok");
+		} catch (e) {
+			next(e);
+		}
+	},
+	bookToggle: async (req, res, next) => {
+		try {
+			const {recipe, tokenInfo} = req;
+			const {author} = tokenInfo;
+			let action;
+
+			const recipeInBook = await bookRepository.findOne(recipe._id, req.tokenInfo.author._id);
+
+			if (!recipeInBook) {
+				await Promise.all([
+					bookRepository.create(recipe._id, author._id),
+					recipeRepository.setBookCount(recipe._id, 1)
+				]);
+				action = "recipe has been added to book";
+			} else {
+				await Promise.all([
+					bookRepository.deleteOne(recipe._id, author._id),
+					recipeRepository.setBookCount(recipe._id, -1)
+				]);
+				action = "recipe has been removed from book";
+			}
+
+			res.status(200).json(action);
 		} catch (e) {
 			next(e);
 		}

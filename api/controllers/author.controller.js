@@ -5,13 +5,15 @@ const {
 	recipeRepository,
 	mediaRepository,
 	likeRepository,
-	subscriptionRepository, subscriberRepository
+	subscriptionRepository,
+	subscriberRepository,
+	bookRepository
 } = require("../repositories");
 const {authService, emailService} = require("../services");
 const {emailActions, uploadFileTypes} = require("../enums");
 const {dateHelper, fileHelper} = require("../helpers");
 const {config} = require("../configs");
-const {recipePresenter, authorPresenter, bookPresenter, subscriberPresenter} = require("../presenters");
+const {recipePresenter, authorPresenter, subscriberPresenter} = require("../presenters");
 
 module.exports = {
 	block: async (req, res, next) => {
@@ -22,43 +24,6 @@ module.exports = {
 			const prettyDate = await dateHelper.getPrettyDate(date);
 
 			res.json(`author ${author.userName} has been baned until ${prettyDate}`);
-		} catch (e) {
-			next(e);
-		}
-	},
-	bookRemove: async (req, res, next) => {
-		try {
-			const {author} = req.tokenInfo;
-			const {recipeId} = req.params;
-
-			await authorRepository.removeRecipeFromBook(author._id, recipeId);
-
-			res.sendStatus(204);
-		} catch (e) {
-			next(e);
-		}
-	},
-	bookToggle: async (req, res, next) => {
-		try {
-			const {recipe, tokenInfo} = req;
-			const {author} = tokenInfo;
-			let action;
-
-			if (!tokenInfo.author.book.includes(recipe.id)) {
-				await Promise.all([
-					authorRepository.addRecipeToBook(author._id, recipe._id),
-					recipeRepository.setBookCount(recipe._id, 1)
-				]);
-				action = "recipe has been added to book";
-			} else {
-				await Promise.all([
-					authorRepository.removeRecipeFromBook(author._id, recipe._id),
-					recipeRepository.setBookCount(recipe._id, -1)
-				]);
-				action = "recipe has been removed from book";
-			}
-
-			res.status(200).json(action);
 		} catch (e) {
 			next(e);
 		}
@@ -101,9 +66,10 @@ module.exports = {
 	},
 	getBook: async (req, res, next) => {
 		try {
-			const book = await authorRepository.getBook(req.tokenInfo.author._id);
+			const book = await bookRepository.findByAuthorId(req.tokenInfo.author._id);
+			const presentedBook = recipePresenter.presentMany(book);
 
-			res.json(bookPresenter.presentMany(book));
+			res.status(200).json(presentedBook);
 		} catch (e) {
 			next(e);
 		}

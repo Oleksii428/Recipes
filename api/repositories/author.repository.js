@@ -1,9 +1,6 @@
 const {Author} = require("../dataBases");
 
 module.exports = {
-	addRecipeToBook: async (authorId, recipeId) => {
-		await Author.findByIdAndUpdate(authorId, {$push: {"book": recipeId}});
-	},
 	create: (newAuthor) => Author.create(newAuthor),
 	deleteById: (authorId) => Author.deleteOne({_id: authorId}),
 	getAdmins: () => {
@@ -30,21 +27,6 @@ module.exports = {
 		const {block} = await Author.findById(id).select("block -_id").lean();
 		return block;
 	},
-	getBook: async (id) => {
-		const {book} = await Author.findById(id).select("book -_id").populate({
-			path: "book",
-			populate: {
-				path: "category kitchen gallery stages",
-				select: "title number photo description",
-				populate: {
-					strictPopulate: false,
-					path: "photo",
-					select: "-_id path"
-				}
-			}
-		});
-		return book;
-	},
 	getBlockedAuthors: () => Author.find({block: {$ne: ""}}),
 	getListByParams: async (query) => {
 		const {page = "1", name, sort = "totalLikes"} = query;
@@ -56,7 +38,13 @@ module.exports = {
 				userName: new RegExp(name)
 			};
 		}
-		const authors = await Author.find(findObj).limit(limit).skip((page - 1) * limit).populate("role avatar recipes").sort({[sort]: -1}).lean();
+		const authors = await Author
+		.find(findObj)
+		.limit(limit)
+		.skip((page - 1) * limit)
+		.populate("role avatar recipes totalBook")
+		.sort({[sort]: -1})
+		.lean();
 
 		const count = await Author.count(findObj);
 		return {
@@ -79,9 +67,6 @@ module.exports = {
 	},
 	incTotalLikes: async (fromId, toId) => {
 		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": 1}});
-	},
-	removeRecipeFromBook: async (authorId, recipeId) => {
-		await Author.findByIdAndUpdate(authorId, {$pull: {"book": recipeId}});
 	},
 	setAvatar: (authorId, avatar) => Author.findByIdAndUpdate(authorId, {$set: {"avatar": avatar}}),
 	setBlock: (authorId, date) => Author.findByIdAndUpdate(authorId, {$set: {"block": date}}),

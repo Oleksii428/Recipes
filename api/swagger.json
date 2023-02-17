@@ -960,52 +960,6 @@
         }
       }
     },
-    "/authors/{authorId}/book-toggle": {
-      "patch": {
-        "description": "Add recipe to book or remove",
-        "tags": [
-          "Author"
-        ],
-        "operationId": "BookToggle",
-        "parameters": [
-          {
-            "name": "authorId",
-            "type": "string",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "Authorization",
-            "type": "string",
-            "in": "header",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "recipe has been added to book"
-                },
-                "statusCode": {
-                  "type": "number",
-                  "example": 200
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ApiError"
-            }
-          }
-        }
-      }
-    },
     "/authors/{authorId}/complain": {
       "patch": {
         "description": "Complain to author",
@@ -1371,6 +1325,52 @@
                 "statusCode": {
                   "type": "number",
                   "example": 204
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}/book-toggle": {
+      "patch": {
+        "description": "Add or remove recipe from your book",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "BookToggle",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "recipe has been added to book"
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
                 }
               }
             }

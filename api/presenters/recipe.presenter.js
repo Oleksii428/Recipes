@@ -12,7 +12,7 @@ const present = (recipe) => {
 		stages: recipe.stages.map(stage => {
 			return {
 				number: stage.number,
-				photo: stage.photo,
+				photo: stage.photo?.path ? stage.photo?.path : null,
 				description: stage.description
 			};
 		}),

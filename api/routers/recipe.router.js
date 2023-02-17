@@ -1,13 +1,16 @@
 const router = require("express").Router();
 
+const {recipeController} = require("../controllers");
 const {
 	authMiddleware,
 	recipeMiddleware,
 	authorMiddleware,
 	reviewMiddleware,
-	kitchenMiddleware, categoryMiddleware, stageMiddleware, mediaMiddleware
+	kitchenMiddleware,
+	categoryMiddleware,
+	stageMiddleware,
+	mediaMiddleware
 } = require("../middlewares");
-const {recipeController} = require("../controllers");
 
 router.get(
 	"/",
@@ -55,6 +58,14 @@ router.get(
 	"/:recipeId/reviews",
 	authMiddleware.isMongoIdValid("recipeId"),
 	recipeController.getReviews
+);
+
+router.patch(
+	"/:recipeId/book-toggle",
+	authMiddleware.checkAccessToken,
+	authMiddleware.isMongoIdValid("recipeId"),
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeController.bookToggle
 );
 
 router.patch(

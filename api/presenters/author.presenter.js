@@ -6,11 +6,10 @@ const present = (author) => {
 		avatar: author.avatar?.path ? author.avatar?.path : null,
 		role: author.role.title,
 		recipes: author.recipes,
-		likes: author.likes,
 		totalLikes: author.totalLikes,
 		totalSubscriptions: author.totalSubscriptions,
 		totalSubscribers: author.totalSubscribers,
-		book: author.book,
+		totalBook: author.totalBook,
 		block: author.block,
 		createdAt: author.createdAt
 	};

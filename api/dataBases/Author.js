@@ -11,7 +11,6 @@ const AuthorSchema = new Schema({
 	totalLikes: {type: Number, default: 0},
 	totalSubscriptions: {type: Number, require: true, default: 0},
 	totalSubscribers: {type: Number, require: true, default: 0},
-	book: [{type: Schema.Types.ObjectId, ref: "Recipe"}],
 	block: {type: Date, default: ""}
 }, {
 	timestamps: true,
@@ -23,6 +22,13 @@ AuthorSchema.virtual("recipes", {
 	ref: "Recipe",
 	localField: "_id",
 	foreignField: "creator",
+	count: true
+});
+
+AuthorSchema.virtual("totalBook", {
+	ref: "Book",
+	localField: "_id",
+	foreignField: "author",
 	count: true
 });
 

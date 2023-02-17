@@ -2,6 +2,7 @@ module.exports = {
 	ActionToken: require("./ActionToken"),
 	Author: require("./Author"),
 	Auth: require("./Auth"),
+	Book: require("./Book"),
 	Category: require("./Category"),
 	Kitchen: require("./Kitchen"),
 	Like: require("./Like"),

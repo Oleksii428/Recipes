@@ -1,12 +1,13 @@
 const router = require("express").Router();
 
 const {authorController} = require("../controllers");
-const {authorMiddleware, authMiddleware, recipeMiddleware} = require("../middlewares");
+const {authorMiddleware, authMiddleware} = require("../middlewares");
 
 router.get(
 	"/",
 	authorController.getByParams
 );
+
 router.post(
 	"/",
 	authorMiddleware.isBodyCreateValid,
@@ -14,6 +15,7 @@ router.post(
 	authorMiddleware.isFieldUniqueDynamically("email", "author"),
 	authorController.create
 );
+
 router.delete(
 	"/",
 	authMiddleware.checkAccessToken,
@@ -93,21 +95,6 @@ router.patch(
 	authorMiddleware.checkBanStatus,
 	authorMiddleware.isLiked,
 	authorController.likeToggle
-);
-
-router.patch(
-	"/:authorId/book-toggle",
-	authMiddleware.checkAccessToken,
-	authMiddleware.isMongoIdValid("authorId"),
-	recipeMiddleware.isRecipeExistsDynamically("authorId", "params", "_id"),
-	authorController.bookToggle
-);
-
-router.delete(
-	"/:recipeId/book-remove",
-	authMiddleware.checkAccessToken,
-	authMiddleware.isMongoIdValid("recipeId"),
-	authorController.bookRemove
 );
 
 module.exports = router;
