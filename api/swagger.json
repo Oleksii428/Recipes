@@ -1685,18 +1685,24 @@
         }
       }
     },
-    "/stages/": {
-      "post": {
-        "description": "Create stage",
+    "/stages/{stageId}": {
+      "put": {
+        "description": "Update stage",
         "tags": [
           "Stage"
         ],
-        "operationId": "CreateStage",
+        "operationId": "UpdateStage",
         "parameters": [
           {
             "name": "Authorization",
             "type": "string",
             "in": "header",
+            "required": true
+          },
+          {
+            "name": "stageId",
+            "type": "string",
+            "in": "path",
             "required": true
           },
           {
@@ -1719,27 +1725,40 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
+            "description": "Updated"
+          },
+          "400": {
             "description": "Bad request",
             "schema": {
-              "properties": {
-                "_id": {
-                  "$ref": "#/definitions/MongoId"
-                },
-                "number": {
-                  "type": "number",
-                  "example": 1
-                },
-                "photo": {
-                  "type": "string",
-                  "example": "63e9eaf06038c07b443ae796"
-                },
-                "description": {
-                  "type": "string",
-                  "example": "description text"
-                }
-              }
+              "$ref": "#/definitions/ApiError"
             }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete stage",
+        "tags": [
+          "Stage"
+        ],
+        "operationId": "DeleteStage",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "stageId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "description": "Bad request",

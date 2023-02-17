@@ -110,5 +110,8 @@ module.exports = {
 			return Recipe.findByIdAndUpdate(id, {$set: {rating: averageRating}});
 		}
 	},
-	updateById: (id, updateRecipe) => Recipe.findByIdAndUpdate(id, updateRecipe)
+	updateById: (id, updateRecipe) => {
+		const {title, time, servings, description, ingredients} = updateRecipe;
+		return Recipe.findByIdAndUpdate(id, {$set: {title, time, servings, description, ingredients}}, {new: true});
+	}
 };

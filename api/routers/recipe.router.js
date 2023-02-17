@@ -38,9 +38,9 @@ router.put(
 	"/:recipeId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.isMongoIdValid("recipeId"),
-	recipeMiddleware.isBodyUpdateValid,
 	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeMiddleware.checkCreator,
+	recipeMiddleware.isBodyUpdateValid,
 	recipeController.update
 );
 
@@ -69,7 +69,7 @@ router.patch(
 	recipeController.bookToggle
 );
 
-router.patch(
+router.post(
 	"/:recipeId/addStage",
 	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessToken,

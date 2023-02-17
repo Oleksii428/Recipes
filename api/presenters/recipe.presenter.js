@@ -11,6 +11,7 @@ const present = (recipe) => {
 		gallery: recipe.gallery.map(media => media.path),
 		stages: recipe.stages.map(stage => {
 			return {
+				_id: stage._id,
 				number: stage.number,
 				photo: stage.photo?.path ? stage.photo?.path : null,
 				description: stage.description
@@ -41,6 +42,7 @@ const presentWithCreator = (recipe) => {
 		},
 		stages: recipe.stages.map(stage => {
 			return {
+				_id: stage._id,
 				number: stage.number,
 				photo: stage.photo?.path ? stage.photo?.path : null,
 				description: stage.description

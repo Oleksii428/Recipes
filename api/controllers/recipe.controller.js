@@ -173,7 +173,7 @@ module.exports = {
 				});
 			}
 
-			res.json("updated");
+			res.status(200).json("updated");
 		} catch (e) {
 			next(e);
 		}
