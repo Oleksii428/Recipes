@@ -2,7 +2,6 @@ const {Recipe} = require("../dataBases");
 
 module.exports = {
 	addMedia: (recipeId, mediaId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"gallery": mediaId}}, {new: true}),
-	addReview: (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"reviews": reviewId}}),
 	create: (newRecipe) => Recipe.create(newRecipe),
 	deleteById: (id) => Recipe.findByIdAndDelete(id).lean(),
 	getById: (id) => Recipe.findById(id).populate({
@@ -89,7 +88,6 @@ module.exports = {
 	setModerateStatus: async (id, status) => {
 		await Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}});
 	},
-	removeReview: (recipeId, reviewId) => Recipe.findByIdAndUpdate(recipeId, {$pull: {reviews: reviewId}}),
 	setBookCount: (id, number) => Recipe.findByIdAndUpdate(id, {$inc: {"bookCount": number}}),
 	setRating: async (id) => {
 		const {reviews} = await Recipe.findById(id).populate("reviews").select("reviews").lean();

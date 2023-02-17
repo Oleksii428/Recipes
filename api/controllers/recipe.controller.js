@@ -205,10 +205,10 @@ module.exports = {
 	},
 	deleteReview: async (req, res, next) => {
 		try {
-			const {recipe, review} = req;
+			const {review} = req;
 
-			const updatedRecipe = await recipeRepository.removeReview(recipe._id, review._id);
-			await recipeRepository.setRating(updatedRecipe._id);
+			await reviewRepository.deleteById(review._id);
+			await recipeRepository.setRating(review.recipe);
 
 			res.sendStatus(204);
 		} catch (e) {

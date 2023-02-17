@@ -11,7 +11,6 @@ const RecipeSchema = new Schema({
 	gallery: [{type: Schema.Types.ObjectId, ref: "Media"}],
 	rating: {type: Number, default: 0},
 	bookCount: {type: Number, default: 0},
-	// reviews: [{type: Schema.Types.ObjectId, ref: "Review"}],
 	creator: {type: Schema.Types.ObjectId, ref: "Author"},
 	isModerated: {type: Boolean, default: false}
 }, {

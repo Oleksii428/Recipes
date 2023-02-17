@@ -123,16 +123,4 @@ router.post(
 	recipeController.addReview
 );
 
-router.delete(
-	"/:recipeId/removeReview/:reviewId",
-	authMiddleware.isMongoIdValid("recipeId"),
-	authMiddleware.isMongoIdValid("reviewId"),
-	authMiddleware.checkAccessToken,
-	authorMiddleware.checkBanStatus,
-	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
-	reviewMiddleware.isReviewExistsDynamically("reviewId", "params", "_id"),
-	reviewMiddleware.checkOwner,
-	recipeController.deleteReview
-);
-
 module.exports = router;

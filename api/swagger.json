@@ -1932,6 +1932,34 @@
           }
         }
       }
+    },
+    "/reviews/{reviewId}": {
+      "delete": {
+        "description": "Delete review by id",
+        "tags": [
+          "Review"
+        ],
+        "operationId": "DeleteReview",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
     }
   }
 }
