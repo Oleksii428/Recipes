@@ -114,14 +114,40 @@
         "gallery": {
           "type": "array",
           "items": {
-            "type": "string",
-            "example": "recipes/63e0f73b03a811f4473b065b/1675687868399.jpg"
+            "type": "object",
+            "properties": {
+              "_id": {
+                "$ref": "#/definitions/MongoId"
+              },
+              "path": {
+                "example": "recipes/63e0f73b03a811f4473b065b/1675687868399.jpg"
+              }
+            }
+          }
+        },
+        "creator": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "$ref": "#/definitions/MongoId"
+            },
+            "userName": {
+              "type": "string",
+              "example": "john_01"
+            },
+            "avatar": {
+              "type": "string",
+              "example": "recipes/63e0f73b03a811f4473b065b/1675687868399.jpg"
+            }
           }
         },
         "stages": {
           "type": "array",
           "items": {
             "properties": {
+              "_id": {
+                "$ref": "#/definitions/MongoId"
+              },
               "number": {
                 "type": "number",
                 "example": 1
@@ -1478,6 +1504,46 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/{recipeId}/removeMedia/{mediaId}": {
+      "delete": {
+        "description": "Remove media from gallery",
+        "tags": [
+          "Recipe"
+        ],
+        "operationId": "RemoveMediaFromGallery",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "mediaId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "description": "Bad request",

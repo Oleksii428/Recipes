@@ -34,7 +34,7 @@ const presentWithCreator = (recipe) => {
 		category: recipe.category.title,
 		kitchen: recipe.kitchen.title,
 		ingredients: recipe.ingredients,
-		gallery: recipe.gallery.map(item => item.media.path),
+		gallery: recipe.gallery.map(item => item.media),
 		creator: {
 			_id: recipe.creator._id,
 			userName: recipe.creator.userName,

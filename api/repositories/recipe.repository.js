@@ -4,9 +4,9 @@ module.exports = {
 	create: (newRecipe) => Recipe.create(newRecipe),
 	deleteById: (id) => Recipe.findByIdAndDelete(id).lean(),
 	getById: (id) => Recipe.findById(id).populate({
-		path: "category kitchen creator reviewsCount gallery stages",
+		path: "category kitchen gallery creator reviewsCount stages",
 		populate: {
-			path: "avatar photo",
+			path: "media avatar photo",
 			strictPopulate: false
 		}
 	}).lean(),

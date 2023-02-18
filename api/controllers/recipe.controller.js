@@ -40,6 +40,29 @@ module.exports = {
 			next(e);
 		}
 	},
+	addReview: async (req, res, next) => {
+		try {
+			const recipe = req.recipe;
+			const newReview = await reviewRepository.create(req.review);
+
+			await Promise.all([
+				recipeRepository.setRating(recipe._id)
+			]);
+
+			if (req.photo) {
+				const fileName = fileHelper.buildFileName(req.photo.name, uploadFileTypes.REVIEWS, newReview.id);
+				const newMedia = await mediaRepository.create({path: fileName});
+				await Promise.all([
+					req.photo.mv(path.join(process.cwd(), "uploads", fileName)),
+					reviewRepository.addPhoto(newReview._id, newMedia._id)
+				]);
+			}
+
+			res.sendStatus(201);
+		} catch (e) {
+			next(e);
+		}
+	},
 	addVideo: async (req, res, next) => {
 		try {
 			const {recipe, video} = req;
@@ -83,36 +106,6 @@ module.exports = {
 			next(e);
 		}
 	},
-	getByQuery: async (req, res, next) => {
-		try {
-			const data = await recipeRepository.getByQuery(req.query);
-			const presentRecipes = recipePresenter.presentManyWithCreator(data.recipes);
-
-			res.json({...data, recipes: presentRecipes});
-		} catch (e) {
-			next(e);
-		}
-	},
-	getById: async (req, res, next) => {
-		try {
-			let recipe = await recipeRepository.getById(req.params.recipeId);
-			recipe = recipePresenter.presentWithCreator(recipe);
-
-			res.json(recipe);
-		} catch (e) {
-			next(e);
-		}
-	},
-	getReviews: async (req, res, next) => {
-		try {
-			let reviews = await recipeRepository.getReviews(req.params.recipeId);
-			reviews = reviewPresenter.presentMany(reviews);
-
-			res.json(reviews);
-		} catch (e) {
-			next(e);
-		}
-	},
 	create: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
@@ -144,11 +137,71 @@ module.exports = {
 			next(e);
 		}
 	},
+	delete: async (req, res, next) => {
+		try {
+			await recipeRepository.deleteById(req.recipe._id);
+
+			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	deleteReview: async (req, res, next) => {
+		try {
+			const {review} = req;
+
+			await reviewRepository.deleteById(review._id);
+			await recipeRepository.setRating(review.recipe);
+
+			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	getById: async (req, res, next) => {
+		try {
+			let recipe = await recipeRepository.getById(req.params.recipeId);
+			recipe = recipePresenter.presentWithCreator(recipe);
+
+			res.json(recipe);
+		} catch (e) {
+			next(e);
+		}
+	},
+	getByQuery: async (req, res, next) => {
+		try {
+			const data = await recipeRepository.getByQuery(req.query);
+			const presentRecipes = recipePresenter.presentManyWithCreator(data.recipes);
+
+			res.json({...data, recipes: presentRecipes});
+		} catch (e) {
+			next(e);
+		}
+	},
+	getReviews: async (req, res, next) => {
+		try {
+			let reviews = await recipeRepository.getReviews(req.params.recipeId);
+			reviews = reviewPresenter.presentMany(reviews);
+
+			res.json(reviews);
+		} catch (e) {
+			next(e);
+		}
+	},
 	moderate: async (req, res, next) => {
 		try {
 			const {recipeId} = req.params;
 
 			await recipeRepository.setModerateStatus(recipeId, true);
+
+			res.sendStatus(204);
+		} catch (e) {
+			next(e);
+		}
+	},
+	removeMedia: async (req, res, next) => {
+		try {
+			await galleryRepository.deleteOne(req.gallery._id);
 
 			res.sendStatus(204);
 		} catch (e) {
@@ -174,52 +227,6 @@ module.exports = {
 			}
 
 			res.status(200).json("updated");
-		} catch (e) {
-			next(e);
-		}
-	},
-	addReview: async (req, res, next) => {
-		try {
-			const recipe = req.recipe;
-
-			const newReview = await reviewRepository.create(req.review);
-
-			await Promise.all([
-				// recipeRepository.addReview(recipe._id, newReview._id),
-				recipeRepository.setRating(recipe._id)
-			]);
-
-			if (req.photo) {
-				const fileName = fileHelper.buildFileName(req.photo.name, uploadFileTypes.REVIEWS, newReview.id);
-				const newMedia = await mediaRepository.create({path: fileName});
-				await Promise.all([
-					req.photo.mv(path.join(process.cwd(), "uploads", fileName)),
-					reviewRepository.addPhoto(newReview._id, newMedia._id)
-				]);
-			}
-
-			res.sendStatus(201);
-		} catch (e) {
-			next(e);
-		}
-	},
-	deleteReview: async (req, res, next) => {
-		try {
-			const {review} = req;
-
-			await reviewRepository.deleteById(review._id);
-			await recipeRepository.setRating(review.recipe);
-
-			res.sendStatus(204);
-		} catch (e) {
-			next(e);
-		}
-	},
-	delete: async (req, res, next) => {
-		try {
-			await recipeRepository.deleteById(req.recipe._id);
-
-			res.sendStatus(204);
 		} catch (e) {
 			next(e);
 		}

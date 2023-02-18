@@ -9,7 +9,8 @@ const {
 	kitchenMiddleware,
 	categoryMiddleware,
 	stageMiddleware,
-	mediaMiddleware
+	mediaMiddleware,
+	galleryMiddleware
 } = require("../middlewares");
 
 router.get(
@@ -100,6 +101,18 @@ router.patch(
 	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeMiddleware.checkCreator,
 	recipeController.addVideo
+);
+
+router.delete(
+	"/:recipeId/removeMedia/:mediaId",
+	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.isMongoIdValid("mediaId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.checkBanStatus,
+	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
+	recipeMiddleware.checkCreator,
+	galleryMiddleware.isExists,
+	recipeController.removeMedia
 );
 
 router.patch(
