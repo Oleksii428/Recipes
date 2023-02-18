@@ -8,7 +8,6 @@ const RecipeSchema = new Schema({
 	category: {type: Schema.Types.ObjectId, ref: "Category", require: true},
 	kitchen: {type: Schema.Types.ObjectId, ref: "Kitchen", require: true},
 	ingredients: [{type: String, require: true}],
-	gallery: [{type: Schema.Types.ObjectId, ref: "Media"}],
 	rating: {type: Number, default: 0},
 	bookCount: {type: Number, default: 0},
 	creator: {type: Schema.Types.ObjectId, ref: "Author"},
@@ -36,6 +35,12 @@ RecipeSchema.virtual("reviewsCount", {
 	localField: "_id",
 	foreignField: "recipe",
 	count: true
+});
+
+RecipeSchema.virtual("gallery", {
+	ref: "Gallery",
+	localField: "_id",
+	foreignField: "recipe"
 });
 
 module.exports = model("Recipe", RecipeSchema);

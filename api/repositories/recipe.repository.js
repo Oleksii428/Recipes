@@ -1,7 +1,6 @@
 const {Recipe} = require("../dataBases");
 
 module.exports = {
-	addMedia: (recipeId, mediaId) => Recipe.findByIdAndUpdate(recipeId, {$push: {"gallery": mediaId}}, {new: true}),
 	create: (newRecipe) => Recipe.create(newRecipe),
 	deleteById: (id) => Recipe.findByIdAndDelete(id).lean(),
 	getById: (id) => Recipe.findById(id).populate({
@@ -71,7 +70,7 @@ module.exports = {
 		const recipes = await Recipe.find({isModerated: true}).populate({
 			path: "category kitchen creator reviewsCount gallery stages",
 			populate: {
-				path: "avatar photo",
+				path: "media avatar photo",
 				strictPopulate: false
 			}
 		}).find(findObj).sort(sortObj).skip((+page - 1) * limit).limit(limit);

@@ -6,7 +6,7 @@ const {
 	reviewRepository,
 	mediaRepository,
 	subscriberRepository,
-	bookRepository
+	bookRepository, galleryRepository
 } = require("../repositories");
 const {
 	CREATE_RECIPE_MODERATION,
@@ -32,7 +32,7 @@ module.exports = {
 					mediaRepository.create({"path": fileName}),
 					photo.mv(path.join(process.cwd(), "uploads", fileName))
 				]);
-				await recipeRepository.addMedia(recipe._id, newMedia._id);
+				await galleryRepository.create(recipe._id, newMedia._id);
 			}
 
 			res.json("ok");
@@ -49,7 +49,7 @@ module.exports = {
 				mediaRepository.create({"path": fileName}),
 				video.mv(path.join(process.cwd(), "uploads", fileName))
 			]);
-			await recipeRepository.addMedia(recipe._id, newMedia._id);
+			await galleryRepository.create(recipe._id, newMedia._id);
 
 			res.json("ok");
 		} catch (e) {

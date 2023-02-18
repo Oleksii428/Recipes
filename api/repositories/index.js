@@ -4,6 +4,7 @@ module.exports = {
 	authorRepository: require("./author.repository"),
 	bookRepository: require("./book.repository"),
 	categoryRepository: require("./category.repository"),
+	galleryRepository: require("./gallery.repository"),
 	kitchenRepository: require("./kitchen.repository"),
 	likeRepository: require("./like.repository"),
 	mediaRepository: require("./media.repository"),

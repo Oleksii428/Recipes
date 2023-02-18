@@ -24,7 +24,6 @@ module.exports = {
 		servings: Joi.number().min(1).max(50).required(),
 		description: Joi.string().min(10).max(300).required(),
 		ingredients: Joi.array().items(Joi.string().min(3).max(20)).min(1).required(),
-		gallery: Joi.array().items(Joi.string().regex(regex.MONGO_ID)).optional().default([]),
 		isModerated: Joi.boolean().default(false)
 	})
 };
