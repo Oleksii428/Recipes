@@ -1,11 +1,13 @@
-import {FC} from 'react';
+import {FC} from "react";
+
+import {Recipes} from "./components";
 
 const App: FC = () => {
-    return (
-        <div>
-            App
-        </div>
-    );
+	return (
+		<div>
+			<Recipes />
+		</div>
+	);
 };
 
 export {App};
