@@ -4,7 +4,7 @@ module.exports = {
 	create: (newRecipe) => Recipe.create(newRecipe),
 	deleteById: (id) => Recipe.findByIdAndDelete(id).lean(),
 	getById: (id) => Recipe.findById(id).populate({
-		path: "category kitchen gallery creator reviewsCount stages",
+		path: "category kitchen gallery creator reviewsCount stages bookCount",
 		populate: {
 			path: "media avatar photo",
 			strictPopulate: false
@@ -68,7 +68,7 @@ module.exports = {
 		}
 
 		const recipes = await Recipe.find({isModerated: true}).populate({
-			path: "category kitchen creator reviewsCount gallery stages",
+			path: "category kitchen creator reviewsCount gallery stages bookCount",
 			populate: {
 				path: "media avatar photo",
 				strictPopulate: false
@@ -82,7 +82,13 @@ module.exports = {
 			count
 		};
 	},
-	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate("category kitchen gallery reviewsCount stages").lean(),
+	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate({
+		path: "category kitchen reviewsCount gallery stages bookCount",
+		populate: {
+			path: "media photo",
+			strictPopulate: false
+		}
+	}).lean(),
 	getOneByParams: (filter = {}) => Recipe.findOne(filter),
 	setModerateStatus: async (id, status) => {
 		await Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}});

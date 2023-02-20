@@ -8,7 +8,7 @@ const present = (recipe) => {
 		category: recipe.category.title,
 		kitchen: recipe.kitchen.title,
 		ingredients: recipe.ingredients,
-		gallery: recipe.gallery.map(media => media.path),
+		gallery: recipe.gallery.map(media => media.media),
 		stages: recipe.stages.map(stage => {
 			return {
 				_id: stage._id,
@@ -19,7 +19,7 @@ const present = (recipe) => {
 		}),
 		rating: recipe.rating,
 		bookCount: recipe.bookCount,
-		reviewsCount: recipe.reviews.length,
+		reviewsCount: recipe.reviewsCount,
 		createdAt: recipe.createdAt,
 	};
 };
