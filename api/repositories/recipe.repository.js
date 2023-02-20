@@ -89,6 +89,25 @@ module.exports = {
 			strictPopulate: false
 		}
 	}).lean(),
+	getByAuthorIdWithCreator: async (authorId, query) => {
+		const {page = "1"} = query;
+		const limit = 5;
+
+		const recipes = await Recipe.find({creator: authorId, isModerated: true}).populate({
+			path: "category kitchen creator reviewsCount gallery stages bookCount",
+			populate: {
+				path: "media avatar photo",
+				strictPopulate: false
+			}
+		}).skip((+page - 1) * limit).limit(limit).lean();
+		const count = await Recipe.count({creator: authorId, isModerated: true});
+
+		return {
+			recipes,
+			page,
+			count
+		};
+	},
 	getOneByParams: (filter = {}) => Recipe.findOne(filter),
 	setModerateStatus: async (id, status) => {
 		await Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}});

@@ -842,6 +842,55 @@
         }
       }
     },
+    "/authors/{authorId}/recipes": {
+      "get": {
+        "description": "Get author's recipes by id",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "GetAuthorsRecipesById",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "recipes": {
+                  "$ref": "#/definitions/Recipe"
+                },
+                "page": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "count": {
+                  "type": "number",
+                  "example": 2
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
     "/authors/{authorId}/block": {
       "patch": {
         "description": "Block author",

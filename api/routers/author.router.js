@@ -51,6 +51,13 @@ router.get(
 );
 
 router.get(
+	"/:authorId/recipes",
+	authMiddleware.isMongoIdValid("authorId"),
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorController.getRecipesByParams
+);
+
+router.get(
 	"/book",
 	authMiddleware.checkAccessToken,
 	authorController.getBook
