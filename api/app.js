@@ -3,6 +3,7 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const swaggerUI = require("swagger-ui-express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const {MONGO_URL, PORT} = require("./configs/config");
 const {
@@ -18,6 +19,12 @@ const swaggerJson = require("./swagger.json");
 const path = require("path");
 
 const app = express();
+app.use(cors({
+	origin: "http://localhost:3000",
+	methods: ["GET", "PUT", "POST", "PATCH"],
+	credentials: true,
+	optionSuccessStatus: 200
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(process.cwd(), "uploads")));
