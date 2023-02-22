@@ -1,26 +1,25 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect} from "react";
 
-import {IRecipes} from "../../interfaces";
-import {recipeService} from "../../services";
 import {Recipe} from "../Recipe/Recipe";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {recipeActions} from "../../redux";
+
+import {Container, Grid} from "@mui/material";
 
 const Recipes: FC = () => {
-	const [list, setList] = useState<IRecipes>();
+	const {list} = useAppSelector(state => state.recipeReducer);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		recipeService.getByQuery().then(({data}) => setList(data));
-	}, []);
+		dispatch(recipeActions.getByQuery());
+	}, [dispatch]);
 
 	return (
-		<div>
-			<div>
-				{list?.recipes.map(recipe => <Recipe recipe={recipe} key={recipe._id} />)}
-			</div>
-			<br />
-			<div>
-				Page: {list?.page}
-			</div>
-		</div>
+		<Container maxWidth={"lg"}>
+			<Grid container spacing={2}>
+				{list.recipes.map(recipe => <Recipe recipe={recipe} key={recipe._id} />)}
+			</Grid>
+		</Container>
 	);
 };
 

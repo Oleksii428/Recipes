@@ -1,5 +1,19 @@
 import {FC} from "react";
+import {
+	Avatar,
+	Button,
+	Card,
+	CardContent,
+	CardHeader,
+	CardMedia,
+	Grid,
+	Paper,
+	Rating,
+	Typography
+} from "@mui/material";
+
 import {IRecipe} from "../../interfaces";
+import {baseURL} from "../../configs";
 
 interface Iprops {
 	recipe: IRecipe;
@@ -23,71 +37,49 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 		title,
 		servings
 	} = recipe;
+	const {avatar, userName} = creator;
 
 	return (
-		<div>
-			<div>
-				<h2>_id</h2>: {_id}
-			</div>
-			<div>
-				<h2>category</h2>: {category}
-			</div>
-			<div>
-				<div>
-					{creator._id}
-				</div>
-				<div>
-					{creator.avatar}
-				</div>
-				<div>
-					{creator.userName}
-				</div>
-			</div>
-			<div>
-				<h2>description</h2>: {description}
-			</div>
-			<div>
-				<h2>createdAt</h2>: {createdAt}
-			</div>
-			<div>
-				<h2>gallery</h2>:
-				{gallery.map(media => <div key={media._id}>
-					<div>{media.path}</div>
-				</div>)}
-			</div>
-			<div>
-				<h2>ingredients</h2>: {ingredients}
-			</div>
-			<div>
-				<h2>kitchen</h2>: {kitchen}
-			</div>
-			<div>
-				<h2>rating</h2>: {rating}
-			</div>
-			<div>
-				<h2>reviewsCount</h2>: {reviewsCount}
-			</div>
-			<div>
-				<h2>bookCount</h2>: {bookCount}
-			</div>
-			<div>
-				<h2>time</h2>: {time}
-			</div>
-			<div>
-				<h2>stages</h2>:
-				{stages.map((stage) => <div key={stage._id}>
-					<div>{stage.number}</div>
-					<div>{stage.photo}</div>
-					<div>{stage.description}</div>
-				</div>)}
-			</div>
-			<div>
-				<h2>title</h2>: {title}
-			</div>
-			<div>
-				<h2>servings</h2>: {servings}
-			</div>
-		</div>
+		<Grid item xs={3}>
+			<Card>
+				<CardHeader
+					avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
+					title={userName}
+					subheader={createdAt}
+				/>
+				<CardContent>
+					<Typography variant="h5">
+						{title}
+						{gallery.length ?
+							<CardMedia
+								component="img"
+								height="200"
+								image={gallery.length ? baseURL + gallery[0].path : "static/images/cards/paella.jpg"}
+								alt="preview"
+								sx={{borderRadius: 5}}
+							/> :
+							<Paper sx={{height: 200, borderRadius: 5, bgcolor: "grey"}}
+							/>
+						}
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
+						Time: {time}
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
+						Servings: {servings}
+					</Typography>
+					<Typography variant="body2" color="text.secondary" sx={{display: "flex", alignItems: "center"}}>
+						<Rating name="read-only" value={rating} precision={0.1} readOnly />
+						<Typography variant="body2" color="text.secondary">
+							{reviewsCount}
+						</Typography>
+					</Typography>
+					<Button variant="contained">
+						Details
+					</Button>
+				</CardContent>
+			</Card>
+		</Grid>
 	);
 };
 
