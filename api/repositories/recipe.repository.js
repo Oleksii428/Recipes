@@ -44,18 +44,6 @@ module.exports = {
 				title: new RegExp(title)
 			};
 		}
-		if (category) {
-			findObj = {
-				...findObj,
-				"category.title": new RegExp(category)
-			};
-		}
-		if (kitchen) {
-			findObj = {
-				...findObj,
-				"kitchen.title": new RegExp(kitchen)
-			};
-		}
 		if (ingredients) {
 			const findIngredients = ingredients.split(",");
 			for (const findIngredient of findIngredients) {
@@ -67,19 +55,25 @@ module.exports = {
 			};
 		}
 
-		const recipes = await Recipe.find({isModerated: true}).populate({
+		let recipes = await Recipe.find({isModerated: true}).populate({
 			path: "category kitchen creator reviewsCount gallery stages bookCount",
 			populate: {
 				path: "media avatar photo",
 				strictPopulate: false
 			}
 		}).find(findObj).sort(sortObj).skip((+page - 1) * limit).limit(limit);
-		const count = await Recipe.count({...findObj, isModerated: true});
+
+		if (category) {
+			recipes = recipes.filter(recipe => recipe.category.title === category);
+		}
+		if (kitchen) {
+			recipes = recipes.filter(recipe => recipe.kitchen.title === kitchen);
+		}
 
 		return {
 			recipes,
 			page,
-			count
+			count: recipes.length
 		};
 	},
 	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate({
