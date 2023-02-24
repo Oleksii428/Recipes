@@ -1,11 +1,13 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IRecipes} from "../../interfaces";
+import {IQuery, IRecipes} from "../../interfaces";
 import {recipeService} from "../../services";
 
 interface IState {
 	list: IRecipes;
+	loading: boolean;
+	error: boolean;
 }
 
 const initialState: IState = {
@@ -13,20 +15,21 @@ const initialState: IState = {
 		recipes: [],
 		page: "0",
 		count: 0
-	}
+	},
+	loading: false,
+	error: false
 };
 
-const getByQuery = createAsyncThunk<IRecipes, void>(
+const getByQuery = createAsyncThunk<IRecipes, IQuery | null>(
 	"recipeSlice/getByQuery",
-	async (_, {rejectWithValue}) => {
+	async (query, {rejectWithValue}) => {
 		try {
-			const {data} = await recipeService.getByQuery();
+			const {data} = await recipeService.getByQuery(query);
 			return data;
 		} catch (e) {
 			const err = e as AxiosError;
 			return rejectWithValue(err.response?.data);
 		}
-
 	}
 );
 
@@ -36,8 +39,17 @@ const recipeSlice = createSlice({
 	reducers: {},
 	extraReducers: builder =>
 		builder
-			.addCase(getByQuery.fulfilled, (state, actions) => {
-				state.list = actions.payload;
+			.addCase(getByQuery.fulfilled, (state, action) => {
+				state.list = action.payload;
+				state.loading = false;
+				state.error = false;
+			})
+			.addCase(getByQuery.pending, (state, action) => {
+				state.loading = true;
+			})
+			.addCase(getByQuery.rejected, (state, action) => {
+				state.loading = false;
+				state.error = true;
 			})
 });
 

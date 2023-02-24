@@ -1,7 +1,8 @@
 const baseURL = "http://localhost:5000/";
 
 const urls = {
-	recipes: "recipes/"
+	recipes: "recipes/",
+	categories: "categories/"
 };
 
 export {

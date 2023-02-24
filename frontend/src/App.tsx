@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import {Provider} from "react-redux";
 
 import {MainLayout} from "./layouts";
@@ -13,7 +13,7 @@ const App: FC = () => {
 		<Provider store={store}>
 			<Routes>
 				<Route path={""} element={<MainLayout />}>
-					<Route index element={<Navigate to={"recipes"} />} />
+					{/*<Route index element={<Navigate to={"recipes"} />} />*/}
 					<Route path={"recipes"} element={<RecipesPage />}>
 					</Route>
 				</Route>

@@ -26,21 +26,16 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 		creator,
 		createdAt,
 		gallery,
-		description,
-		kitchen,
 		rating,
-		ingredients,
 		reviewsCount,
-		bookCount,
 		time,
-		stages,
 		title,
 		servings
 	} = recipe;
 	const {avatar, userName} = creator;
 
 	return (
-		<Grid item xs={3}>
+		<Grid item xl={3} lg={4} md={5}>
 			<Card>
 				<CardHeader
 					avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
@@ -66,13 +61,14 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 						Time: {time}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
+						Category: {category}
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
 						Servings: {servings}
 					</Typography>
 					<Typography variant="body2" color="text.secondary" sx={{display: "flex", alignItems: "center"}}>
 						<Rating name="read-only" value={rating} precision={0.1} readOnly />
-						<Typography variant="body2" color="text.secondary">
-							{reviewsCount}
-						</Typography>
+						{reviewsCount}
 					</Typography>
 					<Button variant="contained">
 						Details

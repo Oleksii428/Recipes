@@ -3,8 +3,8 @@ import {AppBar, Avatar, Box, Container, MenuItem, Toolbar, Typography} from "@mu
 
 const Header: FC = () => {
 	return (
-		<AppBar position="static">
-			<Container maxWidth={"lg"}>
+		<AppBar position="sticky">
+			<Container maxWidth={"xl"}>
 				<Toolbar disableGutters>
 					<Box sx={{display: "flex", flexGrow: 1}}>
 						<MenuItem component="a" href="/">
