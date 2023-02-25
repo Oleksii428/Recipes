@@ -23,6 +23,7 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 	const {
 		_id,
 		category,
+		kitchen,
 		creator,
 		createdAt,
 		gallery,
@@ -62,6 +63,9 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Category: {category}
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
+						Kitchen: {kitchen}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Servings: {servings}

@@ -1,10 +1,9 @@
 import React, {FC, useEffect, useState} from "react";
-
-import {Recipe} from "../Recipe/Recipe";
-import {useAppDispatch, useAppSelector} from "../../hooks";
 import {useSearchParams} from "react-router-dom";
 import {Box, CircularProgress, Container, Grid} from "@mui/material";
 
+import {Recipe} from "../Recipe/Recipe";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {recipeActions} from "../../redux";
 import {Filters} from "../Filters/Filters";
 import {IQuery} from "../../interfaces";

@@ -28,6 +28,7 @@ export interface IRecipe {
 	],
 	rating: number,
 	bookCount: number,
+	inBook?: boolean,
 	reviewsCount: number,
 	createdAt: string
 }

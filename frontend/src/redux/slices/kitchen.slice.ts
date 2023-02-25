@@ -1,26 +1,26 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {ICategory} from "../../interfaces";
-import {categoryService} from "../../services/category.service";
+import {IKitchen} from "../../interfaces";
+import {kitchenService} from "../../services";
 
 interface IState {
-	categories: ICategory[];
+	kitchens: IKitchen[];
 	loading: boolean;
 	error: boolean;
 }
 
 const initialState: IState = {
-	categories: [],
+	kitchens: [],
 	loading: false,
 	error: false
 };
 
-const getByParams = createAsyncThunk<ICategory[], void>(
-	"categorySlice/getByParams",
+const getByParams = createAsyncThunk<IKitchen[], void>(
+	"kitchenSlice/getByParams",
 	async (_, {rejectWithValue}) => {
 		try {
-			const {data} = await categoryService.getByParams();
+			const {data} = await kitchenService.getByParams();
 			return data;
 		} catch (e) {
 			const err = e as AxiosError;
@@ -29,14 +29,14 @@ const getByParams = createAsyncThunk<ICategory[], void>(
 	}
 );
 
-const categorySlice = createSlice({
-	name: "categorySlice",
+const recipeSlice = createSlice({
+	name: "kitchenSlice",
 	initialState,
 	reducers: {},
 	extraReducers: builder =>
 		builder
 			.addCase(getByParams.fulfilled, (state, action) => {
-				state.categories = action.payload;
+				state.kitchens = action.payload;
 				state.loading = false;
 				state.error = false;
 			})
@@ -49,13 +49,13 @@ const categorySlice = createSlice({
 			})
 });
 
-const {reducer: categoryReducer, actions} = categorySlice;
+const {reducer: kitchenReducer, actions} = recipeSlice;
 
-const categoryActions = {
+const kitchenActions = {
 	getByParams
 };
 
 export {
-	categoryActions,
-	categoryReducer
+	kitchenActions,
+	kitchenReducer
 };
