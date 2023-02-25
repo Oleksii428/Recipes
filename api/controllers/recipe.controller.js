@@ -161,8 +161,18 @@ module.exports = {
 	getById: async (req, res, next) => {
 		try {
 			let recipe = await recipeRepository.getById(req.params.recipeId);
-			recipe = recipePresenter.presentWithCreator(recipe);
-
+			if (req.tokenInfo) {
+				const {author} = req.tokenInfo;
+				const authorBookIds = await bookRepository.getBookIdArray(author._id);
+				if (authorBookIds.includes(recipe._id.valueOf())) {
+					recipe = {...recipe, inBook: true};
+				} else {
+					recipe = {...recipe, inBook: false};
+				}
+				recipe = recipePresenter.presentWithCreator(recipe);
+			} else {
+				recipe = recipePresenter.presentWithCreator(recipe);
+			}
 			res.json(recipe);
 		} catch (e) {
 			next(e);

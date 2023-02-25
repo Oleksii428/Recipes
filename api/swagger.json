@@ -1275,6 +1275,12 @@
         "operationId": "GetRecipesById",
         "parameters": [
           {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
             "name": "recipeId",
             "type": "string",
             "in": "path",

@@ -32,6 +32,7 @@ router.post(
 router.get(
 	"/:recipeId",
 	authMiddleware.isMongoIdValid("recipeId"),
+	authMiddleware.checkAccessTokenIfExists,
 	recipeMiddleware.isRecipeExistsDynamically("recipeId", "params", "_id"),
 	recipeController.getById
 );
