@@ -50,6 +50,7 @@ const presentWithCreator = (recipe) => {
 		}),
 		rating: recipe.rating,
 		bookCount: recipe.bookCount,
+		inBook: recipe.inBook,
 		reviewsCount: recipe.reviewsCount,
 		createdAt: recipe.createdAt,
 	};

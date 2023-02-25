@@ -31,6 +31,30 @@ module.exports = {
 			next(e);
 		}
 	},
+	checkAccessTokenIfExists: async (req, res, next) => {
+		try {
+			const accessToken = req.get("Authorization");
+
+			if (accessToken) {
+				authService.checkToken(accessToken, tokenTypes.accessToken);
+
+				const tokenInfo = await authRepository.findOneWidthAuthor({accessToken});
+
+				if (!tokenInfo) {
+					throw new ApiError("No token in data base", 401);
+				}
+
+				if (!tokenInfo.author) {
+					throw new ApiError("Unauthorized", 401);
+				}
+
+				req.tokenInfo = tokenInfo;
+			}
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 	checkActionToken: async (req, res, next) => {
 		try {
 			const {token: actionToken} = req.query;

@@ -170,10 +170,24 @@ module.exports = {
 	},
 	getByQuery: async (req, res, next) => {
 		try {
-			const data = await recipeRepository.getByQuery(req.query);
-			const presentRecipes = recipePresenter.presentManyWithCreator(data.recipes);
-
-			res.json({...data, recipes: presentRecipes});
+			const {recipes, count, page} = await recipeRepository.getByQuery(req.query);
+			if (req.tokenInfo) {
+				const {author} = req.tokenInfo;
+				const authorBookIds = await bookRepository.getBookIdArray(author._id);
+				const newRecipes = recipes.map(recipe => {
+						if (authorBookIds.includes(recipe._id.valueOf())) {
+							return {...recipe, inBook: true};
+						} else {
+							return {...recipe, inBook: false};
+						}
+					}
+				);
+				const presentRecipes = recipePresenter.presentManyWithCreator(newRecipes);
+				res.json({recipes: presentRecipes, count, page});
+			} else {
+				const presentRecipes = recipePresenter.presentManyWithCreator(recipes);
+				res.json({recipes: presentRecipes, count, page});
+			}
 		} catch (e) {
 			next(e);
 		}

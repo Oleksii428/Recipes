@@ -15,6 +15,7 @@ const {
 
 router.get(
 	"/",
+	authMiddleware.checkAccessTokenIfExists,
 	recipeController.getByQuery
 );
 

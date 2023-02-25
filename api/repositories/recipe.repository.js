@@ -61,7 +61,7 @@ module.exports = {
 				path: "media avatar photo",
 				strictPopulate: false
 			}
-		}).find(findObj).sort(sortObj).skip((+page - 1) * limit).limit(limit);
+		}).find(findObj).sort(sortObj).skip((+page - 1) * limit).limit(limit).lean();
 
 		if (category) {
 			recipes = recipes.filter(recipe => recipe.category.title === category);
