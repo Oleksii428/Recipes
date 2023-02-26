@@ -1,18 +1,34 @@
-import React, {FC, useEffect} from "react";
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {FC, SyntheticEvent, useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
-import {kitchenActions} from "../../redux";
 import {Autocomplete, TextField} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+
+import {useAppDispatch, useAppLocation, useAppSelector} from "../../hooks";
+import {kitchenActions} from "../../redux";
 
 const KitchenFilter: FC = () => {
 	const dispatch = useAppDispatch();
 	const {kitchens} = useAppSelector(state => state.kitchenReducer);
 	const titles = kitchens.map(kitchen => kitchen.title);
-	const [searchParams, setSearchParams] = useSearchParams({});
+	const [query] = useSearchParams({});
+	const location = useAppLocation();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		dispatch(kitchenActions.getByParams());
 	}, [dispatch]);
+
+	const handleChange = (e: SyntheticEvent, newValue: string | null) => {
+		if (newValue) {
+			const searchParams: URLSearchParams = new URLSearchParams(location.search);
+			searchParams.set("kitchen", newValue);
+			navigate({search: searchParams.toString()});
+		} else {
+			const searchParams = new URLSearchParams(location.search);
+			searchParams.delete("kitchen");
+			navigate({search: searchParams.toString()});
+		}
+	};
 
 	return (
 		<Autocomplete
@@ -22,17 +38,8 @@ const KitchenFilter: FC = () => {
 			renderInput={(titles) => (
 				<TextField {...titles} label="Kitchen" variant="standard" />
 			)}
-			value={sessionStorage.getItem("kitchen")}
-			onChange={(event: any, newValue) => {
-				if (newValue) {
-					sessionStorage.setItem("kitchen", newValue);
-					setSearchParams((prev) => ({...prev, kitchen: newValue}));
-				} else {
-					sessionStorage.removeItem("kitchen");
-					searchParams.delete("kitchen");
-					setSearchParams(searchParams);
-				}
-			}}
+			value={query.get("kitchen")}
+			onChange={handleChange}
 		/>
 	);
 };

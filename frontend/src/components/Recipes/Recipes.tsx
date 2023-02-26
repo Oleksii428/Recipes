@@ -15,12 +15,12 @@ const Recipes: FC = () => {
 	const [query, setQuery] = useState<IQuery | null>(null);
 
 	useEffect(() => {
-		let isSearchParamsEmpty: boolean = true;
+		let newQuery: IQuery = {};
 		for (const [key, value] of searchParams.entries()) {
-			setQuery(() => ({[key]: value}));
-			isSearchParamsEmpty = false;
+			newQuery = {...newQuery, [key]: value};
 		}
-		if (isSearchParamsEmpty) {
+		setQuery(newQuery);
+		if (Object.keys(newQuery).length === 0) {
 			setQuery(null);
 		}
 	}, [searchParams]);

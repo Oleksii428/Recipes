@@ -1,19 +1,33 @@
-import React, {FC, useEffect} from "react";
+import {FC, SyntheticEvent, useEffect} from "react";
 import {Autocomplete, TextField} from "@mui/material";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch, useAppLocation, useAppSelector} from "../../hooks";
 import {categoryActions} from "../../redux";
 
 const CategoryFilter: FC = () => {
 	const dispatch = useAppDispatch();
 	const {categories} = useAppSelector(state => state.categoryReducer);
 	const titles = categories.map(category => category.title);
-	const [searchParams, setSearchParams] = useSearchParams({});
+	const [query] = useSearchParams({});
+	const location = useAppLocation();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		dispatch(categoryActions.getByParams());
 	}, [dispatch]);
+
+	const handleChange = (e: SyntheticEvent, newValue: string | null) => {
+		if (newValue) {
+			const searchParams: URLSearchParams = new URLSearchParams(location.search);
+			searchParams.set("category", newValue);
+			navigate({search: searchParams.toString()});
+		} else {
+			const searchParams: URLSearchParams = new URLSearchParams(location.search);
+			searchParams.delete("category");
+			navigate({search: searchParams.toString()});
+		}
+	};
 
 	return (
 		<Autocomplete
@@ -23,17 +37,8 @@ const CategoryFilter: FC = () => {
 			renderInput={(titles) => (
 				<TextField {...titles} label="Category" variant="standard" />
 			)}
-			value={sessionStorage.getItem("category")}
-			onChange={(event: any, newValue) => {
-				if (newValue) {
-					sessionStorage.setItem("category", newValue);
-					setSearchParams((prev) => ({...prev, category: newValue}));
-				} else {
-					sessionStorage.removeItem("category");
-					searchParams.delete("category");
-					setSearchParams(searchParams);
-				}
-			}}
+			value={query.get("category")}
+			onChange={handleChange}
 		/>
 	);
 };
