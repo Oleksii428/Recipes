@@ -5,6 +5,7 @@ import {CategoryFilter} from "../CategoryFilter/CategoryFilter";
 import {KitchenFilter} from "../kitchenFilter/KitchenFilter";
 import {TitleFilter} from "../TitleFilter/TitleFilter";
 import {IngredientsFilter} from "../IngredientsFilter/IngredientsFilter";
+import {TimeFilter} from "../TimeFilter/TimeFilter";
 
 const Filters: FC = () => {
 	return (
@@ -13,6 +14,7 @@ const Filters: FC = () => {
 			<KitchenFilter />
 			<TitleFilter />
 			<IngredientsFilter />
+			<TimeFilter />
 		</Stack>
 	);
 };
