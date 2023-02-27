@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import {ChangeEvent, FC, KeyboardEvent, useEffect, useState} from "react";
 import {Chip, FormControl, Input, Paper} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
@@ -13,6 +13,7 @@ const IngredientsFilter: FC = () => {
 		if (prev) {
 			setValues(prev.split(","));
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -23,9 +24,10 @@ const IngredientsFilter: FC = () => {
 			searchParams.delete("ingredients");
 			navigate({search: searchParams.toString()});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigate, values]);
 
-	const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+	const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			if (currValue) {
 				setValues((oldState) => [...oldState, currValue]);
@@ -39,7 +41,7 @@ const IngredientsFilter: FC = () => {
 		}
 	};
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setCurrValue(e.currentTarget.value);
 	};
 

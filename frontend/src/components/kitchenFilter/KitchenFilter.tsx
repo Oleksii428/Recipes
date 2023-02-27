@@ -1,17 +1,15 @@
 import {FC, SyntheticEvent, useEffect} from "react";
-import {useSearchParams} from "react-router-dom";
+import {useSearchParams, useNavigate} from "react-router-dom";
 import {Autocomplete, TextField} from "@mui/material";
-import {useNavigate} from "react-router-dom";
 
-import {useAppDispatch, useAppLocation, useAppSelector} from "../../hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {kitchenActions} from "../../redux";
 
 const KitchenFilter: FC = () => {
 	const dispatch = useAppDispatch();
 	const {kitchens} = useAppSelector(state => state.kitchenReducer);
 	const titles = kitchens.map(kitchen => kitchen.title);
-	const [query] = useSearchParams({});
-	const location = useAppLocation();
+	const [query] = useSearchParams();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -20,13 +18,11 @@ const KitchenFilter: FC = () => {
 
 	const handleChange = (e: SyntheticEvent, newValue: string | null) => {
 		if (newValue) {
-			const searchParams: URLSearchParams = new URLSearchParams(location.search);
-			searchParams.set("kitchen", newValue);
-			navigate({search: searchParams.toString()});
+			query.set("kitchen", newValue);
+			navigate({search: query.toString()});
 		} else {
-			const searchParams = new URLSearchParams(location.search);
-			searchParams.delete("kitchen");
-			navigate({search: searchParams.toString()});
+			query.delete("kitchen");
+			navigate({search: query.toString()});
 		}
 	};
 

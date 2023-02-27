@@ -2,15 +2,14 @@ import {FC, SyntheticEvent, useEffect} from "react";
 import {Autocomplete, TextField} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-import {useAppDispatch, useAppLocation, useAppSelector} from "../../hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {categoryActions} from "../../redux";
 
 const CategoryFilter: FC = () => {
 	const dispatch = useAppDispatch();
 	const {categories} = useAppSelector(state => state.categoryReducer);
 	const titles = categories.map(category => category.title);
-	const [query] = useSearchParams({});
-	const location = useAppLocation();
+	const [query] = useSearchParams();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -19,13 +18,11 @@ const CategoryFilter: FC = () => {
 
 	const handleChange = (e: SyntheticEvent, newValue: string | null) => {
 		if (newValue) {
-			const searchParams: URLSearchParams = new URLSearchParams(location.search);
-			searchParams.set("category", newValue);
-			navigate({search: searchParams.toString()});
+			query.set("category", newValue);
+			navigate({search: query.toString()});
 		} else {
-			const searchParams: URLSearchParams = new URLSearchParams(location.search);
-			searchParams.delete("category");
-			navigate({search: searchParams.toString()});
+			query.delete("category");
+			navigate({search: query.toString()});
 		}
 	};
 
