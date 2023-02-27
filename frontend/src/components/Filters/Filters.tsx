@@ -4,6 +4,7 @@ import {Stack} from "@mui/material";
 import {CategoryFilter} from "../CategoryFilter/CategoryFilter";
 import {KitchenFilter} from "../kitchenFilter/KitchenFilter";
 import {TitleFilter} from "../TitleFilter/TitleFilter";
+import {IngredientsFilter} from "../IngredientsFilter/IngredientsFilter";
 
 const Filters: FC = () => {
 	return (
@@ -11,6 +12,7 @@ const Filters: FC = () => {
 			<CategoryFilter />
 			<KitchenFilter />
 			<TitleFilter />
+			<IngredientsFilter />
 		</Stack>
 	);
 };

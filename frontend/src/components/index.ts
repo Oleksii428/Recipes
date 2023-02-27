@@ -5,3 +5,4 @@ export * from "./Filters/Filters";
 export * from "./CategoryFilter/CategoryFilter";
 export * from "./kitchenFilter/KitchenFilter";
 export * from "./TitleFilter/TitleFilter";
+export * from "./IngredientsFilter/IngredientsFilter";

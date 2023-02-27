@@ -1,5 +1,6 @@
 import {ChangeEvent, FC, useEffect, useState} from "react";
 import {TextField} from "@mui/material";
+
 import {useNavigate} from "react-router-dom";
 import {useAppLocation} from "../../hooks";
 
@@ -10,12 +11,10 @@ const TitleFilter: FC = () => {
 	const [currValue, setCurrValue] = useState<string>(searchParams.get("title") ?? "");
 
 	useEffect(() => {
-		console.log("g");
 		setSearchParams(new URLSearchParams(location.search));
 	}, [location.search]);
 
 	useEffect(() => {
-		console.log("f");
 		setCurrValue(searchParams.get("title") ?? "");
 	}, [searchParams]);
 
