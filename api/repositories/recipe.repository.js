@@ -28,40 +28,41 @@ module.exports = {
 		return reviews;
 	},
 	getByQuery: async (query) => {
-		const {page = "1", title, category, kitchen, ingredients, sort = "rating", sortType = "1"} = query;
+		const {page = "1", title, category, kitchen, ingredients, time, sort = "rating", sortType = "1"} = query;
 
-		const limit = 5;
-		let findObj = {};
-		let sortObj = {
-			[sort]: +sortType
-
-		};
-		let findByIngredients = [];
+		const limit = 6;
+		const skip = (page - 1) * limit;
+		let findObj = {isModerated: true};
+		let sortObj = {[sort]: +sortType};
 
 		if (title) {
-			findObj = {
-				...findObj,
-				title: new RegExp(title)
-			};
-		}
-		if (ingredients) {
-			const findIngredients = ingredients.split(",");
-			for (const findIngredient of findIngredients) {
-				findByIngredients.push({ingredients: new RegExp(findIngredient)});
-			}
-			findObj = {
-				...findObj,
-				$and: findByIngredients
-			};
+			findObj.title = new RegExp(title, "i");
 		}
 
-		let recipes = await Recipe.find({isModerated: true}).populate({
-			path: "category kitchen creator reviewsCount gallery stages bookCount",
-			populate: {
-				path: "media avatar photo",
-				strictPopulate: false
-			}
-		}).find(findObj).sort(sortObj).skip((+page - 1) * limit).limit(limit).lean();
+		if (ingredients) {
+			const findIngredients = ingredients.split(",");
+			findObj.ingredients = {$in: findIngredients.map((ing) => new RegExp(ing, "i"))};
+		}
+		if (time) {
+			const [minTime, maxTime] = time.split("-").map((t) => parseInt(t));
+			findObj.time = {$gte: minTime, $lte: maxTime};
+		}
+
+		let [recipes, count] = await Promise.all([
+			Recipe.find(findObj)
+				.populate({
+					path: "category kitchen creator reviewsCount gallery stages bookCount",
+					populate: {
+						path: "media avatar photo",
+						strictPopulate: false
+					}
+				})
+				.sort(sortObj)
+				.skip(skip)
+				.limit(limit)
+				.lean(),
+			Recipe.countDocuments(findObj)
+		]);
 
 		if (category) {
 			recipes = recipes.filter(recipe => recipe.category.title === category);
@@ -73,7 +74,7 @@ module.exports = {
 		return {
 			recipes,
 			page,
-			count: recipes.length
+			count
 		};
 	},
 	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate({
