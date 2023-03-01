@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from "../../hooks";
 import {recipeActions} from "../../redux";
 import {Filters} from "../Filters/Filters";
 import {IQuery} from "../../interfaces";
+import {RecipesPagination} from "../RecipesPagingation/RecipesPagination";
 
 const Recipes: FC = () => {
 	const dispatch = useAppDispatch();
@@ -26,15 +27,18 @@ const Recipes: FC = () => {
 	return (
 		<Container sx={{display: "flex", columnGap: 3}} maxWidth={"xl"}>
 			<Filters />
-			<Grid container justifyContent="center" spacing={3}>
-				{loading ?
-					<Box sx={{display: "flex"}}>
-						<CircularProgress />
-					</Box> :
-					list.recipes.map(recipe =>
-						<Recipe recipe={recipe} key={recipe._id} />
-					)}
-			</Grid>
+			<Box sx={{display: "flex", flexDirection: "column", flexGrow: 1}}>
+				<Grid container justifyContent="center" spacing={3}>
+					{loading ?
+						<Box sx={{display: "flex"}}>
+							<CircularProgress />
+						</Box> :
+						list.recipes.map(recipe =>
+							<Recipe recipe={recipe} key={recipe._id} />
+						)}
+				</Grid>
+				<RecipesPagination count={list.count} />
+			</Box>
 		</Container>
 	);
 };

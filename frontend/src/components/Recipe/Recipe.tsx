@@ -1,12 +1,12 @@
 import {FC} from "react";
 import {
-	Avatar,
+	Avatar, Box,
 	Button,
 	Card,
 	CardContent,
 	CardHeader,
 	CardMedia,
-	Grid,
+	Grid, Link,
 	Paper,
 	Rating,
 	Typography
@@ -14,6 +14,7 @@ import {
 
 import {IRecipe} from "../../interfaces";
 import {baseURL} from "../../configs";
+import {BookmarkBorder} from "@mui/icons-material";
 
 interface Iprops {
 	recipe: IRecipe;
@@ -38,11 +39,16 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 	return (
 		<Grid item xl={3} lg={4} md={5}>
 			<Card>
-				<CardHeader
-					avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
-					title={userName}
-					subheader={createdAt}
-				/>
+				<Box sx={{display: "flex", alignItems: "center"}}>
+					<CardHeader
+						avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
+						title={userName}
+						subheader={createdAt}
+					/>
+					<Button>
+						<BookmarkBorder fontSize="medium" />
+					</Button>
+				</Box>
 				<CardContent>
 					<Typography variant="h5">
 						{title}
@@ -75,7 +81,7 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 						{reviewsCount}
 					</Typography>
 					<Button variant="contained">
-						Details
+						<Link href={`recipes/${_id}`} color="inherit" underline="none">Details</Link>
 					</Button>
 				</CardContent>
 			</Card>
