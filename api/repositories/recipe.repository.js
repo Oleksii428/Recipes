@@ -28,7 +28,17 @@ module.exports = {
 		return reviews;
 	},
 	getByQuery: async (query) => {
-		const {page = "1", title, category, kitchen, ingredients, time, sort = "rating", sortType = "1"} = query;
+		const {
+			page = "1",
+			title,
+			category,
+			servings,
+			kitchen,
+			ingredients,
+			time,
+			sort = "rating",
+			sortType = "1"
+		} = query;
 
 		const limit = 6;
 		const skip = (page - 1) * limit;
@@ -38,7 +48,9 @@ module.exports = {
 		if (title) {
 			findObj.title = new RegExp(title, "i");
 		}
-
+		if (servings) {
+			findObj.servings = Number(servings);
+		}
 		if (ingredients) {
 			const findIngredients = ingredients.split(",");
 			findObj.ingredients = {$in: findIngredients.map((ing) => new RegExp(ing, "i"))};

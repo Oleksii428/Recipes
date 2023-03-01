@@ -1116,6 +1116,11 @@
             "in": "query"
           },
           {
+            "name": "servings",
+            "type": "string",
+            "in": "query"
+          },
+          {
             "name": "category",
             "type": "string",
             "in": "query"
