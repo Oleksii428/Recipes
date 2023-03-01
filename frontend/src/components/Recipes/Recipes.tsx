@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import {FC, useLayoutEffect} from "react";
 import {useSearchParams} from "react-router-dom";
 import {Box, CircularProgress, Container, Grid} from "@mui/material";
 
@@ -12,22 +12,16 @@ const Recipes: FC = () => {
 	const dispatch = useAppDispatch();
 	const {list, loading} = useAppSelector(state => state.recipeReducer);
 	const [searchParams] = useSearchParams({});
-	const [query, setQuery] = useState<IQuery | null>(null);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		let newQuery: IQuery = {};
+
 		for (const [key, value] of searchParams.entries()) {
 			newQuery = {...newQuery, [key]: value};
 		}
-		setQuery(newQuery);
-		if (Object.keys(newQuery).length === 0) {
-			setQuery(null);
-		}
-	}, [searchParams]);
 
-	useEffect(() => {
-		dispatch(recipeActions.getByQuery(query));
-	}, [dispatch, query]);
+		dispatch(recipeActions.getByQuery(newQuery));
+	}, [dispatch, searchParams]);
 
 	return (
 		<Container sx={{display: "flex", columnGap: 3}} maxWidth={"xl"}>

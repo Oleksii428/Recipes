@@ -5,22 +5,27 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 const IngredientsFilter: FC = () => {
 	const navigate = useNavigate();
 	const [values, setValues] = useState<string[]>([]);
+	const [mounted, setMounted] = useState<boolean>(false);
 	const [currValue, setCurrValue] = useState<string>("");
 	const [searchParams] = useSearchParams();
 
 	useEffect(() => {
 		const prev = searchParams.get("ingredients");
 		if (prev) {
+			console.log("set values", prev);
 			setValues(prev.split(","));
 		}
+		setMounted(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
-		if (values.length) {
+		if (mounted && values.length) {
+			console.log("nav");
 			searchParams.set("ingredients", values.join(","));
 			navigate({search: searchParams.toString()});
-		} else {
+		} else if (mounted && !values.length) {
+			console.log("nav2");
 			searchParams.delete("ingredients");
 			navigate({search: searchParams.toString()});
 		}

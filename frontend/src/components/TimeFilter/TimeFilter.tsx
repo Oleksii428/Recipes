@@ -51,7 +51,7 @@ const TimeFilter: FC = () => {
 				onChange={handleChange}
 				step={10}
 				onChangeCommitted={handleChangeCommitted}
-				valueLabelDisplay="on"
+				valueLabelDisplay="auto"
 			/>
 			<Button onClick={handleClear}>Clear</Button>
 		</Box>

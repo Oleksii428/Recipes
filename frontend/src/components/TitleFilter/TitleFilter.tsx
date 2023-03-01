@@ -5,10 +5,10 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 const TitleFilter: FC = () => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
-	const [currValue, setCurrValue] = useState<string>(query.get("title") ?? "");
+	const [currValue, setCurrValue] = useState<string>(query.get("title") || "");
 
 	useEffect(() => {
-		setCurrValue(query.get("title") ?? "");
+		setCurrValue(query.get("title") || "");
 	}, [query]);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,12 +23,11 @@ const TitleFilter: FC = () => {
 	const handleClick = () => {
 		if (currValue) {
 			query.set("title", currValue);
-			navigate({search: query.toString()});
 		} else {
 			query.delete("title");
-			navigate({search: query.toString()});
 			setCurrValue("");
 		}
+		navigate({search: query.toString()});
 	};
 
 	return (
@@ -36,6 +35,7 @@ const TitleFilter: FC = () => {
 			sx={{display: "flex", alignItems: "flex-end"}}
 		>
 			<TextField
+				sx={{flexGrow: 1}}
 				id="standard-basic"
 				label="Title"
 				value={currValue}
