@@ -21,11 +21,9 @@ const IngredientsFilter: FC = () => {
 
 	useEffect(() => {
 		if (mounted && values.length) {
-			console.log("nav");
 			searchParams.set("ingredients", values.join(","));
 			navigate({search: searchParams.toString()});
 		} else if (mounted && !values.length) {
-			console.log("nav2");
 			searchParams.delete("ingredients");
 			navigate({search: searchParams.toString()});
 		}

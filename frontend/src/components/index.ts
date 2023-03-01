@@ -8,3 +8,5 @@ export * from "./TitleFilter/TitleFilter";
 export * from "./IngredientsFilter/IngredientsFilter";
 export * from "./TimeFilter/TimeFilter";
 export * from "./SevringsFilter/ServingsFilter";
+export * from "./SortFilter/SortFilter";
+export * from "./SortTypeFilter/SortTypeFilter";

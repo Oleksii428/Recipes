@@ -37,7 +37,7 @@ module.exports = {
 			ingredients,
 			time,
 			sort = "rating",
-			sortType = "1"
+			sortType = "-1"
 		} = query;
 
 		const limit = 6;

@@ -1,6 +1,7 @@
-import {FC, useEffect, useState} from "react";
-import {Box, Button, ButtonGroup} from "@mui/material";
+import React, {FC, useEffect, useState} from "react";
+import {Box, Button, ButtonGroup, Typography} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {RemoveRounded, AddRounded} from "@mui/icons-material";
 
 const ServingsFilter: FC = () => {
 	const [value, setValue] = useState<number>(0);
@@ -29,15 +30,21 @@ const ServingsFilter: FC = () => {
 	};
 
 	return (
-		<Box>
+		<Box sx={{display: "flex", justifyContent: "space-between"}}>
 			<ButtonGroup
-				disableElevation
+				sx={{display: "flex", columnGap: 1, alignItems: "center", justifyContent: "flex-start"}}
 				variant="outlined"
 				aria-label="Disabled elevation buttons"
 			>
-				<Button disabled={!value} onClick={handleDec}>-</Button>
-				<Button onClick={handleInc}>+</Button>
-				{value || "auto"}
+				<Button disabled={!value} onClick={handleDec}>
+					<RemoveRounded fontSize="small" />
+				</Button>
+				<Typography variant="body1">
+					{value || "auto"}
+				</Typography>
+				<Button onClick={handleInc}>
+					<AddRounded fontSize="small" />
+				</Button>
 			</ButtonGroup>
 			<Button onClick={handelSubmit}>
 				Ok

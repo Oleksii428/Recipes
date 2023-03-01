@@ -11,7 +11,7 @@ import {IQuery} from "../../interfaces";
 const Recipes: FC = () => {
 	const dispatch = useAppDispatch();
 	const {list, loading} = useAppSelector(state => state.recipeReducer);
-	const [searchParams] = useSearchParams({});
+	const [searchParams] = useSearchParams();
 
 	useLayoutEffect(() => {
 		let newQuery: IQuery = {};
