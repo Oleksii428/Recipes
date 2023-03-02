@@ -3,7 +3,7 @@ import {Box, CircularProgress, Container} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {recipeActions} from "../redux";
-import {Info} from "../components";
+import {CarouselSlider, Info} from "../components";
 
 const RecipeDetailsPage: FC = () => {
 	const {id} = useParams();
@@ -24,14 +24,17 @@ const RecipeDetailsPage: FC = () => {
 			}
 			{
 				recipe &&
-				<Info
-					title={recipe.title}
-					description={recipe.description}
-					rating={recipe.rating}
-					reviewsCount={recipe.reviewsCount}
-					creator={recipe.creator}
-					createdAt={recipe.createdAt}
-				/>
+				<Box>
+					<Info
+						title={recipe.title}
+						description={recipe.description}
+						rating={recipe.rating}
+						reviewsCount={recipe.reviewsCount}
+						creator={recipe.creator}
+						createdAt={recipe.createdAt}
+					/>
+					<CarouselSlider gallery={recipe.gallery} />
+				</Box>
 			}
 		</Container>
 	);

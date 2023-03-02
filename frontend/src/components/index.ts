@@ -12,3 +12,4 @@ export * from "./SortFilter/SortFilter";
 export * from "./SortTypeFilter/SortTypeFilter";
 export * from "./RecipesPagingation/RecipesPagination";
 export * from "./RecipeDetails/Info/Info";
+export * from "./RecipeDetails/CarouselSlider/CarouselSlider";
