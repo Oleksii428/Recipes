@@ -11,3 +11,4 @@ export * from "./SevringsFilter/ServingsFilter";
 export * from "./SortFilter/SortFilter";
 export * from "./SortTypeFilter/SortTypeFilter";
 export * from "./RecipesPagingation/RecipesPagination";
+export * from "./RecipeDetails/Info/Info";

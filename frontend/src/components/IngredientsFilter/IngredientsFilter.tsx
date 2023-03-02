@@ -12,7 +12,6 @@ const IngredientsFilter: FC = () => {
 	useEffect(() => {
 		const prev = searchParams.get("ingredients");
 		if (prev) {
-			console.log("set values", prev);
 			setValues(prev.split(","));
 		}
 		setMounted(true);
