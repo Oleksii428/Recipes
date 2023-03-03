@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IQuery, IRecipe, IRecipes} from "../../interfaces";
+import {IQuery, IRecipe, IRecipes, IReview} from "../../interfaces";
 import {recipeService} from "../../services";
 
 interface IState {
@@ -9,6 +9,7 @@ interface IState {
 	loading: boolean;
 	error: boolean;
 	recipe: IRecipe | null;
+	reviews: IReview[] | null;
 }
 
 const initialState: IState = {
@@ -19,7 +20,8 @@ const initialState: IState = {
 	},
 	loading: false,
 	error: false,
-	recipe: null
+	recipe: null,
+	reviews: null
 };
 
 const getByQuery = createAsyncThunk<IRecipes, IQuery | null>(
@@ -48,6 +50,19 @@ const getById = createAsyncThunk<IRecipe, string>(
 	}
 );
 
+const getReviews = createAsyncThunk<IReview[], string>(
+	"recipeSlice/getReviews",
+	async (recipeId, {rejectWithValue}) => {
+		try {
+			const response = await recipeService.getReviews(recipeId);
+			return response.data;
+		} catch (e) {
+			const err = e as AxiosError;
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
 const recipeSlice = createSlice({
 	name: "recipeSlice",
 	initialState,
@@ -66,6 +81,7 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+
 			.addCase(getById.fulfilled, (state, action) => {
 				state.recipe = action.payload;
 				state.loading = false;
@@ -78,13 +94,27 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+
+			.addCase(getReviews.fulfilled, (state, action) => {
+				state.reviews = action.payload;
+				state.loading = false;
+				state.error = false;
+			})
+			.addCase(getReviews.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(getReviews.rejected, (state) => {
+				state.loading = false;
+				state.error = true;
+			})
 });
 
 const {reducer: recipeReducer, actions} = recipeSlice;
 
 const recipeActions = {
 	getByQuery,
-	getById
+	getById,
+	getReviews
 };
 
 export {
