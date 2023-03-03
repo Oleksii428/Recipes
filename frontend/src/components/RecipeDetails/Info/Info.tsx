@@ -20,7 +20,7 @@ const Info: FC<IProps> = ({title, description, rating, reviewsCount, bookCount, 
 	return (
 		<Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
-				<Typography variant="h2">
+				<Typography variant="h2" fontWeight={600}>
 					{title}
 				</Typography>
 				<Button>

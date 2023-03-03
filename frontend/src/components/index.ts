@@ -14,3 +14,4 @@ export * from "./RecipesPagingation/RecipesPagination";
 export * from "./RecipeDetails/Info/Info";
 export * from "./RecipeDetails/CarouselSlider/CarouselSlider";
 export * from "./RecipeDetails/Characteristic/Characteristic";
+export * from "./RecipeDetails/Ingredients/Ingredients";
