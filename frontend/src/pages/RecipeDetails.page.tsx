@@ -3,13 +3,13 @@ import {Box, CircularProgress, Container} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {recipeActions} from "../redux";
-import {CarouselSlider, Info} from "../components";
+import {CarouselSlider, Characteristic, Info} from "../components";
 
 const RecipeDetailsPage: FC = () => {
 	const {id} = useParams();
 	const dispatch = useAppDispatch();
 	const {recipe, loading, error} = useAppSelector(state => state.recipeReducer);
-
+	// const {kitchen, servings, time, category} = recipe;
 	useEffect(() => {
 		dispatch(recipeActions.getById(id as string));
 	}, [dispatch, id]);
@@ -30,10 +30,17 @@ const RecipeDetailsPage: FC = () => {
 						description={recipe.description}
 						rating={recipe.rating}
 						reviewsCount={recipe.reviewsCount}
+						bookCount={recipe.bookCount}
 						creator={recipe.creator}
 						createdAt={recipe.createdAt}
 					/>
 					<CarouselSlider gallery={recipe.gallery} />
+					<Characteristic
+						kitchen={recipe.kitchen}
+						category={recipe.category}
+						servings={recipe.servings}
+						time={recipe.time}
+					/>
 				</Box>
 			}
 		</Container>

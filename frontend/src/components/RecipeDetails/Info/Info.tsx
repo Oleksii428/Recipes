@@ -7,6 +7,7 @@ interface IProps {
 	description: string;
 	rating: number;
 	reviewsCount: number;
+	bookCount: number;
 	creator: {
 		_id: string,
 		avatar: string,
@@ -15,7 +16,7 @@ interface IProps {
 	createdAt: string;
 }
 
-const Info: FC<IProps> = ({title, description, rating, reviewsCount, creator, createdAt}) => {
+const Info: FC<IProps> = ({title, description, rating, reviewsCount, bookCount, creator, createdAt}) => {
 	return (
 		<Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
@@ -25,6 +26,7 @@ const Info: FC<IProps> = ({title, description, rating, reviewsCount, creator, cr
 				<Button>
 					<BookmarkBorder fontSize="large" />
 				</Button>
+				| {bookCount}
 			</Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Rating name="read-only" value={rating} precision={0.1} readOnly />
