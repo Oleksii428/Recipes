@@ -16,13 +16,13 @@ export interface IRecipe {
 	creator: {
 		_id: string,
 		userName: string,
-		avatar: string
+		avatar: string | null
 	},
 	stages: [
 		{
 			_id: string,
 			number: number,
-			photo: string,
+			photo: string | null,
 			description: string
 		}
 	],

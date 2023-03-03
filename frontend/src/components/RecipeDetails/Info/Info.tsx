@@ -10,7 +10,7 @@ interface IProps {
 	bookCount: number;
 	creator: {
 		_id: string,
-		avatar: string,
+		avatar: string | null,
 		userName: string
 	};
 	createdAt: string;

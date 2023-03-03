@@ -26,7 +26,7 @@ const Characteristic: FC<IProps> = ({kitchen, category, servings, time}) => {
 					alignItems: "center"
 				}}
 			>
-				<Grid xs={5}>
+				<Grid item xs={5}>
 					<Typography component="span" variant="body1" fontWeight={700} mr={1}>
 						Kitchen:
 					</Typography>
@@ -34,7 +34,7 @@ const Characteristic: FC<IProps> = ({kitchen, category, servings, time}) => {
 						{kitchen}
 					</Typography>
 				</Grid>
-				<Grid xs={5}>
+				<Grid item xs={5}>
 					<Typography component="span" variant="body1" fontWeight={700} mr={1}>
 						Category:
 					</Typography>
@@ -42,7 +42,7 @@ const Characteristic: FC<IProps> = ({kitchen, category, servings, time}) => {
 						{category}
 					</Typography>
 				</Grid>
-				<Grid xs={5}>
+				<Grid item xs={5}>
 					<Typography component="span" variant="body1" fontWeight={700} mr={1}>
 						Servings:
 					</Typography>
@@ -50,7 +50,7 @@ const Characteristic: FC<IProps> = ({kitchen, category, servings, time}) => {
 						{servings}
 					</Typography>
 				</Grid>
-				<Grid xs={5}>
+				<Grid item xs={5}>
 					<Typography component="span" variant="body1" fontWeight={700} mr={1}>
 						Time:
 					</Typography>

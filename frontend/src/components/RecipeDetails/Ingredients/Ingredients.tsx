@@ -8,12 +8,12 @@ interface IProps {
 const Ingredients: FC<IProps> = ({ingredients}) => {
 	return (
 		<Box>
-			<Typography variant="h3" fontWeight={500}>
+			<Typography variant="h4" fontWeight={500}>
 				Ingredients
 			</Typography>
 			<ul>
-				{ingredients.map(ingredient =>
-					<li>
+				{ingredients.map((ingredient, index) =>
+					<li key={index}>
 						<Typography variant="h5">
 							{ingredient}
 						</Typography>
