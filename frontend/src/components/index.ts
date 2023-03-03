@@ -17,3 +17,5 @@ export * from "./RecipeDetails/Characteristic/Characteristic";
 export * from "./RecipeDetails/Ingredients/Ingredients";
 export * from "./RecipeDetails/Stages/Stages";
 export * from "./RecipeDetails/Stage/Stage";
+export * from "./RecipeDetails/Reviews/Reviews";
+export * from "./RecipeDetails/Review/Review";

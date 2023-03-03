@@ -1,13 +1,16 @@
 import {FC, useEffect} from "react";
 import {Box, CircularProgress, Container} from "@mui/material";
 import {useParams} from "react-router-dom";
+import {useInView} from "react-intersection-observer";
+
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {recipeActions} from "../redux";
-import {CarouselSlider, Characteristic, Info, Ingredients, Stages} from "../components";
+import {CarouselSlider, Characteristic, Info, Ingredients, Reviews, Stages} from "../components";
 
 const RecipeDetailsPage: FC = () => {
 	const {id} = useParams();
 	const dispatch = useAppDispatch();
+	const [ref, inView] = useInView({triggerOnce: true});
 	const {recipe, loading, error} = useAppSelector(state => state.recipeReducer);
 
 	useEffect(() => {
@@ -22,7 +25,7 @@ const RecipeDetailsPage: FC = () => {
 					<CircularProgress />
 				</Box>
 			}
-			{error && <div>ERROR</div>}
+			{error && <Box>ERROR</Box>}
 			{
 				recipe &&
 				<Box sx={{pb: 5}}>
@@ -44,6 +47,9 @@ const RecipeDetailsPage: FC = () => {
 					/>
 					<Ingredients ingredients={recipe.ingredients} />
 					<Stages stages={recipe.stages} />
+					<Box ref={ref}>
+						{inView && <Reviews recipeId={recipe._id} reviewsCount={recipe.reviewsCount} />}
+					</Box>
 				</Box>
 			}
 		</Container>
