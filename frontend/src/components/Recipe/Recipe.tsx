@@ -1,12 +1,12 @@
 import {FC} from "react";
 import {
-	Avatar, Box,
+	Avatar, Badge,
 	Button,
 	Card,
 	CardContent,
 	CardHeader,
 	CardMedia,
-	Grid, Link,
+	Grid, IconButton, Link,
 	Paper,
 	Rating,
 	Typography
@@ -32,6 +32,7 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 		reviewsCount,
 		time,
 		title,
+		bookCount,
 		servings
 	} = recipe;
 	const {avatar, userName} = creator;
@@ -39,16 +40,18 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 	return (
 		<Grid item xl={3} lg={4} md={5}>
 			<Card>
-				<Box sx={{display: "flex", alignItems: "center"}}>
-					<CardHeader
-						avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
-						title={userName}
-						subheader={createdAt}
-					/>
-					<Button>
-						<BookmarkBorder fontSize="medium" />
-					</Button>
-				</Box>
+				<CardHeader
+					avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
+					title={<Typography variant="subtitle1">{userName}</Typography>}
+					subheader={createdAt}
+					action={
+						<IconButton>
+							<Badge badgeContent={bookCount} color="primary" showZero>
+								<BookmarkBorder fontSize="medium" />
+							</Badge>
+						</IconButton>
+					}
+				/>
 				<CardContent>
 					<Typography variant="h5">
 						{title}

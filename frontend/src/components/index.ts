@@ -19,3 +19,6 @@ export * from "./RecipeDetails/Stages/Stages";
 export * from "./RecipeDetails/Stage/Stage";
 export * from "./RecipeDetails/Reviews/Reviews";
 export * from "./RecipeDetails/Review/Review";
+export * from "./Author/Author";
+export * from "./Authors/Authors";
+export * from "./AuthorsFilters/AuthorsFilters";
