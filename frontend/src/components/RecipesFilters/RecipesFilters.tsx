@@ -26,19 +26,22 @@ const RecipesFilters: FC = () => {
 		navigate({search: query.toString()});
 	};
 
+	const sortFields = ["Rating", "Time", "Servings", "Ingredients", "CreatedAt"];
+
 	return (
 		<Box>
-			<Stack spacing={1} sx={{width: 300}}>
+			<Stack spacing={1} sx={{width: 300, display: "flex", flexDirection: "column", rowGap: 1, mb: 2}}>
 				<CategoryFilter />
 				<KitchenFilter />
 				<TitleFilter />
 				<IngredientsFilter />
 				<TimeFilter />
 				<ServingsFilter />
-				<SortFilter />
+				<SortFilter fields={sortFields} defaultField={"Rating"} />
 				<SortTypeFilter />
 			</Stack>
 			<Button
+				disabled={!query.toString()}
 				variant="contained"
 				onClick={handleClear}
 			>

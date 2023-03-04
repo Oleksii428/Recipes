@@ -22,3 +22,4 @@ export * from "./RecipeDetails/Review/Review";
 export * from "./Author/Author";
 export * from "./Authors/Authors";
 export * from "./AuthorsFilters/AuthorsFilters";
+export * from "./NameFilter/NameFilter";

@@ -30,23 +30,25 @@ module.exports = {
 	getBlockedAuthors: () => Author.find({block: {$ne: null}}).lean(),
 	getListByParams: async (query) => {
 		const {page = "1", name, sort = "totalLikes"} = query;
-		const limit = 5;
+		const limit = 8;
 		let findObj = {};
+		let sortObj = {[sort]: -1};
 
 		if (name) {
-			findObj = {
-				userName: new RegExp(name)
-			};
+			findObj.userName = new RegExp(name);
 		}
-		const authors = await Author
-		.find(findObj)
-		.limit(limit)
-		.skip((page - 1) * limit)
-		.populate("role avatar recipes totalBook totalSubscriptions totalSubscribers")
-		.sort({[sort]: -1})
-		.lean();
 
-		const count = await Author.count(findObj);
+		const [authors, count] = await Promise.all([
+			Author
+				.find(findObj)
+				.limit(limit)
+				.skip((page - 1) * limit)
+				.populate("role avatar recipes totalBook totalSubscriptions totalSubscribers")
+				.sort(sortObj)
+				.lean(),
+			Author.count(findObj)
+		]);
+
 		return {
 			authors,
 			page,

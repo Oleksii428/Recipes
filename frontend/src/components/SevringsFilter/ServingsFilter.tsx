@@ -30,25 +30,30 @@ const ServingsFilter: FC = () => {
 	};
 
 	return (
-		<Box sx={{display: "flex", justifyContent: "space-between"}}>
-			<ButtonGroup
-				sx={{display: "flex", columnGap: 1, alignItems: "center", justifyContent: "flex-start"}}
-				variant="outlined"
-				aria-label="Disabled elevation buttons"
-			>
-				<Button disabled={!value} onClick={handleDec}>
-					<RemoveRounded fontSize="small" />
+		<Box sx={{display: "flex", columnGap: 1, alignItems: "center", justifyContent: "space-between"}}>
+			<Typography variant="h6">
+				Servings
+			</Typography>
+			<Box sx={{display: "flex", columnGap: 1}}>
+				<ButtonGroup
+					sx={{display: "flex", columnGap: 1, alignItems: "center"}}
+					variant="outlined"
+					aria-label="Disabled elevation buttons"
+				>
+					<Button sx={{width: 30}} disabled={!value} onClick={handleDec}>
+						<RemoveRounded fontSize="small" />
+					</Button>
+					<Typography variant="body1" sx={{textAlign: "center", minWidth: "35px"}}>
+						{value || "auto"}
+					</Typography>
+					<Button sx={{width: 30}} onClick={handleInc}>
+						<AddRounded fontSize="small" />
+					</Button>
+				</ButtonGroup>
+				<Button disabled={!value} variant="contained" onClick={handelSubmit}>
+					Ok
 				</Button>
-				<Typography variant="body1">
-					{value || "auto"}
-				</Typography>
-				<Button onClick={handleInc}>
-					<AddRounded fontSize="small" />
-				</Button>
-			</ButtonGroup>
-			<Button onClick={handelSubmit}>
-				Ok
-			</Button>
+			</Box>
 		</Box>
 	);
 };

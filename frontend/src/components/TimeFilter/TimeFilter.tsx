@@ -53,7 +53,7 @@ const TimeFilter: FC = () => {
 				onChangeCommitted={handleChangeCommitted}
 				valueLabelDisplay="auto"
 			/>
-			<Button onClick={handleClear}>Clear</Button>
+			<Button disabled={value[0] === 0 && value[1] === 100} variant="contained" onClick={handleClear}>Clear</Button>
 		</Box>
 	);
 };

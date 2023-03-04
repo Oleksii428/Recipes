@@ -2,10 +2,15 @@ import {FC, useEffect, useState} from "react";
 import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-const SortFilter: FC = () => {
+interface IProps {
+	fields: string[];
+	defaultField: string;
+}
+
+const SortFilter: FC<IProps> = ({fields, defaultField}) => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
-	const [sort, setSort] = useState<string>("rating");
+	const [sort, setSort] = useState<string>(defaultField.toLowerCase());
 
 	useEffect(() => {
 		const sortInQuery: string | null = query.get("sort");
@@ -31,11 +36,11 @@ const SortFilter: FC = () => {
 					label="Sort"
 					onChange={handleChange}
 				>
-					<MenuItem value="rating">Rating</MenuItem>
-					<MenuItem value="time">Time</MenuItem>
-					<MenuItem value="servings">Servings</MenuItem>
-					<MenuItem value="ingredients">Ingredients</MenuItem>
-					<MenuItem value="createdAt">CreatedAt</MenuItem>
+					{
+						fields.map((field, index) =>
+							<MenuItem key={index} value={field.toLowerCase()}>{field}</MenuItem>
+						)
+					}
 				</Select>
 			</FormControl>
 		</Box>

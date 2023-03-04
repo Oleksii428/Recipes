@@ -2,13 +2,13 @@ import {ChangeEvent, FC, useEffect, useState} from "react";
 import {Box, Button, TextField} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-const TitleFilter: FC = () => {
+const NameFilter: FC = () => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
-	const [currValue, setCurrValue] = useState<string>(query.get("title") || "");
+	const [currValue, setCurrValue] = useState<string>(query.get("name") || "");
 
 	useEffect(() => {
-		setCurrValue(query.get("title") || "");
+		setCurrValue(query.get("name") || "");
 	}, [query]);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,9 +22,9 @@ const TitleFilter: FC = () => {
 
 	const handleClick = () => {
 		if (currValue) {
-			query.set("title", currValue);
+			query.set("name", currValue);
 		} else {
-			query.delete("title");
+			query.delete("name");
 			setCurrValue("");
 		}
 		navigate({search: query.toString()});
@@ -37,7 +37,7 @@ const TitleFilter: FC = () => {
 			<TextField
 				sx={{flexGrow: 1}}
 				id="standard-basic"
-				label="Title"
+				label="User name"
 				value={currValue}
 				variant="standard"
 				onChange={handleChange}
@@ -47,4 +47,4 @@ const TitleFilter: FC = () => {
 	);
 };
 
-export {TitleFilter};
+export {NameFilter};

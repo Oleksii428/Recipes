@@ -48,7 +48,7 @@ const Author: FC<IProps> = ({author}) => {
 					title={
 						<Link
 							href={`authors/${_id}/recipes`}
-							variant="h6"
+							variant="body1"
 							sx={{cursor: "pointer"}}
 						>
 							{userName}
