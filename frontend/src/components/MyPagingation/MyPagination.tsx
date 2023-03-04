@@ -6,7 +6,7 @@ interface Iprops {
 	count: number;
 }
 
-const RecipesPagination: FC<Iprops> = ({count}) => {
+const MyPagination: FC<Iprops> = ({count}) => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
 	const [page, setPage] = useState<string>("1");
@@ -38,4 +38,4 @@ const RecipesPagination: FC<Iprops> = ({count}) => {
 	);
 };
 
-export {RecipesPagination};
+export {MyPagination};

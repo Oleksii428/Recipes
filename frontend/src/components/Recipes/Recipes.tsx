@@ -6,7 +6,7 @@ import {Recipe} from "../Recipe/Recipe";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {recipeActions} from "../../redux";
 import {IRecipesQuery} from "../../interfaces";
-import {RecipesPagination} from "../RecipesPagingation/RecipesPagination";
+import {MyPagination} from "../MyPagingation/MyPagination";
 
 const Recipes: FC = () => {
 	const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ const Recipes: FC = () => {
 					)
 				}
 			</Grid>
-			<RecipesPagination count={list.count} />
+			<MyPagination count={list.count} />
 		</Box>
 	);
 };

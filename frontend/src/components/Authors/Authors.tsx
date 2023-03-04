@@ -6,6 +6,7 @@ import {authorActions} from "../../redux";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {IAuthorsQuery} from "../../interfaces";
 import {Author} from "../Author/Author";
+import {MyPagination} from "../MyPagingation/MyPagination";
 
 const Authors: FC = () => {
 	const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ const Authors: FC = () => {
 					)
 				}
 			</Grid>
-			{/*<AuthorsPagination count={list.count} />*/}
+			<MyPagination count={list.count} />
 		</Box>
 	);
 };
