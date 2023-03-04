@@ -11,7 +11,7 @@ import {ServingsFilter} from "../SevringsFilter/ServingsFilter";
 import {SortFilter} from "../SortFilter/SortFilter";
 import {SortTypeFilter} from "../SortTypeFilter/SortTypeFilter";
 
-const Filters: FC = () => {
+const RecipesFilters: FC = () => {
 	const [query] = useSearchParams();
 	const navigate = useNavigate();
 
@@ -48,4 +48,4 @@ const Filters: FC = () => {
 	);
 };
 
-export {Filters};
+export {RecipesFilters};

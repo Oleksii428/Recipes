@@ -1,21 +1,20 @@
 import {FC, useLayoutEffect} from "react";
 import {useSearchParams} from "react-router-dom";
-import {Box, CircularProgress, Container, Grid} from "@mui/material";
+import {CircularProgress, Box, Grid} from "@mui/material";
 
 import {Recipe} from "../Recipe/Recipe";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {recipeActions} from "../../redux";
-import {Filters} from "../Filters/Filters";
-import {IQuery} from "../../interfaces";
+import {IRecipesQuery} from "../../interfaces";
 import {RecipesPagination} from "../RecipesPagingation/RecipesPagination";
 
 const Recipes: FC = () => {
 	const dispatch = useAppDispatch();
-	const {list, loading} = useAppSelector(state => state.recipeReducer);
+	const {list, loading, error} = useAppSelector(state => state.recipeReducer);
 	const [searchParams] = useSearchParams();
 
 	useLayoutEffect(() => {
-		let newQuery: IQuery = {};
+		let newQuery: IRecipesQuery = {};
 
 		for (const [key, value] of searchParams.entries()) {
 			newQuery = {...newQuery, [key]: value};
@@ -25,21 +24,24 @@ const Recipes: FC = () => {
 	}, [dispatch, searchParams]);
 
 	return (
-		<Container sx={{display: "flex", columnGap: 3}} maxWidth={"xl"}>
-			<Filters />
-			<Box sx={{display: "flex", flexDirection: "column", flexGrow: 1}}>
-				<Grid container justifyContent="center" spacing={3}>
-					{loading ?
-						<Box sx={{display: "flex"}}>
-							<CircularProgress />
-						</Box> :
-						list.recipes.map(recipe =>
-							<Recipe recipe={recipe} key={recipe._id} />
-						)}
-				</Grid>
-				<RecipesPagination count={list.count} />
-			</Box>
-		</Container>
+		<Box sx={{display: "flex", flexDirection: "column", flexGrow: 1}}>
+			<Grid minHeight="90vh" container justifyContent="center" spacing={3}>
+				{loading &&
+					<Box sx={{display: "flex"}}>
+						<CircularProgress />
+					</Box>
+				}
+				{
+					error && <h2>ERROR</h2>
+				}
+				{!loading && !error &&
+					list.recipes.map(recipe =>
+						<Recipe recipe={recipe} key={recipe._id} />
+					)
+				}
+			</Grid>
+			<RecipesPagination count={list.count} />
+		</Box>
 	);
 };
 

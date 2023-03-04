@@ -1,4 +1,4 @@
-export interface IQuery {
+export interface IRecipesQuery {
 	page?: string,
 	title?: string,
 	category?: string,

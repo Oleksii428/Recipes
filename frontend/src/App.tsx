@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import {Provider} from "react-redux";
 
 import {MainLayout} from "./layouts";
-import {RecipeDetailsPage, RecipesPage} from "./pages";
+import {AuthorsPage, RecipeDetailsPage, RecipesPage} from "./pages";
 import {setupStore} from "./redux";
 
 const App: FC = () => {
@@ -16,6 +16,7 @@ const App: FC = () => {
 					{/*<Route index element={<Navigate to={"recipes"} />} />*/}
 					<Route path={"recipes"} element={<RecipesPage />} />
 					<Route path={"recipes/:id"} element={<RecipeDetailsPage />} />
+					<Route path={"authors"} element={<AuthorsPage />} />
 				</Route>
 			</Routes>
 		</Provider>

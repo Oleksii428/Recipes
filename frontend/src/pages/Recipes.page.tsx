@@ -1,12 +1,14 @@
 import {FC} from "react";
+import {Container} from "@mui/material";
 
-import {Recipes} from "../components";
+import {RecipesFilters, Recipes} from "../components";
 
 const RecipesPage: FC = () => {
 	return (
-		<div>
+		<Container sx={{display: "flex", columnGap: 3}} maxWidth={"xl"}>
+			<RecipesFilters />
 			<Recipes />
-		</div>
+		</Container>
 	);
 };
 

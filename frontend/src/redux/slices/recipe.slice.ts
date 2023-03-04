@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IQuery, IRecipe, IRecipes, IReview} from "../../interfaces";
+import {IRecipesQuery, IRecipe, IRecipes, IReview} from "../../interfaces";
 import {recipeService} from "../../services";
 
 interface IState {
@@ -24,7 +24,7 @@ const initialState: IState = {
 	reviews: null
 };
 
-const getByQuery = createAsyncThunk<IRecipes, IQuery | null>(
+const getByQuery = createAsyncThunk<IRecipes, IRecipesQuery | null>(
 	"recipeSlice/getByQuery",
 	async (query, {rejectWithValue}) => {
 		try {
