@@ -5,41 +5,32 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 const IngredientsFilter: FC = () => {
 	const navigate = useNavigate();
 	const [values, setValues] = useState<string[]>([]);
-	const [mounted, setMounted] = useState<boolean>(false);
 	const [currValue, setCurrValue] = useState<string>("");
 	const [searchParams] = useSearchParams();
 
 	useEffect(() => {
 		const prev = searchParams.get("ingredients");
-		if (prev) {
-			setValues(prev.split(","));
-		}
-		setMounted(true);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	useEffect(() => {
-		if (mounted && values.length) {
-			searchParams.set("ingredients", values.join(","));
-			navigate({search: searchParams.toString()});
-		} else if (mounted && !values.length) {
-			searchParams.delete("ingredients");
-			navigate({search: searchParams.toString()});
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [navigate, values]);
+		setValues(prev ? prev.split(",") : []);
+	}, [searchParams]);
 
 	const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			if (currValue) {
-				setValues((oldState) => [...oldState, currValue]);
-				setCurrValue("");
+		if (e.key === "Enter" && currValue) {
+			const newValues = [...values, currValue];
+
+			searchParams.set("ingredients", newValues.join(","));
+			navigate({search: searchParams.toString()});
+
+			setCurrValue("");
+		} else if (e.key === "Backspace" && !currValue && values.length) {
+			const newValues = values.slice(0, -1);
+
+			if (newValues.length) {
+				searchParams.set("ingredients", newValues.join(","));
+			} else {
+				searchParams.delete("ingredients");
 			}
-		}
-		if (e.key === "Backspace") {
-			if (values.length && !currValue) {
-				setValues((oldState) => (oldState.slice(0, -1)));
-			}
+
+			navigate({search: searchParams.toString()});
 		}
 	};
 
@@ -48,9 +39,15 @@ const IngredientsFilter: FC = () => {
 	};
 
 	const handleDelete = (item: string, index: number) => {
-		let arr = [...values];
-		arr.splice(index, 1);
-		setValues(arr);
+		values.splice(index, 1);
+
+		if (values.length) {
+			searchParams.set("ingredients", values.join(","));
+		} else {
+			searchParams.delete("ingredients");
+		}
+
+		navigate({search: searchParams.toString()});
 	};
 
 	return (
