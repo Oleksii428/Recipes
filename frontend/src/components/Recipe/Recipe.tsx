@@ -42,7 +42,13 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 			<Card>
 				<CardHeader
 					avatar={<Avatar src={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
-					title={<Typography variant="subtitle1">{userName}</Typography>}
+					title={
+						<Typography variant="subtitle1">
+							<Link
+								href={`/authors/${creator._id}`}>{userName}
+							</Link>
+						</Typography>
+					}
 					subheader={createdAt}
 					action={
 						<IconButton>

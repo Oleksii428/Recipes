@@ -1,14 +1,12 @@
 import {FC} from "react";
 import {Box, Container} from "@mui/material";
 
-import {RecipesFilters, RecipesOfAuthor} from "../components";
+import {AuthorInfo, RecipesFilters, RecipesOfAuthor} from "../components";
 
 const AuthorDetailsPage: FC = () => {
 	return (
 		<Container maxWidth={"xl"}>
-			<div>
-				INFO
-			</div>
+			<AuthorInfo />
 			<Box sx={{display: "flex", columnGap: 3}}>
 				<RecipesFilters />
 				<RecipesOfAuthor />

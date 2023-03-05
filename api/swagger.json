@@ -569,6 +569,37 @@
         }
       }
     },
+    "/authors/{authorId}": {
+      "get": {
+        "description": "Get author by id",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "GetAuthorById",
+        "parameters": [
+          {
+            "name": "authorId",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Author"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
     "/authors/userName": {
       "patch": {
         "description": "change userName",

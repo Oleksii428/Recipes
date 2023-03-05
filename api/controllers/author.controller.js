@@ -74,6 +74,16 @@ module.exports = {
 			next(e);
 		}
 	},
+	getById: async (req, res, next) => {
+		try {
+			let author = await authorRepository.getById(req.author._id);
+			author = authorPresenter.present(author);
+
+			res.json(author);
+		} catch (e) {
+			next(e);
+		}
+	},
 	getByParams: async (req, res, next) => {
 		try {
 			const data = await authorRepository.getListByParams(req.query);

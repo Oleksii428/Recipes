@@ -2,6 +2,9 @@ const {Author} = require("../dataBases");
 
 module.exports = {
 	create: (newAuthor) => Author.create(newAuthor),
+	decTotalLikes: async (fromId, toId) => {
+		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": -1}});
+	},
 	deleteById: (authorId) => Author.deleteOne({_id: authorId}),
 	getAdmins: () => {
 		return Author.aggregate([
@@ -28,6 +31,7 @@ module.exports = {
 		return block;
 	},
 	getBlockedAuthors: () => Author.find({block: {$ne: null}}).lean(),
+	getById: (id) => Author.findById(id).populate("role avatar recipes totalBook totalSubscriptions totalSubscribers").lean(),
 	getListByParams: async (query) => {
 		const {page = "1", name, sort = "totalLikes"} = query;
 		const limit = 8;
@@ -65,9 +69,6 @@ module.exports = {
 	},
 	setAvatar: (authorId, avatar) => Author.findByIdAndUpdate(authorId, {$set: {"avatar": avatar}}),
 	setBlock: (authorId, date) => Author.findByIdAndUpdate(authorId, {$set: {"block": date}}),
-	decTotalLikes: async (fromId, toId) => {
-		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": -1}});
-	},
 	unlock: (authorId) => Author.findByIdAndUpdate(authorId, {$set: {"block": null}}),
 	updateById: (id, payload) => Author.findByIdAndUpdate(id, payload, {new: true}).lean()
 };

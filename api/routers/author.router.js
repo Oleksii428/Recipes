@@ -22,6 +22,13 @@ router.delete(
 	authorController.delete
 );
 
+router.get(
+	"/:authorId",
+	authMiddleware.isMongoIdValid("authorId"),
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorController.getById
+);
+
 router.patch(
 	"/userName",
 	authMiddleware.checkAccessToken,

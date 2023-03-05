@@ -16,7 +16,7 @@ interface IProps {
 	createdAt: string;
 }
 
-const Info: FC<IProps> = ({title, description, rating, reviewsCount, bookCount, creator, createdAt}) => {
+const RecipeInfo: FC<IProps> = ({title, description, rating, reviewsCount, bookCount, creator, createdAt}) => {
 	return (
 		<Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
@@ -36,10 +36,10 @@ const Info: FC<IProps> = ({title, description, rating, reviewsCount, bookCount, 
 				description: {description}
 			</Typography>
 			<Typography>
-				By <Link href="#">{creator.userName}</Link> | Created on {createdAt}
+				By <Link href={`/authors/${creator._id}`}>{creator.userName}</Link> | Created on {createdAt}
 			</Typography>
 		</Box>
 	);
 };
 
-export {Info};
+export {RecipeInfo};
