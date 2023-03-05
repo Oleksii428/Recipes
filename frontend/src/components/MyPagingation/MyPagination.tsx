@@ -28,7 +28,8 @@ const MyPagination: FC<Iprops> = ({count}) => {
 
 	return (
 		<Pagination
-			sx={{display: "flex", justifyContent: "center"}}
+			sx={{display: "flex", justifyContent: "center", p: "40px 0"}}
+			size="large"
 			defaultValue={page}
 			onChange={handleChange}
 			count={Math.ceil(count / 8)}
