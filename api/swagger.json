@@ -855,16 +855,50 @@
         "operationId": "GetAuthorsRecipesById",
         "parameters": [
           {
-            "name": "authorId",
+            "name": "Authorization",
+            "in": "header",
             "type": "string",
-            "in": "path",
-            "required": true
+            "required": false
           },
           {
             "name": "page",
-            "in": "query",
             "type": "string",
-            "required": false
+            "in": "query"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "servings",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "category",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "kitchen",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "ingredients",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "sort",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "sortType",
+            "type": "string",
+            "in": "query"
           }
         ],
         "responses": {
@@ -873,7 +907,10 @@
             "schema": {
               "properties": {
                 "recipes": {
-                  "$ref": "#/definitions/Recipe"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Recipe"
+                  }
                 },
                 "page": {
                   "type": "string",
@@ -881,7 +918,7 @@
                 },
                 "count": {
                   "type": "number",
-                  "example": 2
+                  "example": 1
                 }
               }
             }
