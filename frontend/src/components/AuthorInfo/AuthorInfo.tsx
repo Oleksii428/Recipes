@@ -1,10 +1,17 @@
 import {FC} from "react";
+import {IAuthor} from "../../interfaces";
 
-const AuthorInfo: FC = () => {
+interface IProps {
+	author: IAuthor;
+}
+
+const AuthorInfo: FC<IProps> = ({author}) => {
+
+
 	return (
-		<div>
-			AuthorInfo
-		</div>
+		<h2>
+			{author.userName}
+		</h2>
 	);
 };
 
