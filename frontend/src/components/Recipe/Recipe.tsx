@@ -83,7 +83,7 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 						<Rating name="read-only" value={rating} precision={0.1} readOnly />
 						{reviewsCount}
 					</Typography>
-					<Link href={`recipes/${_id}`} color="inherit" underline="none">
+					<Link href={`/recipes/${_id}`} color="inherit" underline="none">
 						<Button variant="contained">
 							Details
 						</Button>

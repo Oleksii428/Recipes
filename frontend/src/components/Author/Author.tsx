@@ -47,7 +47,7 @@ const Author: FC<IProps> = ({author}) => {
 					avatar={<Avatar sx={{width: 56, height: 56}} srcSet={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
 					title={
 						<Link
-							href={`authors/${_id}/recipes`}
+							href={`authors/${_id}`}
 							variant="body1"
 							sx={{cursor: "pointer"}}
 						>
