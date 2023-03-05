@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import {Provider} from "react-redux";
 
 import {MainLayout} from "./layouts";
-import {AuthorDetailsPage, AuthorsPage, RecipeDetailsPage, RecipesPage} from "./pages";
+import {AuthorDetailsPage, AuthorsPage, LoginPage, RecipeDetailsPage, RecipesPage} from "./pages";
 import {setupStore} from "./redux";
 
 const App: FC = () => {
@@ -18,6 +18,7 @@ const App: FC = () => {
 					<Route path={"recipes/:id"} element={<RecipeDetailsPage />} />
 					<Route path={"authors"} element={<AuthorsPage />} />
 					<Route path={"authors/:id"} element={<AuthorDetailsPage />} />
+					<Route path={"login"} element={<LoginPage />} />
 				</Route>
 			</Routes>
 		</Provider>
