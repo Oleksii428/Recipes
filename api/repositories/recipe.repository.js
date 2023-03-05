@@ -27,7 +27,7 @@ module.exports = {
 		}).lean();
 		return reviews;
 	},
-	getByQuery: async (authorId, query) => {
+	getByQuery: async (query, authorId) => {
 		const {
 			page = "1",
 			title,

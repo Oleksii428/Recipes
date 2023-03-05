@@ -96,7 +96,7 @@ module.exports = {
 	},
 	getRecipesByParams: async (req, res, next) => {
 		try {
-			let data = await recipeRepository.getByQuery(req.author._id, req.query);
+			let data = await recipeRepository.getByQuery(req.query, req.author._id,);
 			const presentRecipes = recipePresenter.presentManyWithCreator(data.recipes);
 
 			res.json({...data, recipes: presentRecipes});
