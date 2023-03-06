@@ -294,19 +294,7 @@
         "operationId": "Refresh",
         "parameters": [
           {
-            "name": "accessToken",
-            "type": "string",
-            "in": "header",
-            "required": true
-          },
-          {
-            "name": "email",
-            "type": "string",
-            "in": "formData",
-            "required": true
-          },
-          {
-            "name": "password",
+            "name": "refreshToken",
             "type": "string",
             "in": "formData",
             "required": true

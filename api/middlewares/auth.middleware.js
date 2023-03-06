@@ -85,7 +85,7 @@ module.exports = {
 	},
 	checkRefreshToken: async (req, res, next) => {
 		try {
-			const refreshToken = req.get("Authorization");
+			const refreshToken = req.body.refreshToken;
 
 			if (!refreshToken) {
 				throw new ApiError("No token", 401);
