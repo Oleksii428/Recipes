@@ -1,4 +1,7 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
+import {LockOutlined} from "@mui/icons-material";
+import {joiResolver} from "@hookform/resolvers/joi";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {
 	Avatar,
 	Box,
@@ -7,13 +10,17 @@ import {
 	Grid,
 	Link,
 	Typography,
-	TextField
+	TextField,
+	Backdrop,
+	CircularProgress,
+	Alert
 } from "@mui/material";
-import {LockOutlined} from "@mui/icons-material";
-import {joiResolver} from "@hookform/resolvers/joi";
-import {Controller, SubmitHandler, useForm} from "react-hook-form";
 
 import {signUpValidator} from "../validators";
+import {ILoginData} from "../interfaces";
+import {useAppDispatch, useAppSelector} from "../hooks";
+import {authActions} from "../redux";
+import {useSearchParams} from "react-router-dom";
 
 interface ISignInForm {
 	userName: string;
@@ -21,25 +28,59 @@ interface ISignInForm {
 }
 
 const LoginPage: FC = () => {
-	const {handleSubmit, control} = useForm<ISignInForm>({
+	const {handleSubmit, control, reset} = useForm<ISignInForm>({
 		resolver: joiResolver(signUpValidator),
 		mode: "all"
 	});
+	const dispatch = useAppDispatch();
+	const [query] = useSearchParams();
+	const {loading, errorMessage, tokenData} = useAppSelector(state => state.authReducer);
 
-	const onSubmit: SubmitHandler<ISignInForm> = (data) => {
-		console.log(data);
+	const onSubmit: SubmitHandler<ILoginData> = ({userName, password}) => {
+		dispatch(authActions.login({userName, password}));
 	};
+
+	useEffect(() => {
+		if (tokenData) reset();
+	}, [reset, tokenData]);
 
 	return (
 		<Container component="main" maxWidth="xs">
+			<Backdrop
+				sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
+				open={loading}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 			<Box
 				sx={{
 					marginTop: 8,
 					display: "flex",
 					flexDirection: "column",
-					alignItems: "center"
+					alignItems: "center",
+					position: "relative"
 				}}
 			>
+				{errorMessage &&
+					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
+							 severity="error">
+						{errorMessage}
+					</Alert>
+				}
+				{
+					tokenData && !errorMessage &&
+					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
+							 severity="success">
+						Success login
+					</Alert>
+				}
+				{
+					query.has("expSession") &&
+					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
+							 severity="warning">
+						Expired session
+					</Alert>
+				}
 				<Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
 					<LockOutlined />
 				</Avatar>

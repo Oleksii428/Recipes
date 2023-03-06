@@ -5,7 +5,9 @@ const urls = {
 	recipes: "recipes/",
 	reviews: "reviews/",
 	categories: "categories/",
-	kitchens: "kitchens/"
+	kitchens: "kitchens/",
+	login: "auth/login",
+	refresh: "auth/refresh/"
 };
 
 export {
