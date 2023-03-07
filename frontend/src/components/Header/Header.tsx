@@ -1,9 +1,37 @@
-import {FC} from "react";
-import {AppBar, Box, Container, MenuItem, Toolbar, Typography} from "@mui/material";
-import {useAppSelector} from "../../hooks";
+import {FC, useEffect, useState} from "react";
+import {
+	Alert,
+	AppBar,
+	Avatar,
+	Box,
+	CircularProgress,
+	Container,
+	MenuItem,
+	Toolbar,
+	Typography
+} from "@mui/material";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {authActions} from "../../redux";
 
 const Header: FC = () => {
-	const {loginAuthor, loading} = useAppSelector(state => state.authReducer);
+	const {loginAuthor, loading, tokenData} = useAppSelector(state => state.authReducer);
+	const [isLogout, setIsLogout] = useState<boolean>(false);
+	const [isLogouted, setIsLogouted] = useState<boolean>(false);
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (!tokenData && isLogouted) {
+			setIsLogout(true);
+			setTimeout(() => {
+				setIsLogout(false);
+			}, 2000);
+		}
+	}, [isLogouted, tokenData]);
+
+	const logout = async () => {
+		await dispatch(authActions.logout());
+		setIsLogouted(true);
+	};
 
 	return (
 		<AppBar position="static" sx={{mb: 4}}>
@@ -21,14 +49,29 @@ const Header: FC = () => {
 						</MenuItem>
 					</Box>
 					{
-						loginAuthor?._id && !loading && <h2>Login</h2>
+						loginAuthor && !loading &&
+						<Box sx={{display: "flex", alignItems: "center", columnGap: 2}}>
+							<Avatar component="a" href="/cabinet" src="static/images/cards/paella.jpg" />
+							{/*<Avatar component="a" href="/login" src={`${baseURL}/${loginAuthor.avatar}`} />*/}
+							<h2>
+								<button onClick={logout}>Logout</button>
+							</h2>
+						</Box>
 					}
 					{
-						!loginAuthor?._id && !loading && <a href="/login">Not login</a>
+						!loginAuthor && !loading && <a href="/login">Login</a>
 					}
-					{/*<Avatar component="a" href="/login" src={`${baseURL}/${loginAuthor.avatar}`} />*/}
+					{
+						loading && <CircularProgress color="inherit" />
+					}
 				</Toolbar>
 			</Container>
+			{
+				isLogout &&
+				<Alert severity="success">
+					Success logout
+				</Alert>
+			}
 		</AppBar>
 	);
 };

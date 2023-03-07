@@ -7,6 +7,7 @@ const urls = {
 	categories: "categories/",
 	kitchens: "kitchens/",
 	login: "auth/login",
+	logout: "auth/logout",
 	isLogin: "auth/isLogin",
 	refresh: "auth/refresh/"
 };

@@ -2,7 +2,7 @@ import {FC, useEffect} from "react";
 import {LockOutlined} from "@mui/icons-material";
 import {joiResolver} from "@hookform/resolvers/joi";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {
 	Avatar,
 	Box,
@@ -35,6 +35,7 @@ const LoginPage: FC = () => {
 	const dispatch = useAppDispatch();
 	const [query] = useSearchParams();
 	const {loading, errorMessage, tokenData} = useAppSelector(state => state.authReducer);
+	const navigate = useNavigate();
 
 	const onSubmit: SubmitHandler<ILoginData> = async ({userName, password}) => {
 		await dispatch(authActions.login({userName, password}));
@@ -42,8 +43,13 @@ const LoginPage: FC = () => {
 	};
 
 	useEffect(() => {
-		if (tokenData) reset();
-	}, [reset, tokenData]);
+		if (tokenData && !errorMessage) {
+			reset();
+			setTimeout(() => {
+				navigate("/recipes");
+			}, 2000);
+		}
+	}, [errorMessage, navigate, reset, tokenData]);
 
 	return (
 		<Container component="main" maxWidth="xs">

@@ -1,4 +1,4 @@
-import {FC, useLayoutEffect} from "react";
+import {FC, useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
 import {CircularProgress, Box, Grid} from "@mui/material";
 
@@ -13,7 +13,7 @@ const Recipes: FC = () => {
 	const {list, loading, error} = useAppSelector(state => state.recipeReducer);
 	const [searchParams] = useSearchParams();
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		let newQuery: IRecipesQuery = {};
 
 		for (const [key, value] of searchParams.entries()) {
