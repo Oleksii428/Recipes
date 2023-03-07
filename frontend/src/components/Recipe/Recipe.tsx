@@ -1,4 +1,5 @@
 import {FC} from "react";
+import {Bookmark, BookmarkBorder} from "@mui/icons-material";
 import {
 	Avatar, Badge,
 	Button,
@@ -14,7 +15,6 @@ import {
 
 import {IRecipe} from "../../interfaces";
 import {baseURL} from "../../configs";
-import {BookmarkBorder} from "@mui/icons-material";
 
 interface Iprops {
 	recipe: IRecipe;
@@ -33,6 +33,7 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 		time,
 		title,
 		bookCount,
+		inBook,
 		servings
 	} = recipe;
 	const {avatar, userName} = creator;
@@ -50,7 +51,13 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 						</Typography>
 					}
 					subheader={createdAt}
-					action={
+					action={inBook ?
+						<IconButton>
+							<Badge badgeContent={bookCount} color="primary" showZero>
+								<Bookmark fontSize="medium" color="primary" />
+							</Badge>
+						</IconButton>
+						:
 						<IconButton>
 							<Badge badgeContent={bookCount} color="primary" showZero>
 								<BookmarkBorder fontSize="medium" />

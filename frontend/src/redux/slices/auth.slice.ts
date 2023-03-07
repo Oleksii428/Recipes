@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IErrorResponse, ILoginData, ITokenData} from "../../interfaces";
+import {IAuthor, IErrorResponse, ILoginData, ITokenData} from "../../interfaces";
 import {authService} from "../../services";
 
 interface IState {
@@ -9,13 +9,15 @@ interface IState {
 	loading: boolean;
 	errorMessage: string | null;
 	statusCode: number | null;
+	loginAuthor: IAuthor | null;
 }
 
 const initialState: IState = {
 	tokenData: null,
 	loading: false,
 	errorMessage: null,
-	statusCode: null
+	statusCode: null,
+	loginAuthor: null
 };
 
 const login = createAsyncThunk<ITokenData, ILoginData, { rejectValue: IErrorResponse }>(
@@ -28,6 +30,19 @@ const login = createAsyncThunk<ITokenData, ILoginData, { rejectValue: IErrorResp
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
 			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
+const isLogin = createAsyncThunk<IAuthor, void>(
+	"authSlice/isLogin",
+	async (_, {rejectWithValue}) => {
+		try {
+			const {data} = await authService.isLogin();
+			return data;
+		} catch (e) {
+			const err = e as AxiosError;
+			return rejectWithValue(err.response?.data);
 		}
 	}
 );
@@ -52,12 +67,25 @@ const authSlice = createSlice({
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.statusCode = action.payload?.status ?? 500;
 			})
+
+			.addCase(isLogin.fulfilled, (state, action) => {
+				state.loading = false;
+				state.loginAuthor = action.payload;
+			})
+			.addCase(isLogin.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(isLogin.rejected, (state) => {
+				state.loading = false;
+				state.loginAuthor = null;
+			})
 });
 
 const {reducer: authReducer, actions} = authSlice;
 
 const authActions = {
-	login
+	login,
+	isLogin
 };
 
 export {

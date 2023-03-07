@@ -1,6 +1,6 @@
 import {AxiosRes, axiosService} from "./axios.servise";
 
-import {ILoginData, ITokenData} from "../interfaces";
+import {IAuthor, ILoginData, ITokenData} from "../interfaces";
 import {urls} from "../configs";
 
 const authService = {
@@ -8,20 +8,20 @@ const authService = {
 		userName,
 		password
 	}),
+	isLogin: (): AxiosRes<IAuthor> => axiosService.get(urls.isLogin),
 	refresh: (refreshToken: string): AxiosRes<ITokenData> => axiosService.post(urls.refresh, {refreshToken}),
-	setTokenData: ({accessToken, refreshToken, author}: ITokenData) => {
+	setTokenData: ({accessToken, refreshToken, author}: ITokenData): void => {
 		localStorage.setItem("accessToken", accessToken);
 		localStorage.setItem("refreshToken", refreshToken);
 		localStorage.setItem("loginAuthorId", author);
 	},
-	deleteTokenData: () => {
+	deleteTokenData: (): void => {
 		localStorage.removeItem("accessToken");
 		localStorage.removeItem("refreshToken");
 		localStorage.removeItem("loginAuthorId");
 	},
-	getAccessToken: () => localStorage.getItem("accessToken"),
-	getRefreshToken: () => localStorage.getItem("refreshToken"),
-	getLoginAuthorId: () => localStorage.getItem("loginAuthorId")
+	getAccessToken: (): string | null => localStorage.getItem("accessToken"),
+	getRefreshToken: (): string | null => localStorage.getItem("refreshToken")
 };
 
 export {

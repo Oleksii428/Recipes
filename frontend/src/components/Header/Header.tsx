@@ -1,7 +1,10 @@
 import {FC} from "react";
-import {AppBar, Avatar, Box, Container, MenuItem, Toolbar, Typography} from "@mui/material";
+import {AppBar, Box, Container, MenuItem, Toolbar, Typography} from "@mui/material";
+import {useAppSelector} from "../../hooks";
 
 const Header: FC = () => {
+	const {loginAuthor, loading} = useAppSelector(state => state.authReducer);
+
 	return (
 		<AppBar position="static" sx={{mb: 4}}>
 			<Container maxWidth={"xl"}>
@@ -17,9 +20,13 @@ const Header: FC = () => {
 							<Typography textAlign="center">Authors</Typography>
 						</MenuItem>
 					</Box>
-					<MenuItem>
-						<Avatar component="a" href="/login" src="/broken-image.jpg" />
-					</MenuItem>
+					{
+						loginAuthor?._id && !loading && <h2>Login</h2>
+					}
+					{
+						!loginAuthor?._id && !loading && <a href="/login">Not login</a>
+					}
+					{/*<Avatar component="a" href="/login" src={`${baseURL}/${loginAuthor.avatar}`} />*/}
 				</Toolbar>
 			</Container>
 		</AppBar>

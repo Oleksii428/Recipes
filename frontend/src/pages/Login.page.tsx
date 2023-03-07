@@ -2,6 +2,7 @@ import {FC, useEffect} from "react";
 import {LockOutlined} from "@mui/icons-material";
 import {joiResolver} from "@hookform/resolvers/joi";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
+import {useSearchParams} from "react-router-dom";
 import {
 	Avatar,
 	Box,
@@ -20,7 +21,6 @@ import {signUpValidator} from "../validators";
 import {ILoginData} from "../interfaces";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
-import {useSearchParams} from "react-router-dom";
 
 interface ISignInForm {
 	userName: string;
@@ -36,8 +36,9 @@ const LoginPage: FC = () => {
 	const [query] = useSearchParams();
 	const {loading, errorMessage, tokenData} = useAppSelector(state => state.authReducer);
 
-	const onSubmit: SubmitHandler<ILoginData> = ({userName, password}) => {
-		dispatch(authActions.login({userName, password}));
+	const onSubmit: SubmitHandler<ILoginData> = async ({userName, password}) => {
+		await dispatch(authActions.login({userName, password}));
+		dispatch(authActions.isLogin());
 	};
 
 	useEffect(() => {
@@ -75,7 +76,7 @@ const LoginPage: FC = () => {
 					</Alert>
 				}
 				{
-					query.has("expSession") &&
+					query.has("expSession") && !tokenData && !errorMessage &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="warning">
 						Expired session
