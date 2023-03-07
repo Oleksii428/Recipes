@@ -70,7 +70,7 @@ module.exports = {
 			const {email, userName} = req.body;
 
 			if (email) {
-				const authorByEmail = await authorRepository.getOneByParams({email});
+				const authorByEmail = await authorRepository.getOneByParamsWithPopulate({email});
 
 				if (!authorByEmail) {
 					throw new ApiError(`Author width email ${email} not found`, 400);
@@ -78,7 +78,7 @@ module.exports = {
 				req.author = authorByEmail;
 				next();
 			} else {
-				const authorByUserName = await authorRepository.getOneByParams({userName});
+				const authorByUserName = await authorRepository.getOneByParamsWithPopulate({userName});
 
 				if (!authorByUserName) {
 					throw new ApiError(`Author width userName ${userName} not found`, 400);

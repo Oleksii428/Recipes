@@ -237,7 +237,19 @@
           "201": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/TokenInfo"
+              "properties": {
+                "accessToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjAwNzU2NTBjMTIyYmI5ZTMyMGMyMCIsImlhdCI6MTY3ODIyMjA2NywiZXhwIjoxNjc4MjIyMDgyfQ._QYQSEw3FxeUYjk2YIBRV4MlGgcIV5b0msSzjzqn7M0"
+                },
+                "refreshToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjAwNzU2NTBjMTIyYmI5ZTMyMGMyMCIsImlhdCI6MTY3ODIyMjA2NywiZXhwIjoxNjc4MjIyMDgyfQ._QYQSEw3FxeUYjk2YIBRV4MlGgcIV5b0msSzjzqn7M0"
+                },
+                "author": {
+                  "$ref": "#/definitions/Author"
+                }
+              }
             }
           },
           "400": {

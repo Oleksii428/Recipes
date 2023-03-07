@@ -14,15 +14,23 @@ module.exports = {
 			const tokenPair = authService.generateTokenPair({userName: author.userName});
 
 			const tokenPairInfo = await authRepository.create(tokenPair, author.id);
+			const newAuthor = await authorRepository.getById(tokenPairInfo.author);
 
-			res.json(tokenPairInfo);
+			const presentAuthor = authorPresenter.present(newAuthor);
+
+			res.json({
+				accessToken: tokenPairInfo.accessToken,
+				refreshToken: tokenPairInfo.refreshToken,
+				author: presentAuthor
+			});
 		} catch (e) {
 			next(e);
 		}
 	},
 	isLogin: async (req, res, next) => {
 		try {
-			const author = authorPresenter.present(req.tokenInfo.author);
+			let author = await authorRepository.getById(req.tokenInfo.author._id);
+			author = authorPresenter.present(author);
 
 			res.json(author);
 		} catch (e) {

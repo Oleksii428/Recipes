@@ -60,6 +60,7 @@ module.exports = {
 		};
 	},
 	getOneByParams: (filter) => Author.findOne(filter),
+	getOneByParamsWithPopulate: (filter) => Author.findOne(filter).populate("role avatar recipes totalBook totalSubscriptions totalSubscribers"),
 	getRoleOfAuthor: async (authorId) => {
 		const {role} = await Author.findById(authorId).populate("role").lean();
 		return role;
