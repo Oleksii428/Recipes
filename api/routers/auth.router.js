@@ -14,6 +14,11 @@ router.post("/logout",
 	authController.logout
 );
 
+router.get("/isLogin",
+	authMiddleware.checkAccessToken,
+	authController.isLogin
+);
+
 router.post("/refresh",
 	authMiddleware.checkRefreshToken,
 	authController.refresh

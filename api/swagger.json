@@ -249,6 +249,37 @@
         }
       }
     },
+    "/auth/isLogin": {
+      "get": {
+        "description": "isLogin",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "isLogin",
+        "parameters": [
+          {
+            "name": "accessToken",
+            "type": "string",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Author"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        }
+      }
+    },
     "/auth/logout": {
       "post": {
         "description": "logout",
@@ -301,7 +332,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Success",
             "schema": {
               "$ref": "#/definitions/TokenInfo"

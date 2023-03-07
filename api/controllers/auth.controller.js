@@ -2,6 +2,7 @@ const {authService, emailService} = require("../services");
 const {authRepository, actionTokenRepository, authorRepository} = require("../repositories");
 const {tokenActions, emailActions} = require("../enums");
 const {config} = require("../configs");
+const {authorPresenter} = require("../presenters");
 
 module.exports = {
 	login: async (req, res, next) => {
@@ -15,6 +16,15 @@ module.exports = {
 			const tokenPairInfo = await authRepository.create(tokenPair, author.id);
 
 			res.json(tokenPairInfo);
+		} catch (e) {
+			next(e);
+		}
+	},
+	isLogin: async (req, res, next) => {
+		try {
+			const author = authorPresenter.present(req.tokenInfo.author);
+
+			res.json(author);
 		} catch (e) {
 			next(e);
 		}
@@ -40,7 +50,7 @@ module.exports = {
 
 			const newTokenPairInfo = await authRepository.create(newTokenPair, authorId);
 
-			res.status(201).json(newTokenPairInfo);
+			res.status(200).json(newTokenPairInfo);
 		} catch (e) {
 			next(e);
 		}
