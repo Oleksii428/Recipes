@@ -39,7 +39,6 @@ const LoginPage: FC = () => {
 
 	const onSubmit: SubmitHandler<ILoginData> = async ({userName, password}) => {
 		await dispatch(authActions.login({userName, password}));
-		dispatch(authActions.isLogin());
 	};
 
 	useEffect(() => {
@@ -133,6 +132,7 @@ const LoginPage: FC = () => {
 						)}
 					/>
 					<Button
+						disabled={!!tokenData}
 						type="submit"
 						fullWidth
 						variant="contained"

@@ -5,13 +5,17 @@ import {MainLayout} from "./layouts";
 import {AuthorDetailsPage, AuthorsPage, LoginPage, RecipeDetailsPage, RecipesPage} from "./pages";
 import {useAppDispatch} from "./hooks";
 import {authActions} from "./redux";
+import {authService} from "./services";
 
 const App: FC = () => {
 	const dispatch = useAppDispatch();
+	const accessToken = authService.getAccessToken();
 
 	useEffect(() => {
-		dispatch(authActions.isLogin());
-	}, [dispatch]);
+		if (accessToken) {
+			dispatch(authActions.isLogin());
+		}
+	}, [accessToken, dispatch]);
 
 	return (
 		<Routes>

@@ -1,5 +1,5 @@
-import {AxiosRes, axiosService, axiosService2} from "./axios.servise";
-
+import {AxiosRes, axiosService} from "./axios.servise";
+import {checkLoginService} from "./axios.checkLogin.service";
 import {IAuthor, ILoginData, ITokenData} from "../interfaces";
 import {urls} from "../configs";
 
@@ -9,17 +9,15 @@ const authService = {
 		password
 	}),
 	logout: (): AxiosRes<void> => axiosService.post(urls.logout),
-	isLogin: (): AxiosRes<IAuthor> => axiosService2.get(urls.isLogin),
+	isLogin: (): AxiosRes<IAuthor> => checkLoginService.get(urls.isLogin),
 	refresh: (refreshToken: string): AxiosRes<ITokenData> => axiosService.post(urls.refresh, {refreshToken}),
-	setTokenData: ({accessToken, refreshToken, author}: ITokenData): void => {
+	setTokenData: ({accessToken, refreshToken}: ITokenData): void => {
 		localStorage.setItem("accessToken", accessToken);
 		localStorage.setItem("refreshToken", refreshToken);
-		localStorage.setItem("loginAuthorId", author);
 	},
 	deleteTokenData: (): void => {
 		localStorage.removeItem("accessToken");
 		localStorage.removeItem("refreshToken");
-		localStorage.removeItem("loginAuthorId");
 	},
 	getAccessToken: (): string | null => localStorage.getItem("accessToken"),
 	getRefreshToken: (): string | null => localStorage.getItem("refreshToken")

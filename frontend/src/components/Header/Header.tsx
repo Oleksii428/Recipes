@@ -4,14 +4,17 @@ import {
 	AppBar,
 	Avatar,
 	Box,
+	Button,
 	CircularProgress,
 	Container,
 	MenuItem,
 	Toolbar,
 	Typography
 } from "@mui/material";
+
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {authActions} from "../../redux";
+import {baseURL} from "../../configs";
 
 const Header: FC = () => {
 	const {loginAuthor, loading, tokenData} = useAppSelector(state => state.authReducer);
@@ -30,6 +33,7 @@ const Header: FC = () => {
 
 	const logout = async () => {
 		await dispatch(authActions.logout());
+		dispatch(authActions.cleanLoginAuthor());
 		setIsLogouted(true);
 	};
 
@@ -48,19 +52,30 @@ const Header: FC = () => {
 							<Typography textAlign="center">Authors</Typography>
 						</MenuItem>
 					</Box>
-					{
-						loginAuthor && !loading &&
-						<Box sx={{display: "flex", alignItems: "center", columnGap: 2}}>
-							<Avatar component="a" href="/cabinet" src="static/images/cards/paella.jpg" />
-							{/*<Avatar component="a" href="/login" src={`${baseURL}/${loginAuthor.avatar}`} />*/}
-							<h2>
-								<button onClick={logout}>Logout</button>
-							</h2>
-						</Box>
-					}
-					{
-						!loginAuthor && !loading && <a href="/login">Login</a>
-					}
+					<Box sx={{display: "flex"}}>
+						{
+							!loginAuthor && !loading &&
+							<MenuItem component="a" href="/login">
+								<Typography textAlign="center">Login</Typography>
+							</MenuItem>
+						}
+						{
+							loginAuthor && !loading &&
+							<MenuItem>
+								<Button color="inherit" variant="text" onClick={logout}>Logout</Button>
+							</MenuItem>
+						}
+						<MenuItem>
+							{
+								loginAuthor?.avatar && !loading &&
+								<Avatar component="a" href="/cabinet" src={`${baseURL}/${loginAuthor.avatar}`} />
+							}
+							{
+								!loginAuthor?.avatar && !loading &&
+								<Avatar component="a" href="/login" src="static/images/cards/paella.jpg" />
+							}
+						</MenuItem>
+					</Box>
 					{
 						loading && <CircularProgress color="inherit" />
 					}

@@ -64,11 +64,16 @@ const logout = createAsyncThunk<void, void, { rejectValue: IErrorResponse }>(
 const authSlice = createSlice({
 	name: "authorSlice",
 	initialState,
-	reducers: {},
+	reducers: {
+		cleanLoginAuthor: state => {
+			state.loginAuthor = null;
+		}
+	},
 	extraReducers: builder =>
 		builder
 			// login
 			.addCase(login.fulfilled, (state, action) => {
+				state.loginAuthor = action.payload.author;
 				state.tokenData = action.payload;
 				state.loading = false;
 				state.errorMessage = null;
@@ -107,19 +112,18 @@ const authSlice = createSlice({
 			.addCase(logout.pending, (state) => {
 				state.loading = true;
 			})
-			.addCase(logout.rejected, (state, action) => {
+			.addCase(logout.rejected, (state) => {
 				state.loading = false;
-				state.errorMessage = action.payload?.message ?? "Unknown error";
-				state.statusCode = action.payload?.status ?? 500;
 			})
 });
 
-const {reducer: authReducer, actions} = authSlice;
+const {reducer: authReducer, actions: {cleanLoginAuthor}} = authSlice;
 
 const authActions = {
 	login,
 	isLogin,
-	logout
+	logout,
+	cleanLoginAuthor
 };
 
 export {
