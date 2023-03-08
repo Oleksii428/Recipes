@@ -1,6 +1,6 @@
 import {AxiosRes, axiosService} from "./axios.servise";
 import {checkLoginService} from "./axios.checkLogin.service";
-import {IAuthor, ILoginData, IRegisterData, ITokenData} from "../interfaces";
+import {IAuthor, IForgotData, ILoginData, IRegisterData, ITokenData} from "../interfaces";
 import {urls} from "../configs";
 
 const authService = {
@@ -17,6 +17,8 @@ const authService = {
 		adminKey: data?.adminKey
 	}),
 	refresh: (refreshToken: string): AxiosRes<ITokenData> => axiosService.post(urls.refresh, {refreshToken}),
+	forgotPass: ({userName}: IForgotData): AxiosRes<void> => axiosService.post(urls.forgotPass, {userName}),
+
 	setTokenData: ({accessToken, refreshToken}: ITokenData): void => {
 		localStorage.setItem("accessToken", accessToken);
 		localStorage.setItem("refreshToken", refreshToken);

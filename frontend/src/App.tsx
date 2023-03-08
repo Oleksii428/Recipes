@@ -2,7 +2,15 @@ import {FC, useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
 
 import {MainLayout} from "./layouts";
-import {AuthorDetailsPage, AuthorsPage, LoginPage, RecipeDetailsPage, RecipesPage, RegisterPage} from "./pages";
+import {
+	AuthorDetailsPage,
+	AuthorsPage,
+	ForgotPasswordPage,
+	LoginPage,
+	RecipeDetailsPage,
+	RecipesPage,
+	RegisterPage
+} from "./pages";
 import {useAppDispatch} from "./hooks";
 import {authActions} from "./redux";
 import {authService} from "./services";
@@ -27,6 +35,7 @@ const App: FC = () => {
 				<Route path={"authors/:id"} element={<AuthorDetailsPage />} />
 				<Route path={"login"} element={<LoginPage />} />
 				<Route path={"register"} element={<RegisterPage />} />
+				<Route path={"forgot-password"} element={<ForgotPasswordPage />} />
 			</Route>
 		</Routes>
 	);

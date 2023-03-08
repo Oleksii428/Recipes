@@ -19,22 +19,22 @@ import {baseURL} from "../../configs";
 const Header: FC = () => {
 	const {loginAuthor, loading, tokenData} = useAppSelector(state => state.authReducer);
 	const [isLogout, setIsLogout] = useState<boolean>(false);
-	const [isLogouted, setIsLogouted] = useState<boolean>(false);
+	const [wasTryToLogout, setWasTryToLogout] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		if (!tokenData && isLogouted) {
+		if (!tokenData && wasTryToLogout) {
 			setIsLogout(true);
 			setTimeout(() => {
 				setIsLogout(false);
 			}, 2000);
 		}
-	}, [isLogouted, tokenData]);
+	}, [wasTryToLogout, tokenData]);
 
 	const logout = async () => {
 		await dispatch(authActions.logout());
 		dispatch(authActions.cleanLoginAuthor());
-		setIsLogouted(true);
+		setWasTryToLogout(true);
 	};
 
 	return (
@@ -82,7 +82,7 @@ const Header: FC = () => {
 				</Toolbar>
 			</Container>
 			{
-				isLogout &&
+				isLogout && wasTryToLogout &&
 				<Alert severity="success">
 					Success logout
 				</Alert>

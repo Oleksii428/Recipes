@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IAuthor, IErrorResponse, ILoginData, IRegisterData, ITokenData} from "../../interfaces";
+import {IAuthor, IErrorResponse, IForgotData, ILoginData, IRegisterData, ITokenData} from "../../interfaces";
 import {authService} from "../../services";
 
 interface IState {
@@ -74,6 +74,19 @@ const register = createAsyncThunk<void, IRegisterData, { rejectValue: IErrorResp
 	}
 );
 
+const forgotPass = createAsyncThunk<void, IForgotData, { rejectValue: IErrorResponse }>(
+	"authSlice/forgotPass",
+	async (userName, {rejectWithValue}) => {
+		try {
+			const {data} = await authService.forgotPass(userName);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
 const authSlice = createSlice({
 	name: "authorSlice",
 	initialState,
@@ -94,6 +107,8 @@ const authSlice = createSlice({
 			})
 			.addCase(login.pending, (state) => {
 				state.loading = true;
+				state.errorMessage = null;
+				state.statusCode = null;
 			})
 			.addCase(login.rejected, (state, action) => {
 				state.loading = false;
@@ -109,6 +124,8 @@ const authSlice = createSlice({
 			})
 			.addCase(isLogin.pending, (state) => {
 				state.loading = true;
+				state.errorMessage = null;
+				state.statusCode = null;
 			})
 			.addCase(isLogin.rejected, (state) => {
 				state.loading = false;
@@ -124,6 +141,8 @@ const authSlice = createSlice({
 			})
 			.addCase(logout.pending, (state) => {
 				state.loading = true;
+				state.errorMessage = null;
+				state.statusCode = null;
 			})
 			.addCase(logout.rejected, (state) => {
 				state.loading = false;
@@ -136,8 +155,26 @@ const authSlice = createSlice({
 			})
 			.addCase(register.pending, (state) => {
 				state.loading = true;
+				state.errorMessage = null;
+				state.statusCode = null;
 			})
 			.addCase(register.rejected, (state, action) => {
+				state.loading = false;
+				state.errorMessage = action.payload?.message ?? "Unknown error";
+				state.statusCode = action.payload?.status ?? 500;
+			})
+			// forgotPass
+			.addCase(forgotPass.fulfilled, (state) => {
+				state.loading = false;
+				state.errorMessage = null;
+				state.statusCode = 200;
+			})
+			.addCase(forgotPass.pending, (state) => {
+				state.loading = true;
+				state.errorMessage = null;
+				state.statusCode = null;
+			})
+			.addCase(forgotPass.rejected, (state, action) => {
 				state.loading = false;
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.statusCode = action.payload?.status ?? 500;
@@ -151,6 +188,7 @@ const authActions = {
 	isLogin,
 	logout,
 	register,
+	forgotPass,
 	cleanLoginAuthor
 };
 

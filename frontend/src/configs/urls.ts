@@ -10,7 +10,8 @@ const urls = {
 	register: "authors",
 	logout: "auth/logout",
 	isLogin: "auth/isLogin",
-	refresh: "auth/refresh/"
+	refresh: "auth/refresh/",
+	forgotPass: "/auth/password/forgot"
 };
 
 export {

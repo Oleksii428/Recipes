@@ -72,4 +72,17 @@ const signUp = Joi.object({
 		})
 });
 
-export {signIn, signUp};
+const forgot = Joi.object({
+	userName: Joi
+		.string()
+		.regex(regexp.USERNAME)
+		.trim()
+		.required()
+		.messages({
+			"string.pattern.base": "Username must be between 8-20 characters and can only contain letters, numbers, periods, and underscores",
+			"string.empty": "Username is required",
+			"any.required": "Username is required"
+		})
+});
+
+export {signIn, signUp, forgot};
