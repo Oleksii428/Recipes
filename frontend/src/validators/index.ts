@@ -1,1 +1,1 @@
-export * from "./signUp.validator";
+export * from "./auth.validator";

@@ -16,23 +16,24 @@ checkLoginService.interceptors.request.use((config) => {
 	return config;
 });
 
-let isRefreshing2 = false;
+let isRefreshing = false;
 checkLoginService.interceptors.response.use((config) => {
 	return config;
 }, async (error) => {
 	const refreshToken = authService.getRefreshToken();
 
-	if (error.response?.data.status === 401 && refreshToken && !isRefreshing2) {
-		isRefreshing2 = true;
+	if (error.response?.data.status === 401 && refreshToken && !isRefreshing) {
+		isRefreshing = true;
 
 		try {
 			const {data: newTokenData} = await authService.refresh(refreshToken);
+			console.log(newTokenData, "CHECK LOGIN AXIOS");
 			authService.setTokenData(newTokenData);
 		} catch (e) {
 			authService.deleteTokenData();
 		}
 
-		isRefreshing2 = false;
+		isRefreshing = false;
 		return axiosService(error.config);
 	}
 

@@ -10,6 +10,7 @@ const authService = {
 	}),
 	logout: (): AxiosRes<void> => axiosService.post(urls.logout),
 	isLogin: (): AxiosRes<IAuthor> => checkLoginService.get(urls.isLogin),
+	register: (): AxiosRes<void> => axiosService.post(urls.register),
 	refresh: (refreshToken: string): AxiosRes<ITokenData> => axiosService.post(urls.refresh, {refreshToken}),
 	setTokenData: ({accessToken, refreshToken}: ITokenData): void => {
 		localStorage.setItem("accessToken", accessToken);

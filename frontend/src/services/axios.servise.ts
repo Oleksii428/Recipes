@@ -32,6 +32,7 @@ axiosService.interceptors.response.use((config) => {
 
 		try {
 			const {data: newTokenData} = await authService.refresh(refreshToken);
+			console.log(newTokenData, "AXIOS");
 			authService.setTokenData(newTokenData);
 		} catch (e) {
 			authService.deleteTokenData();

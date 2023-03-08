@@ -25,7 +25,7 @@ const SortTypeFilter: FC = () => {
 	return (
 		<Box sx={{minWidth: 120}}>
 			<FormControl fullWidth>
-				<InputLabel>Sort</InputLabel>
+				<InputLabel>Sort Type</InputLabel>
 				<Select
 					value={sortType}
 					label="Sort"

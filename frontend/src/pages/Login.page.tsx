@@ -17,19 +17,14 @@ import {
 	Alert
 } from "@mui/material";
 
-import {signUpValidator} from "../validators";
+import {signIn} from "../validators";
 import {ILoginData} from "../interfaces";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
 
-interface ISignInForm {
-	userName: string;
-	password: string;
-}
-
 const LoginPage: FC = () => {
-	const {handleSubmit, control, reset} = useForm<ISignInForm>({
-		resolver: joiResolver(signUpValidator),
+	const {handleSubmit, control, reset} = useForm<ILoginData>({
+		resolver: joiResolver(signIn),
 		mode: "all"
 	});
 	const dispatch = useAppDispatch();
@@ -107,8 +102,6 @@ const LoginPage: FC = () => {
 								label="User Name"
 								margin="normal"
 								fullWidth
-								id="email"
-								autoComplete="email"
 								autoFocus
 							/>
 						)}
