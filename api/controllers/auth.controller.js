@@ -75,7 +75,7 @@ module.exports = {
 
 			await actionTokenRepository.create(newActionToken);
 
-			const forgotPasswordUrl = `${config.FRONTEND_URL}/password/forgot?token=${actionToken}`;
+			const forgotPasswordUrl = `${config.FRONTEND_URL}/restore-password?token=${actionToken}`;
 
 			await emailService.sendEmail(author.email, emailActions.FORGOT_PASS, {
 				userName: author.userName, forgotPasswordUrl
