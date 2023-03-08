@@ -85,4 +85,25 @@ const forgot = Joi.object({
 		})
 });
 
-export {signIn, signUp, forgot};
+const restore = Joi.object({
+	password: Joi
+		.string()
+		.regex(regexp.PASSWORD)
+		.required()
+		.messages({
+			"string.pattern.base": "Password must be at least 8 characters long and contain at least one letter and one number",
+			"string.empty": "Password is required",
+			"any.required": "Password is required"
+		}),
+	repeatPassword: Joi
+		.string()
+		.valid(Joi.ref("password"))
+		.required()
+		.messages({
+			"any.only": "Passwords must match",
+			"string.empty": "Please confirm your password",
+			"any.required": "Please confirm your password"
+		})
+});
+
+export {signIn, signUp, forgot, restore};

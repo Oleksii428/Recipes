@@ -9,7 +9,8 @@ import {
 	LoginPage,
 	RecipeDetailsPage,
 	RecipesPage,
-	RegisterPage
+	RegisterPage,
+	RestorePasswordPage
 } from "./pages";
 import {useAppDispatch} from "./hooks";
 import {authActions} from "./redux";
@@ -36,6 +37,7 @@ const App: FC = () => {
 				<Route path={"login"} element={<LoginPage />} />
 				<Route path={"register"} element={<RegisterPage />} />
 				<Route path={"forgot-password"} element={<ForgotPasswordPage />} />
+				<Route path={"restore-password"} element={<RestorePasswordPage />} />
 			</Route>
 		</Routes>
 	);

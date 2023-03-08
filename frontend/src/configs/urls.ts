@@ -11,7 +11,8 @@ const urls = {
 	logout: "auth/logout",
 	isLogin: "auth/isLogin",
 	refresh: "auth/refresh/",
-	forgotPass: "/auth/password/forgot"
+	forgotPass: "auth/password/forgot",
+	restorePass: (token: string) => `auth/password/forgot?token=${token}`
 };
 
 export {

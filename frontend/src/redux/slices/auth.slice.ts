@@ -1,7 +1,15 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IAuthor, IErrorResponse, IForgotData, ILoginData, IRegisterData, ITokenData} from "../../interfaces";
+import {
+	IAuthor,
+	IErrorResponse,
+	IForgotData,
+	ILoginData,
+	IRegisterData,
+	IRestoreData,
+	ITokenData
+} from "../../interfaces";
 import {authService} from "../../services";
 
 interface IState {
@@ -79,6 +87,19 @@ const forgotPass = createAsyncThunk<void, IForgotData, { rejectValue: IErrorResp
 	async (userName, {rejectWithValue}) => {
 		try {
 			const {data} = await authService.forgotPass(userName);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
+const restorePass = createAsyncThunk<void, IRestoreData, { rejectValue: IErrorResponse }>(
+	"authSlice/restorePass",
+	async ({password, token}, {rejectWithValue}) => {
+		try {
+			const {data} = await authService.restorePass({password, token});
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
@@ -179,6 +200,22 @@ const authSlice = createSlice({
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.statusCode = action.payload?.status ?? 500;
 			})
+			// restorePass
+			.addCase(restorePass.fulfilled, (state) => {
+				state.loading = false;
+				state.errorMessage = null;
+				state.statusCode = 200;
+			})
+			.addCase(restorePass.pending, (state) => {
+				state.loading = true;
+				state.errorMessage = null;
+				state.statusCode = null;
+			})
+			.addCase(restorePass.rejected, (state, action) => {
+				state.loading = false;
+				state.errorMessage = action.payload?.message ?? "Unknown error";
+				state.statusCode = action.payload?.status ?? 500;
+			})
 });
 
 const {reducer: authReducer, actions: {cleanLoginAuthor}} = authSlice;
@@ -189,6 +226,7 @@ const authActions = {
 	logout,
 	register,
 	forgotPass,
+	restorePass,
 	cleanLoginAuthor
 };
 

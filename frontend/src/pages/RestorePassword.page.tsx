@@ -1,7 +1,8 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {LockOutlined} from "@mui/icons-material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {
 	Alert,
 	Avatar,
@@ -16,26 +17,43 @@ import {
 	Typography
 } from "@mui/material";
 
-import {forgot} from "../validators";
+import {IRestoreData} from "../interfaces";
 import {useAppDispatch, useAppSelector} from "../hooks";
+import {restore} from "../validators";
 import {authActions} from "../redux";
-import {IForgotData} from "../interfaces";
 
-const ForgotPasswordPage: FC = () => {
+interface IRestorePassForm extends IRestoreData {
+	repeatPassword: string;
+}
+
+const RestorePasswordPage: FC = () => {
+	const navigate = useNavigate();
+	const [query] = useSearchParams();
 	const dispatch = useAppDispatch();
-	const [wasTryToSendEmail, setWasTryToSendEmail] = useState<boolean>(false);
+	const [wasTryToRestore, setWasTryToRestore] = useState<boolean>(false);
 	const {loading, errorMessage, statusCode} = useAppSelector(state => state.authReducer);
 
-	const {handleSubmit, control, reset} = useForm<IForgotData>({
-		resolver: joiResolver(forgot),
+	const {handleSubmit, control, reset} = useForm<IRestorePassForm>({
+		resolver: joiResolver(restore),
 		mode: "all"
 	});
 
-	const onSubmit: SubmitHandler<IForgotData> = async ({userName}) => {
-		await dispatch(authActions.forgotPass({userName}));
-		reset();
-		setWasTryToSendEmail(true);
+	const onSubmit: SubmitHandler<IRestorePassForm> = async ({password}) => {
+		const token = query.get("token");
+		if (token) {
+			await dispatch(authActions.restorePass({password, token}));
+		}
+		setWasTryToRestore(true);
 	};
+
+	useEffect(() => {
+		if (!errorMessage && statusCode === 200 && wasTryToRestore) {
+			reset();
+			setTimeout(() => {
+				navigate("/login");
+			}, 2000);
+		}
+	}, [errorMessage, navigate, reset, statusCode, wasTryToRestore]);
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -54,39 +72,58 @@ const ForgotPasswordPage: FC = () => {
 					position: "relative"
 				}}
 			>
-				{errorMessage && wasTryToSendEmail &&
+				{errorMessage && wasTryToRestore &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="error">
 						{errorMessage}
 					</Alert>
 				}
-				{!errorMessage && statusCode === 200 && wasTryToSendEmail &&
+				{statusCode === 200 && wasTryToRestore &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="success">
-						Check your email
+						Password has been restored
 					</Alert>
 				}
 				<Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
 					<LockOutlined />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Forgot Password
+					Restore Password
 				</Typography>
 				<Box component="form" noValidate sx={{mt: 1}} onSubmit={handleSubmit(onSubmit)}>
 					<Controller
-						name={"userName"}
+						name={"password"}
 						control={control}
-						rules={{required: "User Name is required"}}
+						rules={{required: "Password is required"}}
 						render={({field: {onChange, value}, fieldState: {error}}) => (
 							<TextField
+								required
 								error={!!error}
 								helperText={error?.message}
 								onChange={onChange}
 								value={value || ""}
-								label="User Name"
+								label="Password"
 								margin="normal"
 								fullWidth
-								autoFocus
+								type="password"
+							/>
+						)}
+					/>
+					<Controller
+						name={"repeatPassword"}
+						control={control}
+						rules={{required: "Repeat Password is required"}}
+						render={({field: {onChange, value}, fieldState: {error}}) => (
+							<TextField
+								required
+								error={!!error}
+								helperText={error?.message}
+								onChange={onChange}
+								value={value || ""}
+								label="Repeat Password"
+								margin="normal"
+								fullWidth
+								type="password"
 							/>
 						)}
 					/>
@@ -117,4 +154,4 @@ const ForgotPasswordPage: FC = () => {
 	);
 };
 
-export {ForgotPasswordPage};
+export {RestorePasswordPage};
