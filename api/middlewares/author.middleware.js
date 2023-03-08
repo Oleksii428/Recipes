@@ -153,17 +153,16 @@ module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
 			const authorInfo = req.body;
-			const adminKey = req.get("Admin-key");
+			const {adminKey} = authorInfo;
 
-			if (adminKey) {
-				if (adminKey === config.CREATE_ADMIN_KEY) {
-					authorInfo.role = await roleRepository.getRoleId("admin");
-				} else {
-					throw new ApiError("Not valid admin key", 400);
-				}
+			if (adminKey && adminKey === config.CREATE_ADMIN_KEY) {
+				authorInfo.role = await roleRepository.getRoleId("admin");
+			} else if (adminKey && adminKey !== config.CREATE_ADMIN_KEY) {
+				throw new ApiError("Not valid admin key", 400);
 			} else {
 				authorInfo.role = await roleRepository.getRoleId();
 			}
+
 			const validatedAuthor = authorValidator.createAuthorValidator.validate(authorInfo);
 
 			if (validatedAuthor.error) {

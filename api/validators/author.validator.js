@@ -10,6 +10,7 @@ module.exports = {
 		userName: Joi.string().regex(regex.USERNAME).trim().required(),
 		email: Joi.string().regex(regex.EMAIL).lowercase().trim().required(),
 		password: Joi.string().regex(regex.PASSWORD).required(),
+		adminKey: Joi.string().optional(),
 		avatar: Joi.string().regex(regex.MONGO_ID).optional().default(null),
 		role: Joi.string().regex(regex.MONGO_ID).required(),
 		totalLikes: Joi.number().integer().default(0),

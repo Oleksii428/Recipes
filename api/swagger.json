@@ -513,7 +513,8 @@
           {
             "name": "AdminKey",
             "type": "string",
-            "in": "header"
+            "in": "formData",
+            "required": false
           },
           {
             "name": "userName",
