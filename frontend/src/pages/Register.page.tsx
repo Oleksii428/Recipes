@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {LockOutlined} from "@mui/icons-material";
 import {joiResolver} from "@hookform/resolvers/joi";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
@@ -14,24 +14,28 @@ import {
 	TextField,
 	Backdrop,
 	CircularProgress,
-	Alert, InputLabel, Select, MenuItem, FormControl, SelectChangeEvent
+	Alert,
+	InputLabel,
+	Select,
+	MenuItem,
+	FormControl,
+	SelectChangeEvent
 } from "@mui/material";
 
+import {IRegisterData} from "../interfaces";
 import {signUp} from "../validators";
 import {useAppDispatch, useAppSelector} from "../hooks";
+import {authActions} from "../redux";
 
-interface ISignUpForm {
-	userName: string;
-	email: string;
-	password: string;
+interface ISignUpForm extends IRegisterData {
 	repeatPassword: string;
-	adminKey?: string | undefined;
 }
 
 const RegisterPage: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const {loading, errorMessage} = useAppSelector(state => state.authReducer);
+	const {loading, errorMessage, statusCode} = useAppSelector(state => state.authReducer);
+	const [wasTryToRegister, setWasTryToRegister] = useState<boolean>(false);
 	const [accountType, setAccountType] = useState<string>("user");
 
 	const {handleSubmit, control, reset} = useForm<ISignUpForm>({
@@ -44,8 +48,22 @@ const RegisterPage: FC = () => {
 	};
 
 	const onSubmit: SubmitHandler<ISignUpForm> = async ({userName, email, password, adminKey}) => {
-		console.log(userName, email, password, adminKey);
+		if (adminKey) {
+			await dispatch(authActions.register({userName, password, email, adminKey}));
+		} else {
+			await dispatch(authActions.register({userName, password, email}));
+		}
+		setWasTryToRegister(true);
 	};
+
+	useEffect(() => {
+		if (statusCode === 201 && !errorMessage && wasTryToRegister) {
+			reset();
+			setTimeout(() => {
+				navigate("/login");
+			}, 2000);
+		}
+	}, [errorMessage, navigate, reset, statusCode, wasTryToRegister]);
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -64,10 +82,16 @@ const RegisterPage: FC = () => {
 					position: "relative"
 				}}
 			>
-				{errorMessage &&
+				{errorMessage && wasTryToRegister &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="error">
 						{errorMessage}
+					</Alert>
+				}
+				{statusCode === 201 && wasTryToRegister &&
+					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
+							 severity="success">
+						Account has been created try to login
 					</Alert>
 				}
 				<Avatar sx={{m: 1, bgcolor: "secondary.main"}}>

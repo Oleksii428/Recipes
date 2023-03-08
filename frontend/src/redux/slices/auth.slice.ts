@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IAuthor, IErrorResponse, ILoginData, ITokenData} from "../../interfaces";
+import {IAuthor, IErrorResponse, ILoginData, IRegisterData, ITokenData} from "../../interfaces";
 import {authService} from "../../services";
 
 interface IState {
@@ -53,6 +53,19 @@ const logout = createAsyncThunk<void, void, { rejectValue: IErrorResponse }>(
 		try {
 			const {data} = await authService.logout();
 			authService.deleteTokenData();
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
+const register = createAsyncThunk<void, IRegisterData, { rejectValue: IErrorResponse }>(
+	"authSlice/register",
+	async ({userName, password, email, adminKey}, {rejectWithValue}) => {
+		try {
+			const {data} = await authService.register({userName, password, email, adminKey});
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
@@ -115,6 +128,20 @@ const authSlice = createSlice({
 			.addCase(logout.rejected, (state) => {
 				state.loading = false;
 			})
+			// register
+			.addCase(register.fulfilled, (state) => {
+				state.loading = false;
+				state.errorMessage = null;
+				state.statusCode = 201;
+			})
+			.addCase(register.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(register.rejected, (state, action) => {
+				state.loading = false;
+				state.errorMessage = action.payload?.message ?? "Unknown error";
+				state.statusCode = action.payload?.status ?? 500;
+			})
 });
 
 const {reducer: authReducer, actions: {cleanLoginAuthor}} = authSlice;
@@ -123,6 +150,7 @@ const authActions = {
 	login,
 	isLogin,
 	logout,
+	register,
 	cleanLoginAuthor
 };
 

@@ -1,4 +1,4 @@
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import {LockOutlined} from "@mui/icons-material";
 import {joiResolver} from "@hookform/resolvers/joi";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
@@ -23,27 +23,30 @@ import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
 
 const LoginPage: FC = () => {
+	const navigate = useNavigate();
+	const [query] = useSearchParams();
+	const dispatch = useAppDispatch();
+	const {loading, errorMessage, statusCode, tokenData} = useAppSelector(state => state.authReducer);
+	const [wasTryToLogin, setWasTryToLogin] = useState<boolean>(false);
+
 	const {handleSubmit, control, reset} = useForm<ILoginData>({
 		resolver: joiResolver(signIn),
 		mode: "all"
 	});
-	const dispatch = useAppDispatch();
-	const [query] = useSearchParams();
-	const {loading, errorMessage, tokenData} = useAppSelector(state => state.authReducer);
-	const navigate = useNavigate();
 
 	const onSubmit: SubmitHandler<ILoginData> = async ({userName, password}) => {
 		await dispatch(authActions.login({userName, password}));
+		setWasTryToLogin(true);
 	};
 
 	useEffect(() => {
-		if (tokenData && !errorMessage) {
+		if (tokenData && !errorMessage && wasTryToLogin && statusCode === 200) {
 			reset();
 			setTimeout(() => {
 				navigate("/recipes");
 			}, 2000);
 		}
-	}, [errorMessage, navigate, reset, tokenData]);
+	}, [errorMessage, navigate, reset, statusCode, tokenData, wasTryToLogin]);
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -62,21 +65,21 @@ const LoginPage: FC = () => {
 					position: "relative"
 				}}
 			>
-				{errorMessage &&
+				{errorMessage && wasTryToLogin &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="error">
 						{errorMessage}
 					</Alert>
 				}
 				{
-					tokenData && !errorMessage &&
+					tokenData && !errorMessage && wasTryToLogin &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="success">
 						Success login
 					</Alert>
 				}
 				{
-					query.has("expSession") && !tokenData && !errorMessage &&
+					query.has("expSession") && !tokenData && !errorMessage && !wasTryToLogin &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="warning">
 						Expired session
