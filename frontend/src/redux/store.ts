@@ -6,7 +6,8 @@ import {
 	categoryReducer,
 	kitchenReducer,
 	likeReducer,
-	recipeReducer
+	recipeReducer,
+	subscribeReducer
 } from "./slices";
 
 const rootReducer = combineReducers({
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
 	categoryReducer,
 	kitchenReducer,
 	bookReducer,
-	likeReducer
+	likeReducer,
+	subscribeReducer
 });
 
 const setupStore = () => configureStore({

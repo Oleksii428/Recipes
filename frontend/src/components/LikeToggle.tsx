@@ -1,45 +1,26 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import {Badge, Box, IconButton} from "@mui/material";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {likeActions} from "../redux";
-import {authorService} from "../services";
 
 interface IProps {
 	_id: string;
 	totalLikes: number;
+	isLiked: boolean | undefined;
 }
 
-const LikeToggle: FC<IProps> = ({_id, totalLikes}) => {
+const LikeToggle: FC<IProps> = ({_id, totalLikes, isLiked}) => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
-	const [isLiked, setIsLiked] = useState(false);
-	const [likes, setLikes] = useState<number>(totalLikes);
 
 	const {loginAuthor} = useAppSelector(state => state.authReducer);
-
-	const checkLikes = async (_id: string) => {
-		const {data} = await authorService.checkLikes(_id);
-		return data;
-	};
-
-	useEffect(() => {
-		if (loginAuthor) {
-			checkLikes(_id).then(value => {
-				setIsLiked(value.isLiked);
-				setLikes(value.totalLikes);
-			});
-		}
-	}, [_id, dispatch, loginAuthor]);
+	const {loading} = useAppSelector(state => state.likeReducer);
 
 	const [clickLike, setClickLike] = useState<boolean>(false);
-	const [likeCounter, setLikeCounter] = useState<number>(0);
-
-	useEffect(() => {
-		setLikeCounter(likes);
-	}, [likes]);
+	const [likeCounter, setLikeCounter] = useState<number>(totalLikes);
 
 	const handleLikeInc = async (n: number) => {
 		await dispatch(likeActions.likeToggle(_id));
@@ -56,19 +37,19 @@ const LikeToggle: FC<IProps> = ({_id, totalLikes}) => {
 	function renderAction() {
 		if (!loginAuthor) {
 			return <IconButton onClick={() => navigate("/login")}>
-				<Badge badgeContent={likes} color="secondary" showZero>
+				<Badge badgeContent={totalLikes} color="secondary" showZero>
 					<FavoriteBorder fontSize="medium" color="primary" />
 				</Badge>
 			</IconButton>;
 		} else if (loginAuthor && isLiked) {
 			if (!clickLike) {
-				return <IconButton disabled={loginAuthor._id === _id} onClick={() => handleLikeDec(1)}>
+				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeDec(1)}>
 					<Badge badgeContent={likeCounter} color="secondary" showZero>
 						<Favorite fontSize="medium" color="primary" />
 					</Badge>
 				</IconButton>;
 			} else {
-				return <IconButton disabled={loginAuthor._id === _id} onClick={() => handleLikeInc(1)}>
+				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeInc(1)}>
 					<Badge badgeContent={likeCounter} color="secondary" showZero>
 						<FavoriteBorder fontSize="medium" color="primary" />
 					</Badge>
@@ -76,13 +57,13 @@ const LikeToggle: FC<IProps> = ({_id, totalLikes}) => {
 			}
 		} else if (loginAuthor && !isLiked) {
 			if (clickLike) {
-				return <IconButton disabled={loginAuthor._id === _id} onClick={() => handleLikeInc(-1)}>
+				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeInc(-1)}>
 					<Badge badgeContent={likeCounter} color="secondary" showZero>
 						<Favorite fontSize="medium" color="primary" />
 					</Badge>
 				</IconButton>;
 			} else {
-				return <IconButton disabled={loginAuthor._id === _id} onClick={() => handleLikeDec(-1)}>
+				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeDec(-1)}>
 					<Badge badgeContent={likeCounter} color="secondary" showZero>
 						<FavoriteBorder fontSize="medium" color="primary" />
 					</Badge>

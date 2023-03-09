@@ -13,7 +13,10 @@ const urls = {
 	refresh: "auth/refresh/",
 	forgotPass: "auth/password/forgot",
 	restorePass: (token: string) => `auth/password/forgot?token=${token}`,
-	isAuthorLiked: (id: string) => `authors/${id}/isLiked`
+	getAuthorById: (id: string) => `authors/${id}/`,
+	getRecipesOfAuthor: (id: string) => `authors/${id}/recipes`,
+	likeToggle: (id: string) => `/authors/${id}/like-toggle`,
+	subscribeToggle: (id: string) => `/authors/${id}/subscribe-toggle`
 };
 
 export {

@@ -10,6 +10,7 @@ const present = (author) => {
 		isLiked: author.isLiked,
 		totalSubscriptions: author.totalSubscriptions,
 		totalSubscribers: author.totalSubscribers,
+		isSubscribed: author.isSubscribed,
 		totalBook: author.totalBook,
 		block: author.block,
 		createdAt: author.createdAt

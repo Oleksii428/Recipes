@@ -1,13 +1,15 @@
 import {FC} from "react";
-import {Box, Button, Link, Rating, Typography} from "@mui/material";
-import {BookmarkBorder} from "@mui/icons-material";
+import {Box, Link, Rating, Typography} from "@mui/material";
+import {BookToggle} from "../../BookToggle";
 
 interface IProps {
+	_id: string;
 	title: string;
 	description: string;
 	rating: number;
 	reviewsCount: number;
 	bookCount: number;
+	inBook: boolean | undefined;
 	creator: {
 		_id: string,
 		avatar: string | null,
@@ -16,17 +18,26 @@ interface IProps {
 	createdAt: string;
 }
 
-const RecipeInfo: FC<IProps> = ({title, description, rating, reviewsCount, bookCount, creator, createdAt}) => {
+const RecipeInfo: FC<IProps> = (recipe) => {
+	const {
+		_id,
+		title,
+		description,
+		rating,
+		reviewsCount,
+		bookCount,
+		inBook,
+		creator,
+		createdAt
+	} = recipe;
+
 	return (
 		<Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Typography variant="h2" fontWeight={600}>
 					{title}
 				</Typography>
-				<Button>
-					<BookmarkBorder fontSize="large" />
-				</Button>
-				| {bookCount}
+				<BookToggle _id={_id} inBook={inBook} bookCount={bookCount} />
 			</Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Rating name="read-only" value={rating} precision={0.1} readOnly />

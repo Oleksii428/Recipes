@@ -76,11 +76,16 @@ module.exports = {
 	},
 	getById: async (req, res, next) => {
 		try {
-			let author = await authorRepository.getById(req.author._id);
+			const {tokenInfo, author: {_id}} = req;
+			let author = await authorRepository.getById(_id);
 
-			if (req.tokenInfo) {
-				const like = await likeRepository.findOne(req.tokenInfo.author._id, author._id);
+			if (tokenInfo) {
+				const [like, subscription] = await Promise.all([
+					likeRepository.findOne(tokenInfo.author._id, author._id),
+					subscriptionRepository.findOne(tokenInfo.author._id, _id)
+				]);
 				author.isLiked = !!like;
+				author.isSubscribed = !!subscription;
 			}
 
 			author = authorPresenter.present(author);
@@ -142,22 +147,6 @@ module.exports = {
 			subscribers = subscriberPresenter.presentMany(subscribers);
 
 			res.json(subscribers);
-		} catch (e) {
-			next(e);
-		}
-	},
-	isLiked: async (req, res, next) => {
-		try {
-			const {author} = req.tokenInfo;
-			const {authorId} = req.params;
-
-			const [like, count] = await likeRepository.isLikedAdnCount(author._id, authorId);
-
-			if (like) {
-				return res.json({isLiked: true, totalLikes: count});
-			} else {
-				return res.json({isLiked: false, totalLikes: count});
-			}
 		} catch (e) {
 			next(e);
 		}
@@ -225,14 +214,14 @@ module.exports = {
 					subscriber: subscriber.userName
 				});
 
-				action = "subscribed";
+				action = {isSubscribed: true};
 			} else {
 				await Promise.all([
 					subscriptionRepository.delete(subscriber._id, authorId),
 					subscriberRepository.delete(subscriber._id, authorId)
 				]);
 
-				action = "unsubscribed";
+				action = {isSubscribed: false};
 			}
 
 			res.status(200).json(action);

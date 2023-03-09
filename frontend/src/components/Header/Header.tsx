@@ -5,7 +5,8 @@ import {
 	Avatar,
 	Box,
 	CircularProgress,
-	Container, IconButton,
+	Container,
+	IconButton,
 	MenuItem,
 	Toolbar,
 	Typography
@@ -61,9 +62,9 @@ const Header: FC = () => {
 						}
 						{
 							loginAuthor && !loading &&
-							<IconButton onClick={logout}>
-								<Logout sx={{color: "white"}} />
-							</IconButton>
+							<MenuItem>
+								<Typography textAlign="center">{loginAuthor.userName}</Typography>
+							</MenuItem>
 						}
 						<MenuItem>
 							{
@@ -75,6 +76,12 @@ const Header: FC = () => {
 								<Avatar component="a" href="/login" src="static/images/cards/paella.jpg" />
 							}
 						</MenuItem>
+						{
+							loginAuthor && !loading &&
+							<IconButton onClick={logout}>
+								<Logout sx={{color: "white"}} />
+							</IconButton>
+						}
 					</Box>
 					{
 						loading && <CircularProgress color="inherit" />

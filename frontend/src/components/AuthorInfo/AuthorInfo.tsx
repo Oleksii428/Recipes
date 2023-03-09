@@ -1,9 +1,10 @@
 import {FC} from "react";
-import {Alert, Avatar, Badge, Box, Button, Typography} from "@mui/material";
+import {Alert, Avatar, Badge, Box, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
 import {baseURL} from "../../configs";
 import {LikeToggle} from "../LikeToggle";
+import {SubscribeToggle} from "../SubscribeToggle";
 
 interface IProps {
 	author: IAuthor;
@@ -14,10 +15,12 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 		_id,
 		userName,
 		avatar,
+		totalLikes,
+		isLiked,
+		isSubscribed,
 		recipes,
 		block,
 		totalSubscriptions,
-		totalLikes,
 		createdAt,
 		totalSubscribers,
 		role
@@ -33,9 +36,9 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 					<Typography variant="h4">{userName}</Typography>
 					<Typography variant="subtitle1">{createdAt}</Typography>
 				</Box>
-				<Box sx={{display: "flex", alignItems: "center", flexDirection: "column", rowGap: 1}}>
-					<LikeToggle totalLikes={totalLikes} _id={_id} />
-					<Button variant="contained">Subscribe</Button>
+				<Box sx={{display: "flex", minWidth: 130, alignItems: "center", flexDirection: "column", rowGap: 1}}>
+					<LikeToggle _id={_id} totalLikes={totalLikes} isLiked={isLiked} />
+					<SubscribeToggle _id={_id} isSubscribed={isSubscribed} />
 				</Box>
 			</Box>
 			{

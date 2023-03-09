@@ -16,9 +16,10 @@ const Author: FC<IProps> = ({author}) => {
 		userName,
 		recipes,
 		totalBook,
-		totalLikes,
 		totalSubscribers,
-		totalSubscriptions
+		totalSubscriptions,
+		totalLikes,
+		isLiked
 	} = author;
 
 	const tableData = [
@@ -55,7 +56,7 @@ const Author: FC<IProps> = ({author}) => {
 							{userName}
 						</Link>
 					}
-					action={<LikeToggle totalLikes={totalLikes} _id={_id} />}
+					action={<LikeToggle isLiked={isLiked ?? undefined} totalLikes={totalLikes} _id={_id} />}
 				/>
 				<CardContent>
 					<Box sx={{display: "flex", flexDirection: "column", rowGap: 1}}>

@@ -30,6 +30,8 @@ const RecipeDetailsPage: FC = () => {
 				recipe &&
 				<Box sx={{pb: 5}}>
 					<RecipeInfo
+						_id={recipe._id}
+						inBook={recipe.inBook}
 						title={recipe.title}
 						description={recipe.description}
 						rating={recipe.rating}
