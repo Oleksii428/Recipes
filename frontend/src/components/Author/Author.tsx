@@ -1,12 +1,9 @@
-import {FC, useState} from "react";
-import {Avatar, Badge, Box, Card, CardContent, CardHeader, Grid, IconButton, Link, Typography} from "@mui/material";
-import {FavoriteBorder, Favorite} from "@mui/icons-material";
+import {FC} from "react";
+import {Avatar, Box, Card, CardContent, CardHeader, Grid, Link, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
 import {baseURL} from "../../configs";
-import {useAppDispatch, useAppSelector} from "../../hooks";
-import {useNavigate} from "react-router-dom";
-import {likeActions} from "../../redux";
+import {LikeToggle} from "../LikeToggle";
 
 interface IProps {
 	author: IAuthor;
@@ -44,65 +41,6 @@ const Author: FC<IProps> = ({author}) => {
 		}
 	];
 
-	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
-
-	const {loginAuthor} = useAppSelector(state => state.authReducer);
-	const {loading} = useAppSelector(state => state.likeReducer);
-
-	const [clickLike, setClickLike] = useState<boolean>(false);
-	const [likeCounter, setLikeCounter] = useState<number>(totalLikes);
-
-	const handleLikeInc = async (n: number) => {
-		await dispatch(likeActions.likeToggle(_id));
-		setClickLike(false);
-		setLikeCounter(prevState => prevState + n);
-	};
-
-	const handleLikeDec = async (n: number) => {
-		await dispatch(likeActions.likeToggle(_id));
-		setClickLike(true);
-		setLikeCounter(prevState => prevState - n);
-	};
-
-	const renderAction = () => {
-
-		if (!loginAuthor) {
-			return <IconButton onClick={() => navigate("/login")}>
-				<Badge badgeContent={totalLikes} color="secondary" showZero>
-					<FavoriteBorder fontSize="medium" color="primary" />
-				</Badge>
-			</IconButton>;
-		} else if (loginAuthor && isLiked) {
-			if (!clickLike) {
-				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeDec(1)}>
-					<Badge badgeContent={likeCounter} color="secondary" showZero>
-						<Favorite fontSize="medium" color="primary" />
-					</Badge>
-				</IconButton>;
-			} else {
-				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeInc(1)}>
-					<Badge badgeContent={likeCounter} color="secondary" showZero>
-						<FavoriteBorder fontSize="medium" color="primary" />
-					</Badge>
-				</IconButton>;
-			}
-		} else if (loginAuthor && !isLiked) {
-			if (clickLike) {
-				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeInc(-1)}>
-					<Badge badgeContent={likeCounter} color="secondary" showZero>
-						<Favorite fontSize="medium" color="primary" />
-					</Badge>
-				</IconButton>;
-			} else {
-				return <IconButton disabled={loading || loginAuthor._id === _id} onClick={() => handleLikeDec(-1)}>
-					<Badge badgeContent={likeCounter} color="secondary" showZero>
-						<FavoriteBorder fontSize="medium" color="primary" />
-					</Badge>
-				</IconButton>;
-			}
-		}
-	};
 
 	return (
 		<Grid item xs={12} sm={6} md={4} lg={3}>
@@ -118,7 +56,7 @@ const Author: FC<IProps> = ({author}) => {
 							{userName}
 						</Link>
 					}
-					action={renderAction()}
+					action={<LikeToggle isLiked={isLiked ?? undefined} totalLikes={totalLikes} _id={_id} />}
 				/>
 				<CardContent>
 					<Box sx={{display: "flex", flexDirection: "column", rowGap: 1}}>

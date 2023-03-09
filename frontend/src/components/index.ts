@@ -25,3 +25,5 @@ export * from "./AuthorsFilters/AuthorsFilters";
 export * from "./NameFilter/NameFilter";
 export * from "./RecipesOfAuthor/RecipesOfAuthor";
 export * from "./AuthorInfo/AuthorInfo";
+export * from "./BookToggle";
+export * from "./LikeToggle";
