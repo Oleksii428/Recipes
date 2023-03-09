@@ -83,10 +83,10 @@ const authorSlice = createSlice({
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getByQuery.pending, (state) => {
+			.addCase(getByQuery.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getByQuery.rejected, (state) => {
+			.addCase(getByQuery.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
@@ -96,10 +96,10 @@ const authorSlice = createSlice({
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getRecipesOfAuthor.pending, (state) => {
+			.addCase(getRecipesOfAuthor.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getRecipesOfAuthor.rejected, (state) => {
+			.addCase(getRecipesOfAuthor.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
@@ -109,16 +109,16 @@ const authorSlice = createSlice({
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getById.pending, (state) => {
+			.addCase(getById.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getById.rejected, (state) => {
+			.addCase(getById.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
 });
 
-const {reducer: authorReducer, actions} = authorSlice;
+const {reducer: authorReducer} = authorSlice;
 
 const authorActions = {
 	getByQuery,

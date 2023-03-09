@@ -69,47 +69,48 @@ const recipeSlice = createSlice({
 	reducers: {},
 	extraReducers: builder =>
 		builder
+			// getByQuery
 			.addCase(getByQuery.fulfilled, (state, action) => {
 				state.list = action.payload;
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getByQuery.pending, (state) => {
+			.addCase(getByQuery.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getByQuery.rejected, (state) => {
+			.addCase(getByQuery.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
-
+			// getById
 			.addCase(getById.fulfilled, (state, action) => {
 				state.recipe = action.payload;
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getById.pending, (state) => {
+			.addCase(getById.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getById.rejected, (state) => {
+			.addCase(getById.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
-
+			// getReviews
 			.addCase(getReviews.fulfilled, (state, action) => {
 				state.reviews = action.payload;
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getReviews.pending, (state) => {
+			.addCase(getReviews.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getReviews.rejected, (state) => {
+			.addCase(getReviews.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
 });
 
-const {reducer: recipeReducer, actions} = recipeSlice;
+const {reducer: recipeReducer} = recipeSlice;
 
 const recipeActions = {
 	getByQuery,

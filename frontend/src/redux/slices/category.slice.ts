@@ -40,16 +40,16 @@ const categorySlice = createSlice({
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getByParams.pending, (state, action) => {
+			.addCase(getByParams.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getByParams.rejected, (state, action) => {
+			.addCase(getByParams.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
 });
 
-const {reducer: categoryReducer, actions} = categorySlice;
+const {reducer: categoryReducer} = categorySlice;
 
 const categoryActions = {
 	getByParams

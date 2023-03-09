@@ -1,12 +1,13 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import {authorReducer, authReducer, categoryReducer, kitchenReducer, recipeReducer} from "./slices";
+import {authorReducer, authReducer, bookReducer, categoryReducer, kitchenReducer, recipeReducer} from "./slices";
 
 const rootReducer = combineReducers({
 	authReducer,
 	authorReducer,
 	recipeReducer,
 	categoryReducer,
-	kitchenReducer
+	kitchenReducer,
+	bookReducer
 });
 
 const setupStore = () => configureStore({

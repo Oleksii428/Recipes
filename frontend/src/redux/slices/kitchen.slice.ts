@@ -40,16 +40,16 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = false;
 			})
-			.addCase(getByParams.pending, (state, action) => {
+			.addCase(getByParams.pending, state => {
 				state.loading = true;
 			})
-			.addCase(getByParams.rejected, (state, action) => {
+			.addCase(getByParams.rejected, state => {
 				state.loading = false;
 				state.error = true;
 			})
 });
 
-const {reducer: kitchenReducer, actions} = recipeSlice;
+const {reducer: kitchenReducer} = recipeSlice;
 
 const kitchenActions = {
 	getByParams

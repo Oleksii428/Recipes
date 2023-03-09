@@ -1,5 +1,6 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Bookmark, BookmarkBorder} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 import {
 	Avatar, Badge,
 	Button,
@@ -7,7 +8,9 @@ import {
 	CardContent,
 	CardHeader,
 	CardMedia,
-	Grid, IconButton, Link,
+	Grid,
+	IconButton,
+	Link,
 	Paper,
 	Rating,
 	Typography
@@ -15,12 +18,14 @@ import {
 
 import {IRecipe} from "../../interfaces";
 import {baseURL} from "../../configs";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {bookActions} from "../../redux";
 
-interface Iprops {
+interface IProps {
 	recipe: IRecipe;
 }
 
-const Recipe: FC<Iprops> = ({recipe}) => {
+const Recipe: FC<IProps> = ({recipe}) => {
 	const {
 		_id,
 		category,
@@ -37,6 +42,68 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 		servings
 	} = recipe;
 	const {avatar, userName} = creator;
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+
+	const {loginAuthor} = useAppSelector(state => state.authReducer);
+	const {statusCode, loading} = useAppSelector(state => state.bookReducer);
+
+	const [clickBook, setClickBook] = useState<boolean>(false);
+	const [bookCounter, setBookCounter] = useState<number>(bookCount);
+
+	const handleBookInc = async (n: number) => {
+		await dispatch(bookActions.bookToggle(_id));
+		setClickBook(false);
+		setBookCounter(prevState => prevState + n);
+		if (statusCode === 200 && !loading) {
+		}
+	};
+
+	const handleBookDec = async (n: number) => {
+		await dispatch(bookActions.bookToggle(_id));
+		setClickBook(true);
+		setBookCounter(prevState => prevState - n);
+		if (statusCode === 200 && !loading) {
+		}
+	};
+
+	const renderAction = () => {
+		if (!loginAuthor) {
+			return <IconButton onClick={() => navigate("/login")}>
+				<Badge badgeContent={bookCount} color="primary" showZero>
+					<BookmarkBorder fontSize="medium" color="primary" />
+				</Badge>
+			</IconButton>;
+		} else if (loginAuthor && inBook) {
+			if (!clickBook) {
+				return <IconButton disabled={loading} onClick={() => handleBookDec(1)}>
+					<Badge badgeContent={bookCounter} color="primary" showZero>
+						<Bookmark fontSize="medium" color="primary" />
+					</Badge>
+				</IconButton>;
+			} else {
+				return <IconButton disabled={loading} onClick={() => handleBookInc(1)}>
+					<Badge badgeContent={bookCounter} color="primary" showZero>
+						<BookmarkBorder fontSize="medium" />
+					</Badge>
+				</IconButton>;
+			}
+		} else if (loginAuthor && !inBook) {
+			if (clickBook) {
+				return <IconButton disabled={loading} onClick={() => handleBookInc(-1)}>
+					<Badge badgeContent={bookCounter} color="primary" showZero>
+						<Bookmark fontSize="medium" color="primary" />
+					</Badge>
+				</IconButton>;
+			} else {
+				return <IconButton disabled={loading} onClick={() => handleBookDec(-1)}>
+					<Badge badgeContent={bookCounter} color="primary" showZero>
+						<BookmarkBorder fontSize="medium" />
+					</Badge>
+				</IconButton>;
+			}
+		}
+	};
 
 	return (
 		<Grid item xl={3} lg={4} md={5}>
@@ -51,19 +118,7 @@ const Recipe: FC<Iprops> = ({recipe}) => {
 						</Typography>
 					}
 					subheader={createdAt}
-					action={inBook ?
-						<IconButton>
-							<Badge badgeContent={bookCount} color="primary" showZero>
-								<Bookmark fontSize="medium" color="primary" />
-							</Badge>
-						</IconButton>
-						:
-						<IconButton>
-							<Badge badgeContent={bookCount} color="primary" showZero>
-								<BookmarkBorder fontSize="medium" />
-							</Badge>
-						</IconButton>
-					}
+					action={renderAction()}
 				/>
 				<CardContent>
 					<Typography variant="h5">

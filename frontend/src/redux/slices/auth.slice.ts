@@ -126,7 +126,7 @@ const authSlice = createSlice({
 				state.errorMessage = null;
 				state.statusCode = 200;
 			})
-			.addCase(login.pending, (state) => {
+			.addCase(login.pending, state => {
 				state.loading = true;
 				state.errorMessage = null;
 				state.statusCode = null;
@@ -143,38 +143,38 @@ const authSlice = createSlice({
 				state.errorMessage = null;
 				state.statusCode = 200;
 			})
-			.addCase(isLogin.pending, (state) => {
+			.addCase(isLogin.pending, state => {
 				state.loading = true;
 				state.errorMessage = null;
 				state.statusCode = null;
 			})
-			.addCase(isLogin.rejected, (state) => {
+			.addCase(isLogin.rejected, state => {
 				state.loading = false;
 				state.loginAuthor = null;
 			})
 			// logout
-			.addCase(logout.fulfilled, (state) => {
+			.addCase(logout.fulfilled, state => {
 				state.tokenData = null;
 				state.loading = false;
 				state.loginAuthor = null;
 				state.errorMessage = null;
 				state.statusCode = 200;
 			})
-			.addCase(logout.pending, (state) => {
+			.addCase(logout.pending, state => {
 				state.loading = true;
 				state.errorMessage = null;
 				state.statusCode = null;
 			})
-			.addCase(logout.rejected, (state) => {
+			.addCase(logout.rejected, state => {
 				state.loading = false;
 			})
 			// register
-			.addCase(register.fulfilled, (state) => {
+			.addCase(register.fulfilled, state => {
 				state.loading = false;
 				state.errorMessage = null;
 				state.statusCode = 201;
 			})
-			.addCase(register.pending, (state) => {
+			.addCase(register.pending, state => {
 				state.loading = true;
 				state.errorMessage = null;
 				state.statusCode = null;
@@ -185,12 +185,12 @@ const authSlice = createSlice({
 				state.statusCode = action.payload?.status ?? 500;
 			})
 			// forgotPass
-			.addCase(forgotPass.fulfilled, (state) => {
+			.addCase(forgotPass.fulfilled, state => {
 				state.loading = false;
 				state.errorMessage = null;
 				state.statusCode = 200;
 			})
-			.addCase(forgotPass.pending, (state) => {
+			.addCase(forgotPass.pending, state => {
 				state.loading = true;
 				state.errorMessage = null;
 				state.statusCode = null;
@@ -201,12 +201,12 @@ const authSlice = createSlice({
 				state.statusCode = action.payload?.status ?? 500;
 			})
 			// restorePass
-			.addCase(restorePass.fulfilled, (state) => {
+			.addCase(restorePass.fulfilled, state => {
 				state.loading = false;
 				state.errorMessage = null;
 				state.statusCode = 200;
 			})
-			.addCase(restorePass.pending, (state) => {
+			.addCase(restorePass.pending, state => {
 				state.loading = true;
 				state.errorMessage = null;
 				state.statusCode = null;

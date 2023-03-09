@@ -4,13 +4,13 @@ import {
 	AppBar,
 	Avatar,
 	Box,
-	Button,
 	CircularProgress,
-	Container,
+	Container, IconButton,
 	MenuItem,
 	Toolbar,
 	Typography
 } from "@mui/material";
+import {Logout} from "@mui/icons-material";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {authActions} from "../../redux";
@@ -52,7 +52,7 @@ const Header: FC = () => {
 							<Typography textAlign="center">Authors</Typography>
 						</MenuItem>
 					</Box>
-					<Box sx={{display: "flex"}}>
+					<Box sx={{display: "flex", columnGap: 2}}>
 						{
 							!loginAuthor && !loading &&
 							<MenuItem component="a" href="/login">
@@ -61,9 +61,9 @@ const Header: FC = () => {
 						}
 						{
 							loginAuthor && !loading &&
-							<MenuItem>
-								<Button color="inherit" variant="text" onClick={logout}>Logout</Button>
-							</MenuItem>
+							<IconButton onClick={logout}>
+								<Logout sx={{color: "white"}} />
+							</IconButton>
 						}
 						<MenuItem>
 							{
