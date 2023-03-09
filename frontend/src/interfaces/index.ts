@@ -7,4 +7,5 @@ export * from "./review.interface";
 export * from "./author.interface";
 export * from "./authors.interface";
 export * from "./authors.query.interface";
+export * from "./checkLikes";
 export * from "./auth";

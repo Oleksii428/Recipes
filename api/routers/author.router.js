@@ -60,6 +60,13 @@ router.get(
 );
 
 router.get(
+	"/:authorId/isLiked",
+	authMiddleware.checkAccessToken,
+	authMiddleware.isMongoIdValid("authorId"),
+	authorController.isLiked
+);
+
+router.get(
 	"/:authorId/recipes",
 	authMiddleware.isMongoIdValid("authorId"),
 	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),

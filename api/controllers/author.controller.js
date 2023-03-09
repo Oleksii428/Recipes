@@ -146,6 +146,22 @@ module.exports = {
 			next(e);
 		}
 	},
+	isLiked: async (req, res, next) => {
+		try {
+			const {author} = req.tokenInfo;
+			const {authorId} = req.params;
+
+			const [like, count] = await likeRepository.isLikedAdnCount(author._id, authorId);
+
+			if (like) {
+				return res.json({isLiked: true, totalLikes: count});
+			} else {
+				return res.json({isLiked: false, totalLikes: count});
+			}
+		} catch (e) {
+			next(e);
+		}
+	},
 	likeToggle: async (req, res, next) => {
 		try {
 			const {author} = req.tokenInfo;
