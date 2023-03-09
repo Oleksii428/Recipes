@@ -26,6 +26,7 @@ router.delete(
 router.get(
 	"/:authorId",
 	authMiddleware.isMongoIdValid("authorId"),
+	authMiddleware.checkAccessTokenIfExists,
 	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
 	authorController.getById
 );

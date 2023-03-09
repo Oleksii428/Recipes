@@ -620,6 +620,12 @@
         "operationId": "GetAuthorById",
         "parameters": [
           {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": false
+          },
+          {
             "name": "authorId",
             "type": "string",
             "in": "path",

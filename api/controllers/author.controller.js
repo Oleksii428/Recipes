@@ -77,8 +77,13 @@ module.exports = {
 	getById: async (req, res, next) => {
 		try {
 			let author = await authorRepository.getById(req.author._id);
-			author = authorPresenter.present(author);
 
+			if (req.tokenInfo) {
+				const like = await likeRepository.findOne(req.tokenInfo.author._id, author._id);
+				author.isLiked = !!like;
+			}
+
+			author = authorPresenter.present(author);
 			res.json(author);
 		} catch (e) {
 			next(e);
