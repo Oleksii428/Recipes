@@ -24,7 +24,7 @@ module.exports = {
 		.transform(res => res.map(item => item.recipe))
 		.lean(),
 	getBookIdArray: async (authorId) => {
-		const book = await Book.find({author: authorId}).select("-_id recipe");
+		const book = await Book.find({author: authorId}).select("-_id recipe").lean();
 		return book.map(recipe => recipe.recipe.valueOf());
 	}
 };

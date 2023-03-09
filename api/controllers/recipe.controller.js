@@ -181,8 +181,10 @@ module.exports = {
 	getByQuery: async (req, res, next) => {
 		try {
 			const {recipes, count, page} = await recipeRepository.getByQuery(req.query);
-			if (req.tokenInfo) {
-				const {author} = req.tokenInfo;
+			const {tokenInfo} = req;
+
+			if (tokenInfo) {
+				const {author} = tokenInfo;
 				const authorBookIds = await bookRepository.getBookIdArray(author._id);
 				const newRecipes = recipes.map(recipe => {
 						if (authorBookIds.includes(recipe._id.valueOf())) {
@@ -192,6 +194,7 @@ module.exports = {
 						}
 					}
 				);
+
 				const presentRecipes = recipePresenter.presentManyWithCreator(newRecipes);
 				res.json({recipes: presentRecipes, count, page});
 			} else {

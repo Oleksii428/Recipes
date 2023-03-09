@@ -86,11 +86,28 @@ module.exports = {
 	},
 	getByParams: async (req, res, next) => {
 		try {
-			const data = await authorRepository.getListByParams(req.query);
-			const {authors, page, count} = data;
-			const presentAuthors = authorPresenter.presentMany(authors);
+			const {authors, page, count} = await authorRepository.getListByParams(req.query);
+			const {tokenInfo} = req;
 
-			res.json({authors: presentAuthors, page, count});
+			if (tokenInfo) {
+				const {author} = tokenInfo;
+				const authorLikeIds = await likeRepository.getAuthorLikes(author._id);
+
+				const newAuthors = authors.map(author => {
+					if (authorLikeIds.includes(author._id.valueOf())) {
+						return {...author, isLiked: true};
+					} else {
+						return {...author, isLiked: false};
+					}
+				});
+
+				const presentAuthors = authorPresenter.presentMany(newAuthors);
+				res.json({authors: presentAuthors, page, count});
+			} else {
+				const presentAuthors = authorPresenter.presentMany(authors);
+				res.json({authors: presentAuthors, page, count});
+			}
+
 		} catch (e) {
 			next(e);
 		}

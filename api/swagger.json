@@ -52,6 +52,10 @@
           "type": "number",
           "example": 1
         },
+        "isLiked": {
+          "type": "boolean",
+          "example": false
+        },
         "totalSubscriptions": {
           "type": "number",
           "example": 1
@@ -457,6 +461,12 @@
         ],
         "operationId": "GetAuthorsByParams",
         "parameters": [
+          {
+            "name": "Authorization",
+            "type": "string",
+            "in": "header",
+            "required": false
+          },
           {
             "name": "page",
             "in": "query",

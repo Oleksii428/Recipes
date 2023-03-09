@@ -5,6 +5,7 @@ const {authorMiddleware, authMiddleware} = require("../middlewares");
 
 router.get(
 	"/",
+	authMiddleware.checkAccessTokenIfExists,
 	authorController.getByParams
 );
 
