@@ -27,7 +27,6 @@ checkLoginService.interceptors.response.use((config) => {
 
 		try {
 			const {data: newTokenData} = await authService.refresh(refreshToken);
-			console.log(newTokenData, "CHECK LOGIN AXIOS");
 			authService.setTokenData(newTokenData);
 		} catch (e) {
 			authService.deleteTokenData();

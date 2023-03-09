@@ -2,7 +2,8 @@ import {FC, useState} from "react";
 import {Bookmark, BookmarkBorder} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {
-	Avatar, Badge,
+	Avatar,
+	Badge,
 	Button,
 	Card,
 	CardContent,
@@ -46,7 +47,7 @@ const Recipe: FC<IProps> = ({recipe}) => {
 	const dispatch = useAppDispatch();
 
 	const {loginAuthor} = useAppSelector(state => state.authReducer);
-	const {statusCode, loading} = useAppSelector(state => state.bookReducer);
+	const {loading} = useAppSelector(state => state.bookReducer);
 
 	const [clickBook, setClickBook] = useState<boolean>(false);
 	const [bookCounter, setBookCounter] = useState<number>(bookCount);
@@ -55,16 +56,12 @@ const Recipe: FC<IProps> = ({recipe}) => {
 		await dispatch(bookActions.bookToggle(_id));
 		setClickBook(false);
 		setBookCounter(prevState => prevState + n);
-		if (statusCode === 200 && !loading) {
-		}
 	};
 
 	const handleBookDec = async (n: number) => {
 		await dispatch(bookActions.bookToggle(_id));
 		setClickBook(true);
 		setBookCounter(prevState => prevState - n);
-		if (statusCode === 200 && !loading) {
-		}
 	};
 
 	const renderAction = () => {

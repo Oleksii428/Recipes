@@ -6,6 +6,7 @@ export interface IAuthor {
 	role: string,
 	recipes: number,
 	totalLikes: number,
+	isLiked?: boolean,
 	totalSubscriptions: number,
 	totalSubscribers: number,
 	totalBook: number,
