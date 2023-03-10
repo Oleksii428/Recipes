@@ -2,8 +2,8 @@ import {FC, useEffect, useState} from "react";
 import {Button, CircularProgress} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 
-import {useAppDispatch, useAppSelector} from "../hooks";
-import {subscribeActions} from "../redux";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {subscribeActions} from "../../redux";
 
 interface IProps {
 	_id: string;

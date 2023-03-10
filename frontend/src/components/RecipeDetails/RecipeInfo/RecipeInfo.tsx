@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Box, Link, Rating, Typography} from "@mui/material";
-import {BookToggle} from "../../BookToggle";
+import {BookToggle} from "../../BookToggle/BookToggle";
 
 interface IProps {
 	_id: string;

@@ -3,7 +3,7 @@ import {Avatar, Box, Card, CardContent, CardHeader, Grid, Link, Typography} from
 
 import {IAuthor} from "../../interfaces";
 import {baseURL} from "../../configs";
-import {LikeToggle} from "../LikeToggle";
+import {LikeToggle} from "../LikeToggle/LikeToggle";
 
 interface IProps {
 	author: IAuthor;

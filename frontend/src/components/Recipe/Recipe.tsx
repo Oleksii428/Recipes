@@ -15,7 +15,7 @@ import {
 
 import {IRecipe} from "../../interfaces";
 import {baseURL} from "../../configs";
-import {BookToggle} from "../BookToggle";
+import {BookToggle} from "../BookToggle/BookToggle";
 
 interface IProps {
 	recipe: IRecipe;

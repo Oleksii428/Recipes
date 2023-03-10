@@ -3,8 +3,8 @@ import {Alert, Avatar, Badge, Box, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
 import {baseURL} from "../../configs";
-import {LikeToggle} from "../LikeToggle";
-import {SubscribeToggle} from "../SubscribeToggle";
+import {LikeToggle} from "../LikeToggle/LikeToggle";
+import {SubscribeToggle} from "../SubscribeToggle/SubscribeToggle";
 
 interface IProps {
 	author: IAuthor;

@@ -3,8 +3,8 @@ import {Badge, Box, IconButton} from "@mui/material";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
-import {useAppDispatch, useAppSelector} from "../hooks";
-import {likeActions} from "../redux";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {likeActions} from "../../redux";
 
 interface IProps {
 	_id: string;

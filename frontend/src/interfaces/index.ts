@@ -8,4 +8,5 @@ export * from "./author.interface";
 export * from "./authors.interface";
 export * from "./authors.query.interface";
 export * from "./subscribe.interface";
+export * from "./createReview.interface";
 export * from "./auth";

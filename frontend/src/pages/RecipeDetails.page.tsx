@@ -5,7 +5,15 @@ import {useInView} from "react-intersection-observer";
 
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {recipeActions} from "../redux";
-import {CarouselSlider, Characteristic, RecipeInfo, Ingredients, Reviews, Stages} from "../components";
+import {
+	CarouselSlider,
+	Characteristic,
+	RecipeInfo,
+	Ingredients,
+	Reviews,
+	Stages,
+	CreateReviewForm
+} from "../components";
 
 const RecipeDetailsPage: FC = () => {
 	const {id} = useParams();
@@ -49,6 +57,7 @@ const RecipeDetailsPage: FC = () => {
 					/>
 					<Ingredients ingredients={recipe.ingredients} />
 					<Stages stages={recipe.stages} />
+					<CreateReviewForm _id={recipe._id} />
 					<Box ref={ref}>
 						{inView && <Reviews recipeId={recipe._id} reviewsCount={recipe.reviewsCount} />}
 					</Box>

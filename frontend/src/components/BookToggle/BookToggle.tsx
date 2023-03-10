@@ -3,8 +3,8 @@ import {useNavigate} from "react-router-dom";
 import {Badge, Box, IconButton} from "@mui/material";
 import {Bookmark, BookmarkBorder} from "@mui/icons-material";
 
-import {useAppDispatch, useAppSelector} from "../hooks";
-import {bookActions} from "../redux";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {bookActions} from "../../redux";
 
 interface IProps {
 	_id: string;
