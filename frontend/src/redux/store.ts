@@ -9,7 +9,8 @@ import {
 	recipeReducer,
 	reviewReducer,
 	subscribeReducer,
-	reportReducer
+	reportReducer,
+	blockReducer
 } from "./slices";
 
 const rootReducer = combineReducers({
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
 	likeReducer,
 	subscribeReducer,
 	reviewReducer,
-	reportReducer
+	reportReducer,
+	blockReducer
 });
 
 const setupStore = () => configureStore({

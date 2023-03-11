@@ -2,48 +2,47 @@ import {FC, useEffect, useState} from "react";
 import {
 	Backdrop,
 	Box,
-	Button, CircularProgress,
+	Button,
+	CircularProgress,
 	Dialog,
 	DialogActions,
 	DialogContent,
+	TextField,
 	DialogContentText,
 	DialogTitle,
-	IconButton,
-	TextField
+	IconButton
 } from "@mui/material";
-import {ReportProblem} from "@mui/icons-material";
+import {RemoveCircle} from "@mui/icons-material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
-import {useNavigate} from "react-router-dom";
 
-import {reportValidator} from "../../validators";
+import {blockActions} from "../../redux";
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {reportActions} from "../../redux";
+import {blockValidator} from "../../validators";
 
 interface IProps {
 	authorId: string;
-	isReport: Function;
+	isBlock: Function;
 }
 
-interface IReport {
-	text: string;
+interface IBlock {
+	days: number;
 }
 
-const ReportButton: FC<IProps> = ({authorId, isReport}) => {
-	const navigate = useNavigate();
+const BlockButton: FC<IProps> = ({authorId, isBlock}) => {
 	const dispatch = useAppDispatch();
 	const [open, setOpen] = useState(false);
 
-	const {handleSubmit, control, reset} = useForm<IReport>({
-		resolver: joiResolver(reportValidator),
+	const {loading, statusCode} = useAppSelector(state => state.blockReducer);
+
+	const {handleSubmit, control, reset} = useForm<IBlock>({
+		resolver: joiResolver(blockValidator),
 		mode: "all"
 	});
-	const {loading, statusCode} = useAppSelector(state => state.reportReducer);
-	const {loginAuthor} = useAppSelector(state => state.authReducer);
-
-	const onSubmit: SubmitHandler<IReport> = ({text}) => {
-		dispatch(reportActions.sendReport({authorId, text}));
+	const onSubmit: SubmitHandler<IBlock> = ({days}) => {
+		dispatch(blockActions.blockAuthor({authorId, days}));
 		handleClose();
+		reset();
 	};
 
 	const handleOpen = () => {
@@ -55,10 +54,10 @@ const ReportButton: FC<IProps> = ({authorId, isReport}) => {
 
 	useEffect(() => {
 		if (statusCode === 200) {
-			isReport(true);
+			isBlock(true);
 			reset();
 		}
-	}, [isReport, reset, statusCode]);
+	}, [isBlock, reset, statusCode]);
 
 	return (
 		<Box>
@@ -68,25 +67,20 @@ const ReportButton: FC<IProps> = ({authorId, isReport}) => {
 			>
 				<CircularProgress color="inherit" />
 			</Backdrop>
-			{
-				loginAuthor ?
-					<IconButton onClick={handleOpen}>
-						<ReportProblem color="warning" />
-					</IconButton> :
-					<IconButton onClick={() => navigate("/login")}>
-						<ReportProblem color="warning" />
-					</IconButton>
-			}
+			<IconButton onClick={handleOpen}>
+				<RemoveCircle color="error" />
+			</IconButton>
 			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Report</DialogTitle>
+				<DialogTitle>Block</DialogTitle>
 				<DialogContent>
-					<DialogContentText sx={{minWidth: "300px"}}>Write details about problem</DialogContentText>
-					<Box component="form" id="report-form" noValidate onSubmit={handleSubmit(onSubmit)}>
+					<DialogContentText sx={{minWidth: "300px"}}>Block author</DialogContentText>
+					<Box component="form" id="block-form" noValidate onSubmit={handleSubmit(onSubmit)}>
 						<Controller
-							name={"text"}
+							name={"days"}
 							control={control}
 							render={({field: {onChange, value}, fieldState: {error}}) => (
 								<TextField
+									type="number"
 									error={!!error}
 									helperText={error?.message}
 									onChange={onChange}
@@ -94,8 +88,7 @@ const ReportButton: FC<IProps> = ({authorId, isReport}) => {
 									autoFocus
 									required
 									margin="dense"
-									label="Description"
-									type="text"
+									label="Days"
 									fullWidth
 									variant="standard"
 								/>
@@ -105,11 +98,11 @@ const ReportButton: FC<IProps> = ({authorId, isReport}) => {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
-					<Button form="report-form" type="submit">Send</Button>
+					<Button form="block-form" type="submit">Block</Button>
 				</DialogActions>
 			</Dialog>
 		</Box>
 	);
 };
 
-export {ReportButton};
+export {BlockButton};

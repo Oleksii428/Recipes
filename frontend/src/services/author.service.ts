@@ -9,7 +9,8 @@ const authorService = {
 	getRecipesOfAuthor: (id: string, query: IRecipesQuery | null): AxiosRes<IRecipes> => axiosService.get(urls.getRecipesOfAuthor(id), {params: query}),
 	likeToggle: (id: string): AxiosRes<void> => axiosService.patch(urls.likeToggle(id)),
 	subscribeToggle: (id: string): AxiosRes<ISubscribe> => axiosService.patch(urls.subscribeToggle(id)),
-	sendReport: (id: string, text: string): AxiosRes<void> => axiosService.patch(urls.reportAuthor(id), {text})
+	sendReport: (id: string, text: string): AxiosRes<void> => axiosService.patch(urls.reportAuthor(id), {text}),
+	blockAuthor: (id: string, days: number): AxiosRes<void> => axiosService.patch(urls.blockAuthor(id), {days})
 };
 
 export {

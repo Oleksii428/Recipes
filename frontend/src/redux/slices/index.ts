@@ -8,3 +8,4 @@ export * from "./like.slice";
 export * from "./subscribe.slice";
 export * from "./review.slice";
 export * from "./report.slice";
+export * from "./block.slice";
