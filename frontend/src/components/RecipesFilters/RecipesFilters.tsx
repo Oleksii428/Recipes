@@ -8,8 +8,8 @@ import {TitleFilter} from "../TitleFilter/TitleFilter";
 import {IngredientsFilter} from "../IngredientsFilter/IngredientsFilter";
 import {TimeFilter} from "../TimeFilter/TimeFilter";
 import {ServingsFilter} from "../SevringsFilter/ServingsFilter";
-import {SortFilter} from "../SortFilter/SortFilter";
 import {SortTypeFilter} from "../SortTypeFilter/SortTypeFilter";
+import {SortFilterRecipes} from "../SortFilterRecipes/SortFilterRecipes";
 
 const RecipesFilters: FC = () => {
 	const [query] = useSearchParams();
@@ -26,8 +26,6 @@ const RecipesFilters: FC = () => {
 		navigate({search: query.toString()});
 	};
 
-	const sortFields = ["Rating", "Time", "Servings", "Ingredients", "CreatedAt"];
-
 	return (
 		<Box>
 			<Stack spacing={1} sx={{width: 300, display: "flex", flexDirection: "column", rowGap: 1, mb: 2}}>
@@ -37,7 +35,7 @@ const RecipesFilters: FC = () => {
 				<IngredientsFilter />
 				<TimeFilter />
 				<ServingsFilter />
-				<SortFilter fields={sortFields} defaultField={"Rating"} />
+				<SortFilterRecipes />
 				<SortTypeFilter />
 			</Stack>
 			<Button

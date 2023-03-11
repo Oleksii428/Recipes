@@ -2,15 +2,10 @@ import {FC, useEffect, useState} from "react";
 import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-interface IProps {
-	fields: string[];
-	defaultField: string;
-}
-
-const SortFilter: FC<IProps> = ({fields, defaultField}) => {
+const SortFilterAuthors: FC = () => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
-	const [sort, setSort] = useState<string>(defaultField.toLowerCase());
+	const [sort, setSort] = useState<string>("totalLikes");
 
 	useEffect(() => {
 		const sortInQuery: string | null = query.get("sort");
@@ -36,15 +31,12 @@ const SortFilter: FC<IProps> = ({fields, defaultField}) => {
 					label="Sort"
 					onChange={handleChange}
 				>
-					{
-						fields.map((field, index) =>
-							<MenuItem key={index} value={field.toLowerCase()}>{field}</MenuItem>
-						)
-					}
+					<MenuItem value="totalLikes">Total Likes</MenuItem>
+					<MenuItem value="userName">User Name</MenuItem>
 				</Select>
 			</FormControl>
 		</Box>
 	);
 };
 
-export {SortFilter};
+export {SortFilterAuthors};
