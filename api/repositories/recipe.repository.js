@@ -1,4 +1,4 @@
-const {Recipe} = require("../dataBases");
+const {Recipe, Category, Kitchen} = require("../dataBases");
 
 module.exports = {
 	create: (newRecipe) => Recipe.create(newRecipe),
@@ -62,6 +62,14 @@ module.exports = {
 			const [minTime, maxTime] = time.split("-").map((t) => parseInt(t));
 			findObj.time = {$gte: minTime, $lte: maxTime};
 		}
+		if (category) {
+			const {_id} = await Category.findOne({title: category});
+			findObj.category = _id;
+		}
+		if (kitchen) {
+			const {_id} = await Kitchen.findOne({title: kitchen});
+			findObj.kitchen = _id;
+		}
 
 		let [recipes, count] = await Promise.all([
 			Recipe.find(findObj)
@@ -78,13 +86,6 @@ module.exports = {
 				.lean(),
 			Recipe.countDocuments(findObj)
 		]);
-
-		if (category) {
-			recipes = recipes.filter(recipe => recipe.category.title === category);
-		}
-		if (kitchen) {
-			recipes = recipes.filter(recipe => recipe.kitchen.title === kitchen);
-		}
 
 		return {
 			recipes,
