@@ -1,5 +1,5 @@
 import {ChangeEvent, FC, useState} from "react";
-import {Alert, Backdrop, Box, Button, CircularProgress, TextField, Typography} from "@mui/material";
+import {Alert, Backdrop, Box, Button, CircularProgress, Rating, TextField, Typography} from "@mui/material";
 import {joiResolver} from "@hookform/resolvers/joi";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 
@@ -40,14 +40,15 @@ const CreateReviewForm: FC<IProps> = ({_id}) => {
 
 	return (
 		<Box>
-			<Typography variant="h4">Create Review</Typography>
+			<Typography variant="h4" fontWeight={500} sx={{mb: 1}}>Create Review</Typography>
 			<Box
 				component="form"
 				noValidate
 				onSubmit={handleSubmit(onSubmit)}
 				sx={{
 					display: "flex",
-					flexDirection: "column"
+					flexDirection: "column",
+					rowGap: 1
 				}}
 			>
 				{statusCode === 201 &&
@@ -82,17 +83,15 @@ const CreateReviewForm: FC<IProps> = ({_id}) => {
 					)}
 				/>
 				<Controller
-					name={"rating"}
 					control={control}
-					rules={{required: "Password is required"}}
-					render={({field: {onChange, value}, fieldState: {error}}) => (
-						<TextField
-							error={!!error}
-							helperText={error?.message}
+					name={"rating"}
+					defaultValue={-1}
+					render={({field: {onChange, value}}) => (
+						<Rating
+							name={"rating"}
 							onChange={onChange}
-							value={value || ""}
-							label="Rating"
-							margin="dense"
+							value={Number(value)}
+							size="large"
 						/>
 					)}
 				/>
