@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Avatar, Box, Card, CardContent, CardHeader, Grid, Link, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
@@ -22,6 +22,9 @@ const Author: FC<IProps> = ({author}) => {
 		isLiked
 	} = author;
 
+	const [liked, setLiked] = useState<boolean | undefined>(isLiked);
+	const [totalLikesState, setTotalLikesState] = useState<number>(totalLikes);
+
 	const tableData = [
 		{
 			label: "Total recipes",
@@ -41,7 +44,6 @@ const Author: FC<IProps> = ({author}) => {
 		}
 	];
 
-
 	return (
 		<Grid item xs={12} sm={6} md={4} lg={3}>
 			<Card>
@@ -56,7 +58,15 @@ const Author: FC<IProps> = ({author}) => {
 							{userName}
 						</Link>
 					}
-					action={<LikeToggle isLiked={isLiked ?? undefined} totalLikes={totalLikes} _id={_id} />}
+					action={
+						<LikeToggle
+							setLiked={setLiked}
+							isLiked={liked}
+							totalLikes={totalLikesState}
+							setTotalLikes={setTotalLikesState}
+							_id={_id}
+						/>
+					}
 				/>
 				<CardContent>
 					<Box sx={{display: "flex", flexDirection: "column", rowGap: 1}}>

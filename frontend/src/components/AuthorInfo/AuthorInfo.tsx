@@ -29,8 +29,12 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 		role
 	} = author;
 
+	const [liked, setLiked] = useState<boolean | undefined>(isLiked);
+	const [totalLikesState, setTotalLikesState] = useState<number>(totalLikes);
+
 	const [isReport, setIsReport] = useState<boolean>(false);
 	const [isBlock, setIsBlock] = useState<boolean>(false);
+
 	const {loginAuthor} = useAppSelector(state => state.authReducer);
 
 	return (
@@ -51,7 +55,12 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 				</Box>
 				<Box sx={{display: "flex", minWidth: 130, alignItems: "center", flexDirection: "column", rowGap: 1}}>
 					<Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-						<LikeToggle _id={_id} totalLikes={totalLikes} isLiked={isLiked} />
+						<LikeToggle
+							_id={_id}
+							totalLikes={totalLikesState}
+							setTotalLikes={setTotalLikesState}
+							isLiked={liked}
+							setLiked={setLiked} />
 						<ReportButton authorId={_id} isReport={setIsReport} />
 						{
 							loginAuthor?.role === "admin" &&

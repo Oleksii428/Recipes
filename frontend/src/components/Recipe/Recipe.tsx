@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {
 	Avatar,
 	Button,
@@ -39,6 +39,9 @@ const Recipe: FC<IProps> = ({recipe}) => {
 	} = recipe;
 	const {avatar, userName} = creator;
 
+	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
+	const [bookCountState, setBookCountState] = useState<number>(bookCount);
+
 	return (
 		<Grid item xl={3} lg={4} md={5}>
 			<Card>
@@ -52,7 +55,15 @@ const Recipe: FC<IProps> = ({recipe}) => {
 						</Typography>
 					}
 					subheader={createdAt}
-					action={<BookToggle _id={_id} bookCount={bookCount} inBook={inBook} />}
+					action={
+						<BookToggle
+							_id={_id}
+							bookCount={bookCountState}
+							inBook={bookState}
+							setBook={setBookState}
+							setBookCount={setBookCountState}
+						/>
+					}
 				/>
 				<CardContent>
 					<Typography variant="h5">

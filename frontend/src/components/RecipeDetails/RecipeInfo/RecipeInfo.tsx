@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Box, Link, Rating, Typography} from "@mui/material";
 import {BookToggle} from "../../BookToggle/BookToggle";
 
@@ -31,13 +31,22 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 		createdAt
 	} = recipe;
 
+	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
+	const [bookCountState, setBookCountState] = useState<number>(bookCount);
+
 	return (
 		<Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Typography variant="h2" fontWeight={600}>
 					{title}
 				</Typography>
-				<BookToggle _id={_id} inBook={inBook} bookCount={bookCount} />
+				<BookToggle
+					_id={_id}
+					inBook={bookState}
+					bookCount={bookCountState}
+					setBook={setBookState}
+					setBookCount={setBookCountState}
+				/>
 			</Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Rating name="read-only" value={rating} precision={0.1} readOnly />
