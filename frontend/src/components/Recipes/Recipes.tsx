@@ -30,12 +30,14 @@ const Recipes: FC = () => {
 				{
 					error && <h2>ERROR</h2>
 				}
-				{!loading && !error &&
+				{
+					!loading && !error &&
 					list.recipes.map(recipe =>
 						<Recipe recipe={recipe} key={recipe._id} />
 					)
 				}
-				{loading && !error &&
+				{
+					loading && !error &&
 					[...Array(8).keys()].map((number, index) =>
 						<RecipeSkeleton key={index} />
 					)

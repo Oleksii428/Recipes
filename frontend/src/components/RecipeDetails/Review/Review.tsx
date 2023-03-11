@@ -1,27 +1,17 @@
-import {FC, useEffect, useState} from "react";
+import {FC} from "react";
 import {Avatar, Box, Button, Rating, Typography} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 
 import {IReview} from "../../../interfaces";
 import {baseURL} from "../../../configs";
+import {getPrettyDate} from "../../../helpers";
 
 interface IProps {
 	review: IReview;
 }
 
 const Review: FC<IProps> = ({review}) => {
-	const {_id, photo, rating, text, owner, createdAt} = review;
-	const [formattedDate, setFormattedDate] = useState("");
-
-	useEffect(() => {
-		const date: Date = new Date(createdAt);
-		const formattedDate = new Intl.DateTimeFormat("en-US", {
-			year: "numeric",
-			month: "long",
-			day: "numeric"
-		}).format(date);
-		setFormattedDate(formattedDate);
-	}, [createdAt]);
+	const {photo, rating, text, owner, createdAt} = review;
 
 	return (
 		<Box sx={{
@@ -43,7 +33,7 @@ const Review: FC<IProps> = ({review}) => {
 			</Box>
 			<Box sx={{display: "flex", alignItems: "center", columnGap: 2}}>
 				<Rating name="read-only" value={rating} precision={1} readOnly />
-				<Typography variant="overline">{formattedDate}</Typography>
+				<Typography variant="overline">{getPrettyDate(createdAt)}</Typography>
 			</Box>
 			<Box sx={{display: "flex", columnGap: 2, maxWidth: 400}}>
 				{photo &&

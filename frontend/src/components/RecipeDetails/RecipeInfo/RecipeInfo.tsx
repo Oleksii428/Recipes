@@ -1,6 +1,7 @@
 import {FC, useState} from "react";
 import {Box, Link, Rating, Typography} from "@mui/material";
 import {BookToggle} from "../../BookToggle/BookToggle";
+import {getPrettyDate} from "../../../helpers";
 
 interface IProps {
 	_id: string;
@@ -56,7 +57,7 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 				description: {description}
 			</Typography>
 			<Typography>
-				By <Link href={`/authors/${creator._id}`}>{creator.userName}</Link> | Created on {createdAt}
+				By <Link href={`/authors/${creator._id}`}>{creator.userName}</Link> | Created on {getPrettyDate(createdAt)}
 			</Typography>
 		</Box>
 	);

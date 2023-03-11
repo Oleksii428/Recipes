@@ -8,6 +8,7 @@ import {SubscribeToggle} from "../SubscribeToggle/SubscribeToggle";
 import {ReportButton} from "../ReportButton/ReportButton";
 import {useAppSelector} from "../../hooks";
 import {BlockButton} from "../BlockButton/BlockButton";
+import {getPrettyDate} from "../../helpers";
 
 interface IProps {
 	author: IAuthor;
@@ -51,7 +52,7 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 				</Badge>
 				<Box>
 					<Typography variant="h4">{userName}</Typography>
-					<Typography variant="subtitle1">{createdAt}</Typography>
+					<Typography variant="subtitle1">{getPrettyDate(createdAt)}</Typography>
 				</Box>
 				<Box sx={{display: "flex", minWidth: 130, alignItems: "center", flexDirection: "column", rowGap: 1}}>
 					<Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
@@ -73,7 +74,7 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 			{
 				block &&
 				<Box>
-					<Alert severity="warning">This author blocked until {block}</Alert>
+					<Alert severity="warning">This author blocked until {getPrettyDate(block)}</Alert>
 				</Box>
 			}
 			<Box sx={{

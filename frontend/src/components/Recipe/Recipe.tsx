@@ -16,6 +16,7 @@ import {
 import {IRecipe} from "../../interfaces";
 import {baseURL} from "../../configs";
 import {BookToggle} from "../BookToggle/BookToggle";
+import {getPrettyDate} from "../../helpers";
 
 interface IProps {
 	recipe: IRecipe;
@@ -54,7 +55,7 @@ const Recipe: FC<IProps> = ({recipe}) => {
 							</Link>
 						</Typography>
 					}
-					subheader={createdAt}
+					subheader={getPrettyDate(createdAt)}
 					action={
 						<BookToggle
 							_id={_id}
