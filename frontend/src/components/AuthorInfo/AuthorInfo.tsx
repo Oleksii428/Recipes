@@ -1,10 +1,11 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Alert, Avatar, Badge, Box, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
 import {baseURL} from "../../configs";
 import {LikeToggle} from "../LikeToggle/LikeToggle";
 import {SubscribeToggle} from "../SubscribeToggle/SubscribeToggle";
+import {ReportButton} from "../ReportButton/ReportButton";
 
 interface IProps {
 	author: IAuthor;
@@ -26,8 +27,13 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 		role
 	} = author;
 
+	const [isReport, setIsReport] = useState<boolean>(false);
+
 	return (
 		<Box sx={{width: "fit-content", margin: "0 auto", padding: 2}}>
+			{isReport && <Alert severity="success">
+				Report sent
+			</Alert>}
 			<Box sx={{display: "flex", columnGap: 2, alignItems: "center", padding: 1}}>
 				<Badge badgeContent={role} invisible={role === "user"} color="primary" showZero>
 					<Avatar sx={{width: 112, height: 112}} srcSet={avatar ? baseURL + avatar : "/broken-image.jpg"} />
@@ -37,7 +43,10 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 					<Typography variant="subtitle1">{createdAt}</Typography>
 				</Box>
 				<Box sx={{display: "flex", minWidth: 130, alignItems: "center", flexDirection: "column", rowGap: 1}}>
-					<LikeToggle _id={_id} totalLikes={totalLikes} isLiked={isLiked} />
+					<Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+						<LikeToggle _id={_id} totalLikes={totalLikes} isLiked={isLiked} />
+						<ReportButton authorId={_id} isReport={setIsReport} />
+					</Box>
 					<SubscribeToggle _id={_id} isSubscribed={isSubscribed} />
 				</Box>
 			</Box>

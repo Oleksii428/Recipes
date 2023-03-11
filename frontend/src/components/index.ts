@@ -29,3 +29,4 @@ export * from "./BookToggle/BookToggle";
 export * from "./LikeToggle/LikeToggle";
 export * from "./SubscribeToggle/SubscribeToggle";
 export * from "./CreateReviewForm/CreateReviewForm";
+export * from "./ReportButton/ReportButton";

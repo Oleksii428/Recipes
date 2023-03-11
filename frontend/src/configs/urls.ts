@@ -17,7 +17,8 @@ const urls = {
 	getRecipesOfAuthor: (id: string) => `authors/${id}/recipes`,
 	likeToggle: (id: string) => `/authors/${id}/like-toggle`,
 	subscribeToggle: (id: string) => `/authors/${id}/subscribe-toggle`,
-	createReview: (id: string) => `/recipes/${id}/addReview`
+	createReview: (id: string) => `/recipes/${id}/addReview`,
+	reportAuthor: (id: string) => `/authors/${id}/complain`
 };
 
 export {

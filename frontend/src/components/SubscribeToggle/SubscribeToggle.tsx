@@ -30,7 +30,6 @@ const SubscribeToggle: FC<IProps> = ({_id, isSubscribed: state}) => {
 	};
 
 	useEffect(() => {
-		console.log(isSubscribed);
 		if (wasClick) {
 			setIsSubscribedCurrent(isSubscribed);
 		}
