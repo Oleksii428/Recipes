@@ -1,5 +1,5 @@
-import {FC, useEffect} from "react";
-import {Box, CircularProgress, Typography} from "@mui/material";
+import {FC, useEffect, useState} from "react";
+import {Alert, Box, CircularProgress, Typography} from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {recipeActions} from "../../../redux";
@@ -13,6 +13,7 @@ interface IProps {
 const Reviews: FC<IProps> = ({reviewsCount, recipeId}) => {
 	const dispatch = useAppDispatch();
 	const {reviews, loading, error} = useAppSelector(state => state.recipeReducer);
+	const [deletedReviewId, setDeletedReviewId] = useState<string | null>(null);
 
 	useEffect(() => {
 		dispatch(recipeActions.getReviews(recipeId));
@@ -27,7 +28,15 @@ const Reviews: FC<IProps> = ({reviewsCount, recipeId}) => {
 			<Box sx={{display: "flex", flexDirection: "column", rowGap: 3}}>
 				{
 					reviews && reviews.map(review =>
-						<Review key={review._id} review={review} />
+						<Box>
+							{
+								deletedReviewId === review._id &&
+								<Alert severity="success">
+									Review deleted
+								</Alert>
+							}
+							<Review key={review._id} review={review} setDeletedReview={setDeletedReviewId} />
+						</Box>
 					)
 				}
 			</Box>

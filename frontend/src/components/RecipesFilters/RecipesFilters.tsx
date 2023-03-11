@@ -27,7 +27,7 @@ const RecipesFilters: FC = () => {
 	};
 
 	return (
-		<Box>
+		<Box sx={{position: "sticky", alignSelf: "flex-start", top: 0, left: 0}}>
 			<Stack spacing={1} sx={{width: 300, display: "flex", flexDirection: "column", rowGap: 1, mb: 2}}>
 				<CategoryFilter />
 				<KitchenFilter />

@@ -5,6 +5,7 @@ const present = (review) => {
 		rating: review.rating,
 		photo: review.photo?.path ? review.photo.path : null,
 		owner: {
+			_id: review.owner._id,
 			userName: review.owner.userName,
 			avatar: review.owner.avatar?.path ? review.owner.avatar?.path : null
 		},

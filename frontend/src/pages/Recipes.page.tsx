@@ -5,7 +5,7 @@ import {RecipesFilters, Recipes} from "../components";
 
 const RecipesPage: FC = () => {
 	return (
-		<Container sx={{display: "flex", columnGap: 3}} maxWidth={"xl"}>
+		<Container sx={{position: "relative", columnGap: 3, display: "flex"}} maxWidth={"xl"}>
 			<RecipesFilters />
 			<Recipes />
 		</Container>

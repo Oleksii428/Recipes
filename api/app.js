@@ -21,7 +21,7 @@ const path = require("path");
 const app = express();
 app.use(cors({
 	origin: "http://localhost:3000",
-	methods: ["GET", "PUT", "POST", "PATCH"],
+	methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
 	credentials: true,
 	optionSuccessStatus: 200
 }));

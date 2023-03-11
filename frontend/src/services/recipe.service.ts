@@ -12,7 +12,8 @@ const recipeService = {
 		photo: review.photo,
 		text: review.text,
 		rating: review.rating
-	}, {headers: {"Content-Type": "multipart/form-data"}})
+	}, {headers: {"Content-Type": "multipart/form-data"}}),
+	deleteReview: (recipeId: string): AxiosRes<void> => axiosService.delete(urls.deleteReview(recipeId))
 };
 
 export {

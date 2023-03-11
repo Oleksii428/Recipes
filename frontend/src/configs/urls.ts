@@ -13,13 +13,14 @@ const urls = {
 	refresh: "auth/refresh/",
 	forgotPass: "auth/password/forgot",
 	restorePass: (token: string) => `auth/password/forgot?token=${token}`,
-	getAuthorById: (id: string) => `authors/${id}/`,
-	getRecipesOfAuthor: (id: string) => `authors/${id}/recipes`,
-	likeToggle: (id: string) => `/authors/${id}/like-toggle`,
-	subscribeToggle: (id: string) => `/authors/${id}/subscribe-toggle`,
-	createReview: (id: string) => `/recipes/${id}/addReview`,
-	reportAuthor: (id: string) => `/authors/${id}/complain`,
-	blockAuthor: (id: string) => `/authors/${id}/block`
+	getAuthorById: (authorId: string) => `authors/${authorId}/`,
+	getRecipesOfAuthor: (authorId: string) => `authors/${authorId}/recipes`,
+	likeToggle: (authorId: string) => `/authors/${authorId}/like-toggle`,
+	subscribeToggle: (authorId: string) => `/authors/${authorId}/subscribe-toggle`,
+	createReview: (recipeId: string) => `/recipes/${recipeId}/addReview`,
+	deleteReview: (reviewId: string) => `/reviews/${reviewId}`,
+	reportAuthor: (authorId: string) => `/authors/${authorId}/complain`,
+	blockAuthor: (authorId: string) => `/authors/${authorId}/block`
 };
 
 export {

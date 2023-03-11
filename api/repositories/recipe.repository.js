@@ -16,7 +16,7 @@ module.exports = {
 			model: "Review",
 			populate: {
 				path: "photo owner",
-				select: "-_id path userName avatar",
+				select: "path userName avatar",
 				populate: {
 					path: "avatar",
 					select: "-_id path",
@@ -63,11 +63,11 @@ module.exports = {
 			findObj.time = {$gte: minTime, $lte: maxTime};
 		}
 		if (category) {
-			const {_id} = await Category.findOne({title: category});
+			const {_id} = await Category.findOne({title: category}).lean();
 			findObj.category = _id;
 		}
 		if (kitchen) {
-			const {_id} = await Kitchen.findOne({title: kitchen});
+			const {_id} = await Kitchen.findOne({title: kitchen}).lean();
 			findObj.kitchen = _id;
 		}
 

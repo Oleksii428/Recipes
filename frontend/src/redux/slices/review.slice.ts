@@ -20,8 +20,20 @@ const createReview = createAsyncThunk<void, { recipeId: string, review: ICreateR
 	"reviewSlice/createReview",
 	async ({recipeId, review}, {rejectWithValue}) => {
 		try {
-			console.log(review.photo);
 			const {data} = await recipeService.createReview(recipeId, review);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
+const deleteReview = createAsyncThunk<void, string, { rejectValue: IErrorResponse }>(
+	"reviewSlice/deleteReview",
+	async (recipeId, {rejectWithValue}) => {
+		try {
+			const {data} = await recipeService.deleteReview(recipeId);
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
@@ -36,7 +48,7 @@ const reviewSlice = createSlice({
 	reducers: {},
 	extraReducers: builder =>
 		builder
-			// reviewToggle
+			// createReview
 			.addCase(createReview.fulfilled, state => {
 				state.statusCode = 201;
 				state.loading = false;
@@ -51,12 +63,27 @@ const reviewSlice = createSlice({
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.statusCode = action.payload?.status ?? 500;
 			})
+			// deleteReview
+			.addCase(deleteReview.fulfilled, state => {
+				state.statusCode = 204;
+				state.loading = false;
+			})
+			.addCase(deleteReview.pending, state => {
+				state.statusCode = null;
+				state.loading = true;
+			})
+			.addCase(deleteReview.rejected, (state, action) => {
+				state.loading = false;
+				state.errorMessage = action.payload?.message ?? "Unknown error";
+				state.statusCode = action.payload?.status ?? 500;
+			})
 });
 
 const {reducer: reviewReducer} = reviewSlice;
 
 const reviewActions = {
-	createReview
+	createReview,
+	deleteReview
 };
 
 export {

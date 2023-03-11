@@ -1,17 +1,29 @@
 import {FC} from "react";
-import {Avatar, Box, Button, Rating, Typography} from "@mui/material";
+import {Avatar, Backdrop, Box, CircularProgress, IconButton, Rating, Typography} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 
 import {IReview} from "../../../interfaces";
 import {baseURL} from "../../../configs";
 import {getPrettyDate} from "../../../helpers";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {reviewActions} from "../../../redux";
 
 interface IProps {
 	review: IReview;
+	setDeletedReview: Function;
 }
 
-const Review: FC<IProps> = ({review}) => {
-	const {photo, rating, text, owner, createdAt} = review;
+const Review: FC<IProps> = ({review, setDeletedReview}) => {
+	const dispatch = useAppDispatch();
+	const {_id, photo, rating, text, owner, createdAt} = review;
+
+	const {loginAuthor} = useAppSelector(state => state.authReducer);
+	const {loading} = useAppSelector(state => state.reviewReducer);
+
+	const handleDelete = () => {
+		dispatch(reviewActions.deleteReview(_id));
+		setDeletedReview(_id);
+	};
 
 	return (
 		<Box sx={{
@@ -22,14 +34,23 @@ const Review: FC<IProps> = ({review}) => {
 			borderBottom: 1,
 			borderBottomColor: "lightgray"
 		}}>
+			<Backdrop
+				sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
+				open={loading}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 			<Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between", columnGap: 2}}>
 				<Box sx={{display: "flex", alignItems: "center", columnGap: 2}}>
 					<Avatar src={owner.avatar ? baseURL + owner.avatar : "/broken-image.jpg"} />
 					<Typography variant="h6">{owner.userName}</Typography>
 				</Box>
-				<Button>
-					<Delete fontSize="medium" />
-				</Button>
+				{
+					(loginAuthor?._id === owner._id || loginAuthor?.role === "admin") &&
+					<IconButton onClick={handleDelete}>
+						<Delete fontSize="medium" color="primary" />
+					</IconButton>
+				}
 			</Box>
 			<Box sx={{display: "flex", alignItems: "center", columnGap: 2}}>
 				<Rating name="read-only" value={rating} precision={1} readOnly />

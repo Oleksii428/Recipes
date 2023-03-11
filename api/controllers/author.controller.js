@@ -183,7 +183,6 @@ module.exports = {
 			const admins = await authorRepository.getAdmins();
 
 			for (const admin of admins) {
-				console.log("sending complain email...");
 				emailService.sendEmail(admin.email, emailActions.COMPLAIN, {
 					sender: tokenInfo.author.userName,
 					authorLink: `${config.FRONTEND_URL}/recipes/${author._id}`,

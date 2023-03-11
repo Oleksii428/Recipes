@@ -4,6 +4,7 @@ export interface IReview {
 	rating: number;
 	photo: string | null;
 	owner: {
+		_id: string,
 		userName: string,
 		avatar: string | null
 	};
