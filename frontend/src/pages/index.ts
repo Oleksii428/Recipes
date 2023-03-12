@@ -6,3 +6,4 @@ export * from "./Login.page";
 export * from "./Register.page";
 export * from "./ForgotPassword.page";
 export * from "./RestorePassword.page";
+export * from "./Cabinet.page";

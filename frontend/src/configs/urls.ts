@@ -20,7 +20,10 @@ const urls = {
 	createReview: (recipeId: string) => `/recipes/${recipeId}/addReview`,
 	deleteReview: (reviewId: string) => `/reviews/${reviewId}`,
 	reportAuthor: (authorId: string) => `/authors/${authorId}/complain`,
-	blockAuthor: (authorId: string) => `/authors/${authorId}/block`
+	blockAuthor: (authorId: string) => `/authors/${authorId}/block`,
+	uploadAvatar: "/authors/upload-avatar",
+	changeUserName: "/authors/userName"
+
 };
 
 export {

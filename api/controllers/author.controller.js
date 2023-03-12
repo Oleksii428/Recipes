@@ -35,7 +35,7 @@ module.exports = {
 
 			await authorRepository.updateById(author._id, {userName});
 
-			res.status(201).json(`userName has been changed to ${userName}`);
+			res.status(200).json(`userName has been changed to ${userName}`);
 		} catch (e) {
 			next(e);
 		}
@@ -241,7 +241,7 @@ module.exports = {
 			]);
 			await authorRepository.setAvatar(author._id, newMedia._id);
 
-			res.json("uploaded");
+			res.status(201).json("uploaded");
 		} catch (e) {
 			next(e);
 		}

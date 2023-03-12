@@ -1,7 +1,14 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IAuthor, IAuthors, IAuthorsQuery, IRecipes, IRecipesQuery} from "../../interfaces";
+import {
+	IAuthor,
+	IAuthors,
+	IAuthorsQuery,
+	IErrorResponse,
+	IRecipes,
+	IRecipesQuery
+} from "../../interfaces";
 import {authorService} from "../../services";
 
 interface IState {
@@ -10,6 +17,8 @@ interface IState {
 	loading: boolean;
 	error: boolean;
 	author: IAuthor | null;
+	errorMessage: string | null;
+	statusCode: number | null;
 }
 
 const initialState: IState = {
@@ -25,7 +34,9 @@ const initialState: IState = {
 	},
 	loading: false,
 	error: false,
-	author: null
+	author: null,
+	errorMessage: null,
+	statusCode: null
 };
 
 const getByQuery = createAsyncThunk<IAuthors, IAuthorsQuery | null>(
@@ -72,12 +83,39 @@ const getById = createAsyncThunk<IAuthor, string>(
 	}
 );
 
+const uploadAvatar = createAsyncThunk<void, { avatar: File }, { rejectValue: IErrorResponse }>(
+	"authorSlice/uploadAvatar",
+	async ({avatar}, {rejectWithValue}) => {
+		try {
+			const {data} = await authorService.uploadAvatar(avatar);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
+const changeUserName = createAsyncThunk<void, { userName: string }, { rejectValue: IErrorResponse }>(
+	"authorSlice/changeUserName",
+	async ({userName}, {rejectWithValue}) => {
+		try {
+			const {data} = await authorService.changeUserName(userName);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
 const authorSlice = createSlice({
 	name: "authorSlice",
 	initialState,
 	reducers: {},
 	extraReducers: builder =>
 		builder
+			// getByQuery
 			.addCase(getByQuery.fulfilled, (state, action) => {
 				state.list = action.payload;
 				state.loading = false;
@@ -90,7 +128,7 @@ const authorSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
-
+			// getRecipesOfAuthor
 			.addCase(getRecipesOfAuthor.fulfilled, (state, action) => {
 				state.recipesList = action.payload;
 				state.loading = false;
@@ -103,7 +141,7 @@ const authorSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
-
+			// getById
 			.addCase(getById.fulfilled, (state, action) => {
 				state.author = action.payload;
 				state.loading = false;
@@ -116,6 +154,34 @@ const authorSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+			// uploadAvatar
+			.addCase(uploadAvatar.fulfilled, state => {
+				state.statusCode = 201;
+				state.loading = false;
+			})
+			.addCase(uploadAvatar.pending, state => {
+				state.statusCode = null;
+				state.loading = true;
+			})
+			.addCase(uploadAvatar.rejected, (state, action) => {
+				state.statusCode = action.payload?.status ?? 500;
+				state.loading = false;
+			})
+			// changeUserName
+			.addCase(changeUserName.fulfilled, state => {
+				state.statusCode = 200;
+				state.loading = false;
+			})
+			.addCase(changeUserName.pending, state => {
+				state.statusCode = null;
+				state.errorMessage = null;
+				state.loading = true;
+			})
+			.addCase(changeUserName.rejected, (state, action) => {
+				state.statusCode = action.payload?.status ?? 500;
+				state.errorMessage = action.payload?.message ?? "Unknown error";
+				state.loading = false;
+			})
 });
 
 const {reducer: authorReducer} = authorSlice;
@@ -123,7 +189,9 @@ const {reducer: authorReducer} = authorSlice;
 const authorActions = {
 	getByQuery,
 	getRecipesOfAuthor,
-	getById
+	getById,
+	uploadAvatar,
+	changeUserName
 };
 
 export {

@@ -1,10 +1,10 @@
 import {FC, useEffect} from "react";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 
 import {MainLayout} from "./layouts";
 import {
 	AuthorDetailsPage,
-	AuthorsPage,
+	AuthorsPage, CabinetPage,
 	ForgotPasswordPage,
 	LoginPage,
 	RecipeDetailsPage,
@@ -15,6 +15,7 @@ import {
 import {useAppDispatch} from "./hooks";
 import {authActions} from "./redux";
 import {authService} from "./services";
+import {ProfileSettings} from "./components";
 
 const App: FC = () => {
 	const dispatch = useAppDispatch();
@@ -38,6 +39,10 @@ const App: FC = () => {
 				<Route path={"register"} element={<RegisterPage />} />
 				<Route path={"forgot-password"} element={<ForgotPasswordPage />} />
 				<Route path={"restore-password"} element={<RestorePasswordPage />} />
+				<Route path={"cabinet"} element={<CabinetPage />}>
+					<Route index element={<Navigate to={"profile"} />} />
+					<Route path={"profile"} element={<ProfileSettings />} />
+				</Route>
 			</Route>
 		</Routes>
 	);

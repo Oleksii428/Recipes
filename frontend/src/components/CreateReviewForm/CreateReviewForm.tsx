@@ -102,7 +102,7 @@ const CreateReviewForm: FC<IProps> = ({_id}) => {
 						<Box>
 							<input
 								color="primary"
-								accept="image/*"
+								accept="image/jpeg, image/png, image/webp"
 								type="file"
 								onChange={event => {
 									onChange();
@@ -122,7 +122,9 @@ const CreateReviewForm: FC<IProps> = ({_id}) => {
 										padding: 2
 									}}
 								>
-									Upload Image
+									<Typography variant="body1">
+										Upload Image
+									</Typography>
 								</Box>
 							</label>}
 							{image &&
