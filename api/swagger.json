@@ -1387,7 +1387,7 @@
         }
       }
     },
-    "/recipes/{recipeId}": {
+    "/recipes/getById/{recipeId}": {
       "get": {
         "description": "Get recipes by id",
         "tags": [

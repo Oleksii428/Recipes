@@ -13,7 +13,7 @@ const urls = {
 	refresh: "auth/refresh/",
 	forgotPass: "auth/password/forgot",
 	restorePass: (token: string) => `auth/password/forgot?token=${token}`,
-	getAuthorById: (authorId: string) => `authors/${authorId}/`,
+	getAuthorById: (authorId: string) => `authors/getById/${authorId}`,
 	getRecipesOfAuthor: (authorId: string) => `authors/${authorId}/recipes`,
 	likeToggle: (authorId: string) => `/authors/${authorId}/like-toggle`,
 	subscribeToggle: (authorId: string) => `/authors/${authorId}/subscribe-toggle`,
@@ -23,7 +23,6 @@ const urls = {
 	blockAuthor: (authorId: string) => `/authors/${authorId}/block`,
 	uploadAvatar: "/authors/upload-avatar",
 	changeUserName: "/authors/userName"
-
 };
 
 export {
