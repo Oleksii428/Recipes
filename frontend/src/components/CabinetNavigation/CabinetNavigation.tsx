@@ -26,7 +26,7 @@ const CabinetNavigation: FC = () => {
 				sx={{borderRight: 1, borderColor: "divider"}}
 			>
 				<Tab onClick={() => navigate("profile")} label="Profile" />
-				<Tab onClick={() => navigate("recipes")} label="My recipes" />
+				<Tab onClick={() => navigate("my-recipes")} label="My recipes" />
 			</Tabs>
 		</Box>
 	);

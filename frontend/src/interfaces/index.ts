@@ -9,4 +9,6 @@ export * from "./authors.interface";
 export * from "./authors.query.interface";
 export * from "./subscribe.interface";
 export * from "./createReview.interface";
+export * from "./myRecipe.interface";
+export * from "./myRecipes.interface";
 export * from "./auth";

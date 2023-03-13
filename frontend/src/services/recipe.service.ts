@@ -1,6 +1,6 @@
 import {AxiosRes, axiosService} from "./axios.servise";
 
-import {IRecipesQuery, IRecipe, IRecipes, IReview, ICreateReview} from "../interfaces";
+import {IRecipesQuery, IRecipe, IRecipes, IReview, ICreateReview, IMyRecipes} from "../interfaces";
 import {urls} from "../configs";
 
 const recipeService = {
@@ -13,7 +13,8 @@ const recipeService = {
 		text: review.text,
 		rating: review.rating
 	}, {headers: {"Content-Type": "multipart/form-data"}}),
-	deleteReview: (recipeId: string): AxiosRes<void> => axiosService.delete(urls.deleteReview(recipeId))
+	deleteReview: (recipeId: string): AxiosRes<void> => axiosService.delete(urls.deleteReview(recipeId)),
+	getMyRecipes: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyRecipes, {params: {page}})
 };
 
 export {

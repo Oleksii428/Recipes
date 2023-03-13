@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IRecipesQuery, IRecipe, IRecipes, IReview} from "../../interfaces";
+import {IRecipesQuery, IRecipe, IRecipes, IReview, IMyRecipes} from "../../interfaces";
 import {recipeService} from "../../services";
 
 interface IState {
@@ -10,6 +10,7 @@ interface IState {
 	error: boolean;
 	recipe: IRecipe | null;
 	reviews: IReview[] | null;
+	myRecipes: IMyRecipes;
 }
 
 const initialState: IState = {
@@ -21,7 +22,12 @@ const initialState: IState = {
 	loading: false,
 	error: false,
 	recipe: null,
-	reviews: null
+	reviews: null,
+	myRecipes: {
+		recipes: [],
+		page: "0",
+		count: 0
+	}
 };
 
 const getByQuery = createAsyncThunk<IRecipes, IRecipesQuery | null>(
@@ -56,6 +62,19 @@ const getReviews = createAsyncThunk<IReview[], string>(
 		try {
 			const response = await recipeService.getReviews(recipeId);
 			return response.data;
+		} catch (e) {
+			const err = e as AxiosError;
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
+const getMyRecipes = createAsyncThunk<IMyRecipes, string | null>(
+	"recipeSlice/getMyRecipes",
+	async (page, {rejectWithValue}) => {
+		try {
+			const {data} = await recipeService.getMyRecipes(page);
+			return data;
 		} catch (e) {
 			const err = e as AxiosError;
 			return rejectWithValue(err.response?.data);
@@ -108,6 +127,24 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+			// getMyRecipes
+			.addCase(getMyRecipes.fulfilled, (state, action) => {
+				state.myRecipes = action.payload;
+				state.loading = false;
+				state.error = false;
+			})
+			.addCase(getMyRecipes.pending, state => {
+				state.loading = true;
+			})
+			.addCase(getMyRecipes.rejected, state => {
+				state.myRecipes = {
+					recipes: [],
+					page: "0",
+					count: 0
+				};
+				state.loading = false;
+				state.error = true;
+			})
 });
 
 const {reducer: recipeReducer} = recipeSlice;
@@ -115,7 +152,8 @@ const {reducer: recipeReducer} = recipeSlice;
 const recipeActions = {
 	getByQuery,
 	getById,
-	getReviews
+	getReviews,
+	getMyRecipes
 };
 
 export {

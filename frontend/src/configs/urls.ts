@@ -22,7 +22,8 @@ const urls = {
 	reportAuthor: (authorId: string) => `/authors/${authorId}/complain`,
 	blockAuthor: (authorId: string) => `/authors/${authorId}/block`,
 	uploadAvatar: "/authors/upload-avatar",
-	changeUserName: "/authors/userName"
+	changeUserName: "/authors/userName",
+	getMyRecipes: "/authors/recipes"
 };
 
 export {

@@ -3,9 +3,9 @@ import {Alert, Backdrop, Box, Button, CircularProgress, TextField, Typography} f
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
 
-import {changeUserName, imageValidator} from "../../validators";
-import {useAppDispatch, useAppSelector} from "../../hooks";
-import {authActions, authorActions} from "../../redux";
+import {changeUserName, imageValidator} from "../../../validators";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {authActions, authorActions} from "../../../redux";
 
 interface IChangeUserName {
 	userName?: string;

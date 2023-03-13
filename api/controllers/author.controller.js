@@ -124,8 +124,20 @@ module.exports = {
 	},
 	getRecipes: async (req, res, next) => {
 		try {
-			let {recipes, page, count} = await recipeRepository.getByAuthorId(req.tokenInfo.author._id, req.query);
-			recipes = recipePresenter.presentMany(recipes);
+			const {author} = req.tokenInfo;
+			let {recipes, page, count} = await recipeRepository.getByAuthorId(author._id, req.query);
+
+			const authorBookIds = await bookRepository.getBookIdArray(author._id);
+			const newRecipes = recipes.map(recipe => {
+					if (authorBookIds.includes(recipe._id.valueOf())) {
+						return {...recipe, inBook: true};
+					} else {
+						return {...recipe, inBook: false};
+					}
+				}
+			);
+
+			recipes = recipePresenter.presentMany(newRecipes);
 			res.json({recipes, page, count});
 		} catch (e) {
 			next(e);
