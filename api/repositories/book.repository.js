@@ -18,16 +18,17 @@ module.exports = {
 				.populate({
 					path: "recipe",
 					populate: {
-						path: "category kitchen gallery stages",
-						select: "title number photo description",
+						path: "category kitchen gallery stages reviewsCount bookCount",
 						populate: {
 							strictPopulate: false,
-							path: "photo",
-							select: "-_id path"
+							path: "photo media",
+							select: "path"
 						}
 					}
 				})
-				.transform(res => res.map(item => item.recipe))
+				.transform(res => res.map(item => {
+					return {...item.recipe, inBook: true};
+				}))
 				.sort({createdAt: -1})
 				.skip(skip)
 				.limit(limit)

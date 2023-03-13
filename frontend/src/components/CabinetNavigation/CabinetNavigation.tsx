@@ -26,6 +26,10 @@ const CabinetNavigation: FC = () => {
 		{
 			link: "my-recipes",
 			label: "My recipes"
+		},
+		{
+			link: "my-book",
+			label: "My book"
 		}
 	];
 

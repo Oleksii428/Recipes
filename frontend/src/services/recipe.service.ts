@@ -14,7 +14,8 @@ const recipeService = {
 		rating: review.rating
 	}, {headers: {"Content-Type": "multipart/form-data"}}),
 	deleteReview: (recipeId: string): AxiosRes<void> => axiosService.delete(urls.deleteReview(recipeId)),
-	getMyRecipes: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyRecipes, {params: {page}})
+	getMyRecipes: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyRecipes, {params: {page}}),
+	getMyBook: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyBook, {params: {page}})
 };
 
 export {

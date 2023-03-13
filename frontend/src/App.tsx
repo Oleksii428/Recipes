@@ -15,7 +15,7 @@ import {
 import {useAppDispatch} from "./hooks";
 import {authActions} from "./redux";
 import {authService} from "./services";
-import {MyRecipes, ProfileSettings} from "./components";
+import {MyBook, MyRecipes, ProfileSettings} from "./components";
 
 const App: FC = () => {
 	const dispatch = useAppDispatch();
@@ -43,6 +43,7 @@ const App: FC = () => {
 					<Route index element={<Navigate to={"profile"} />} />
 					<Route path={"profile"} element={<ProfileSettings />} />
 					<Route path={"my-recipes"} element={<MyRecipes />} />
+					<Route path={"my-book"} element={<MyBook />} />
 				</Route>
 			</Route>
 		</Routes>

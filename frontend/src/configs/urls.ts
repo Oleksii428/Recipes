@@ -23,7 +23,8 @@ const urls = {
 	blockAuthor: (authorId: string) => `/authors/${authorId}/block`,
 	uploadAvatar: "/authors/upload-avatar",
 	changeUserName: "/authors/userName",
-	getMyRecipes: "/authors/recipes"
+	getMyRecipes: "/authors/recipes",
+	getMyBook: "/authors/book"
 };
 
 export {
