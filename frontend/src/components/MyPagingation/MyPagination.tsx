@@ -9,28 +9,24 @@ interface Iprops {
 const MyPagination: FC<Iprops> = ({count}) => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
-	const [page, setPage] = useState<string>("1");
+	const [page, setPage] = useState<number>(1);
 
 	useLayoutEffect(() => {
-		const pageInQuery: string | null = query.get("page");
-		if (pageInQuery) {
-			setPage(pageInQuery);
-		}
+		setPage(Number(query.get("page")) || 1);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const handleChange = (event: ChangeEvent<unknown>, page: number) => {
-		const newPage = page.toString();
-		setPage(newPage);
-		query.set("page", newPage);
+	const handleChange = (event: ChangeEvent<unknown>, value: number) => {
+		query.set("page", value.toString());
 		navigate({search: query.toString()});
+		setPage(value);
 	};
 
 	return (
 		<Pagination
 			sx={{display: "flex", justifyContent: "center"}}
 			size="large"
-			defaultValue={page}
+			page={page}
 			onChange={handleChange}
 			count={Math.ceil(count / 8)}
 			variant="outlined"
