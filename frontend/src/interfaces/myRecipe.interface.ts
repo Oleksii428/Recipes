@@ -1,4 +1,4 @@
-export interface IMyRecipeInterface {
+export interface IMyRecipe {
 	_id: string,
 	title: string,
 	time: number,

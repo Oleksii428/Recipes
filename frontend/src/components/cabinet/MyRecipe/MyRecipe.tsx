@@ -12,13 +12,13 @@ import {
 	Typography
 } from "@mui/material";
 
-import {IMyRecipeInterface} from "../../../interfaces";
+import {IMyRecipe} from "../../../interfaces";
 import {baseURL} from "../../../configs";
 import {getPrettyDate} from "../../../helpers";
 import {BookToggle} from "../../BookToggle/BookToggle";
 
 interface IProps {
-	recipe: IMyRecipeInterface;
+	recipe: IMyRecipe;
 }
 
 const MyRecipe: FC<IProps> = ({recipe}) => {

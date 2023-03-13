@@ -1,7 +1,7 @@
-import {IMyRecipeInterface} from "./myRecipe.interface";
+import {IMyRecipe} from "./myRecipe.interface";
 
 export interface IMyRecipes {
-	recipes: IMyRecipeInterface[];
+	recipes: IMyRecipe[];
 	page: string;
 	count: number;
 }

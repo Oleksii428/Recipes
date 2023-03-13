@@ -1,17 +1,17 @@
-import {ChangeEvent, FC, useLayoutEffect, useState} from "react";
+import {ChangeEvent, FC, useEffect, useState} from "react";
 import {Pagination} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-interface Iprops {
+interface IProps {
 	count: number;
 }
 
-const MyPagination: FC<Iprops> = ({count}) => {
+const MyPagination: FC<IProps> = ({count}) => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
 	const [page, setPage] = useState<number>(1);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		setPage(Number(query.get("page")) || 1);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
