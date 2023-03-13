@@ -611,7 +611,7 @@
         }
       }
     },
-    "/authors/{authorId}": {
+    "/authors/getById/{authorId}": {
       "get": {
         "description": "Get author by id",
         "tags": [
@@ -753,6 +753,12 @@
             "type": "string",
             "in": "header",
             "required": true
+          },
+          {
+            "name": "page",
+            "type": "string",
+            "in": "query",
+            "required": false
           }
         ],
         "responses": {
@@ -760,20 +766,35 @@
             "description": "Success",
             "schema": {
               "properties": {
-                "_id": {
-                  "$ref": "#/definitions/MongoId"
+                "subscribers": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "$ref": "#/definitions/MongoId"
+                      },
+                      "userName": {
+                        "type": "string",
+                        "example": "john_01"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "john1999@mail.com"
+                      },
+                      "avatar": {
+                        "type": "string",
+                        "example": "https://www.google.com/image"
+                      }
+                    }
+                  }
                 },
-                "userName": {
+                "page": {
                   "type": "string",
-                  "example": "john_01"
+                  "example": "1"
                 },
-                "email": {
-                  "type": "string",
-                  "example": "john1999@mail.com"
-                },
-                "avatar": {
-                  "type": "string",
-                  "example": "https://www.google.com/image"
+                "count": {
+                  "type": "number",
+                  "example": 1
                 }
               }
             }
@@ -834,84 +855,32 @@
             "type": "string",
             "in": "header",
             "required": true
+          },
+          {
+            "name": "page",
+            "type": "string",
+            "in": "query",
+            "required": false
           }
         ],
         "responses": {
           "200": {
             "description": "Success",
             "schema": {
-              "type": "array",
-              "items": {
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "example": "borsh"
-                  },
-                  "time": {
-                    "type": "number",
-                    "example": 90
-                  },
-                  "servings": {
-                    "type": "number",
-                    "example": 3
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "meal description"
-                  },
-                  "category": {
-                    "type": "string",
-                    "example": "lunch"
-                  },
-                  "kitchen": {
-                    "type": "string",
-                    "example": "ukrainian"
-                  },
-                  "ingredients": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "example": "1 cabbage"
-                    }
-                  },
-                  "gallery": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "example": "recipes/63e0f73b03a811f4473b065b/1675687868399.jpg"
-                    }
-                  },
-                  "stages": {
-                    "type": "array",
-                    "items": {
-                      "properties": {
-                        "number": {
-                          "type": "number",
-                          "example": 1
-                        },
-                        "photo": {
-                          "type": "string",
-                          "example": "stages/63e0f73b03a811f4473b065b/1675687868399.jpg"
-                        },
-                        "descriptions": {
-                          "type": "string",
-                          "example": "stage description text"
-                        }
-                      }
-                    }
-                  },
-                  "rating": {
-                    "type": "number",
-                    "example": 4
-                  },
-                  "bookCount": {
-                    "type": "number",
-                    "example": 1
-                  },
-                  "createdAt": {
-                    "type": "string",
-                    "example": "2023-02-06T12:48:59.671Z"
+              "properties": {
+                "recipes": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Recipe"
                   }
+                },
+                "page": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "count": {
+                  "type": "number",
+                  "example": 1
                 }
               }
             }

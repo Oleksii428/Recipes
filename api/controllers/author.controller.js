@@ -66,10 +66,10 @@ module.exports = {
 	},
 	getBook: async (req, res, next) => {
 		try {
-			const book = await bookRepository.findByAuthorId(req.tokenInfo.author._id);
+			const {book, page, count} = await bookRepository.findByAuthorId(req.tokenInfo.author._id, req.query);
 			const presentedBook = recipePresenter.presentMany(book);
 
-			res.status(200).json(presentedBook);
+			res.status(200).json({recipes: presentedBook, page, count});
 		} catch (e) {
 			next(e);
 		}
@@ -124,9 +124,9 @@ module.exports = {
 	},
 	getRecipes: async (req, res, next) => {
 		try {
-			let recipes = await recipeRepository.getByAuthorId(req.tokenInfo.author._id);
+			let {recipes, page, count} = await recipeRepository.getByAuthorId(req.tokenInfo.author._id, req.query);
 			recipes = recipePresenter.presentMany(recipes);
-			res.json(recipes);
+			res.json({recipes, page, count});
 		} catch (e) {
 			next(e);
 		}
@@ -143,10 +143,14 @@ module.exports = {
 	},
 	getSubscribers: async (req, res, next) => {
 		try {
-			let subscribers = await subscriberRepository.getSubscribers(req.tokenInfo.author._id);
+			let {
+				subscribers,
+				page,
+				count
+			} = await subscriberRepository.getSubscribersByQuery(req.tokenInfo.author._id, req.query);
 			subscribers = subscriberPresenter.presentMany(subscribers);
 
-			res.json(subscribers);
+			res.json({subscribers, page, count});
 		} catch (e) {
 			next(e);
 		}

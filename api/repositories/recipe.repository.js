@@ -71,7 +71,7 @@ module.exports = {
 			findObj.kitchen = _id;
 		}
 
-		let [recipes, count] = await Promise.all([
+		const [recipes, count] = await Promise.all([
 			Recipe.find(findObj)
 				.populate({
 					path: "category kitchen creator reviewsCount gallery stages bookCount",
@@ -93,13 +93,28 @@ module.exports = {
 			count
 		};
 	},
-	getByAuthorId: (authorId) => Recipe.find({creator: authorId}).populate({
-		path: "category kitchen reviewsCount gallery stages bookCount",
-		populate: {
-			path: "media photo",
-			strictPopulate: false
+	getByAuthorId: async (authorId, query) => {
+		const {page = "1"} = query;
+		const limit = 8;
+		const skip = (page - 1) * limit;
+
+		const [recipes, count] = await Promise.all([
+			Recipe.find({creator: authorId}).populate({
+				path: "category kitchen reviewsCount gallery stages bookCount",
+				populate: {
+					path: "media photo",
+					strictPopulate: false
+				}
+			}).sort({createdAt: -1}).skip(skip).limit(limit).lean(),
+			Recipe.countDocuments({creator: authorId})
+		]);
+
+		return {
+			recipes,
+			page,
+			count
 		}
-	}).lean(),
+	},
 	getOneByParams: (filter = {}) => Recipe.findOne(filter),
 	setModerateStatus: async (id, status) => {
 		await Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}});
