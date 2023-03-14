@@ -1,6 +1,6 @@
 import {AxiosRes, axiosService} from "./axios.servise";
 
-import {IRecipesQuery, IRecipe, IRecipes, IReview, ICreateReview, IMyRecipes} from "../interfaces";
+import {IRecipesQuery, IRecipe, IRecipes, IReview, ICreateReview, IMyRecipes, ICreateRecipe} from "../interfaces";
 import {urls} from "../configs";
 
 const recipeService = {
@@ -15,7 +15,8 @@ const recipeService = {
 	}, {headers: {"Content-Type": "multipart/form-data"}}),
 	deleteReview: (recipeId: string): AxiosRes<void> => axiosService.delete(urls.deleteReview(recipeId)),
 	getMyRecipes: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyRecipes, {params: {page}}),
-	getMyBook: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyBook, {params: {page}})
+	getMyBook: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyBook, {params: {page}}),
+	create: (newRecipeData: ICreateRecipe): AxiosRes<string> => axiosService.post(urls.recipes, newRecipeData)
 };
 
 export {

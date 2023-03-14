@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IRecipesQuery, IRecipe, IRecipes, IReview, IMyRecipes} from "../../interfaces";
+import {IRecipesQuery, IRecipe, IRecipes, IReview, IMyRecipes, ICreateRecipe} from "../../interfaces";
 import {recipeService} from "../../services";
 
 interface IState {
@@ -82,6 +82,19 @@ const getMyRecipes = createAsyncThunk<IMyRecipes, string | null>(
 	}
 );
 
+const create = createAsyncThunk<string, ICreateRecipe>(
+	"recipeSlice/create",
+	async (newRecipeData, {rejectWithValue}) => {
+		try {
+			const {data} = await recipeService.create(newRecipeData);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError;
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
 const recipeSlice = createSlice({
 	name: "recipeSlice",
 	initialState,
@@ -145,6 +158,19 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+			// create
+			.addCase(create.fulfilled, state => {
+				state.loading = false;
+				state.error = false;
+			})
+			.addCase(create.pending, state => {
+				state.loading = true;
+				state.error = false;
+			})
+			.addCase(create.rejected, state => {
+				state.loading = false;
+				state.error = true;
+			})
 });
 
 const {reducer: recipeReducer} = recipeSlice;
@@ -153,7 +179,8 @@ const recipeActions = {
 	getByQuery,
 	getById,
 	getReviews,
-	getMyRecipes
+	getMyRecipes,
+	create
 };
 
 export {

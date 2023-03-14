@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Box, Button, TextField} from "@mui/material";
+import {Alert, Backdrop, Box, Button, CircularProgress, TextField} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
 
@@ -8,15 +8,21 @@ import {createRecipeValidator} from "../../../validators";
 import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {recipeActions} from "../../../redux";
 
 const CreateRecipeForm: FC = () => {
-	const {handleSubmit, control, setValue, formState: {errors, isValid}} = useForm<ICreateRecipe>({
+	const {handleSubmit, control, setValue, formState: {errors}} = useForm<ICreateRecipe>({
 		resolver: joiResolver(createRecipeValidator),
-		mode: "onSubmit"
+		mode: "onChange"
 	});
 
-	const onSubmit: SubmitHandler<ICreateRecipe> = (newRecipeData) => {
-		console.log(newRecipeData);
+	const dispatch = useAppDispatch();
+	const {error, loading: recipeLoading} = useAppSelector(state => state.recipeReducer);
+
+	const onSubmit: SubmitHandler<ICreateRecipe> = async (newRecipeData) => {
+		const createdId = await dispatch(recipeActions.create(newRecipeData));
+		console.log(createdId);
 	};
 
 	return (
@@ -30,6 +36,18 @@ const CreateRecipeForm: FC = () => {
 				rowGap: 1,
 				pb: 3
 			}}>
+			{
+				error &&
+				<Alert severity="error">
+					Error
+				</Alert>
+			}
+			<Backdrop
+				sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
+				open={recipeLoading}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 			<Controller
 				name="title"
 				control={control}
@@ -91,7 +109,7 @@ const CreateRecipeForm: FC = () => {
 			<CategoryForm errors={errors.category} setValue={setValue} />
 			<KitchenForm setValue={setValue} errors={errors.kitchen} />
 			<IngredientsForm setValue={setValue} name="ingredients" errors={errors.ingredients} />
-			<Button disabled={!isValid} type="submit" variant="contained">Create</Button>
+			<Button type="submit" variant="contained">Create</Button>
 		</Box>
 	);
 };

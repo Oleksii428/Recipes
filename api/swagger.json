@@ -1335,16 +1335,8 @@
           "201": {
             "description": "Success",
             "schema": {
-              "properties": {
-                "massage": {
-                  "type": "string",
-                  "example": "Created"
-                },
-                "statusCode": {
-                  "type": "number",
-                  "example": 201
-                }
-              }
+              "type": "string",
+              "example": "6410c3ad6bbbf08a9bf02a3c"
             }
           },
           "400": {

@@ -132,7 +132,7 @@ module.exports = {
 				}
 			}
 
-			res.sendStatus(201);
+			res.status(201).json(createdRecipe._id);
 		} catch (e) {
 			next(e);
 		}
