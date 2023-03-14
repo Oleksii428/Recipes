@@ -1,5 +1,6 @@
 const present = (category) => {
 	return {
+		_id: category._id,
 		title: category.title
 	};
 };

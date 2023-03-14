@@ -30,7 +30,12 @@ const CabinetNavigation: FC = () => {
 		{
 			link: "my-book",
 			label: "My book"
+		},
+		{
+			link: "create-recipe",
+			label: "Create recipe"
 		}
+
 	];
 
 	useEffect(() => {
@@ -45,7 +50,7 @@ const CabinetNavigation: FC = () => {
 
 	return (
 		<Box
-			sx={{flexGrow: 0, bgcolor: "background.paper", display: "flex"}}
+			sx={{bgcolor: "background.paper"}}
 		>
 			<Tabs
 				orientation="vertical"

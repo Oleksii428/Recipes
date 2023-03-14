@@ -11,4 +11,5 @@ export * from "./subscribe.interface";
 export * from "./createReview.interface";
 export * from "./myRecipe.interface";
 export * from "./myRecipes.interface";
+export * from "./createRecipe.interface";
 export * from "./auth";

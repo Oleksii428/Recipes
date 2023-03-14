@@ -1,5 +1,6 @@
 const present = (kitchen) => {
 	return {
+		_id: kitchen._id,
 		title: kitchen.title
 	};
 };
