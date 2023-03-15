@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Alert, Backdrop, Box, Button, CircularProgress, TextField} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
@@ -10,6 +10,7 @@ import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {recipeActions} from "../../../redux";
+import {AddPhoto} from "../AddPhoto/AddPhoto";
 
 const CreateRecipeForm: FC = () => {
 	const {handleSubmit, control, setValue, formState: {errors}} = useForm<ICreateRecipe>({
@@ -22,8 +23,12 @@ const CreateRecipeForm: FC = () => {
 
 	const onSubmit: SubmitHandler<ICreateRecipe> = async (newRecipeData) => {
 		const createdId = await dispatch(recipeActions.create(newRecipeData));
-		console.log(createdId);
+		if (photos) {
+			console.log("push photo to", createdId);
+		}
 	};
+	const [photos, setPhotos] = useState<File[]>([]);
+	const [photoErrors, setPhotoErrors] = useState<string[]>([]);
 
 	return (
 		<Box
@@ -62,6 +67,7 @@ const CreateRecipeForm: FC = () => {
 					/>
 				)}
 			/>
+			<AddPhoto photos={photos} setPhotos={setPhotos} errors={photoErrors} setErrors={setPhotoErrors} />
 			<Controller
 				name="time"
 				control={control}
@@ -109,7 +115,11 @@ const CreateRecipeForm: FC = () => {
 			<CategoryForm errors={errors.category} setValue={setValue} />
 			<KitchenForm setValue={setValue} errors={errors.kitchen} />
 			<IngredientsForm setValue={setValue} name="ingredients" errors={errors.ingredients} />
-			<Button type="submit" variant="contained">Create</Button>
+			<Button
+				disabled={!!photoErrors.filter(error => error !== undefined).length}
+				type="submit"
+				variant="contained"
+			>Create</Button>
 		</Box>
 	);
 };

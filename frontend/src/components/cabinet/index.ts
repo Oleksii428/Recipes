@@ -7,3 +7,5 @@ export * from "./CreateRecipeForm/CreateRecipeForm";
 export * from "./IngredientsForm/IngredientsForm";
 export * from "./CategoryForm/CategoryForm";
 export * from "./KitchenForm/KitchenForm";
+export * from "./AddVideo/AddVideo";
+export * from "./AddPhoto/AddPhoto";
