@@ -3,7 +3,7 @@ import {Alert, Backdrop, Box, Button, CircularProgress, TextField} from "@mui/ma
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
 
-import {ICreateRecipe} from "../../../interfaces";
+import {ICreateRecipe, ICreateStage} from "../../../interfaces";
 import {createRecipeValidator} from "../../../validators";
 import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
@@ -12,6 +12,7 @@ import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {photoActions, recipeActions, videoActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
+import {StageForm} from "../../StageForm/StageForm";
 
 const CreateRecipeForm: FC = () => {
 	const {handleSubmit, control, setValue, formState: {errors}} = useForm<ICreateRecipe>({
@@ -26,7 +27,6 @@ const CreateRecipeForm: FC = () => {
 
 	const onSubmit: SubmitHandler<ICreateRecipe> = (newRecipeData) => {
 		dispatch(recipeActions.create(newRecipeData));
-
 	};
 
 	const [photos, setPhotos] = useState<File[]>([]);
@@ -34,6 +34,8 @@ const CreateRecipeForm: FC = () => {
 
 	const [video, setVideo] = useState<File | undefined>(undefined);
 	const [videoError, setVideoError] = useState<string | undefined>(undefined);
+
+	const [stages, setStages] = useState<ICreateStage[]>([]);
 
 	useEffect(() => {
 		if (createdRecipeId) {
@@ -147,6 +149,7 @@ const CreateRecipeForm: FC = () => {
 			<CategoryForm errors={errors.category} setValue={setValue} />
 			<KitchenForm setValue={setValue} errors={errors.kitchen} />
 			<IngredientsForm setValue={setValue} name="ingredients" errors={errors.ingredients} />
+			<StageForm stages={stages} setStages={setStages} />
 			<Button
 				disabled={isValid()}
 				type="submit"
