@@ -113,9 +113,31 @@ module.exports = {
 			recipes,
 			page,
 			count
-		}
+		};
 	},
 	getOneByParams: (filter = {}) => Recipe.findOne(filter),
+	getNotModerated: async (query) => {
+		const {page = "1"} = query;
+		const limit = 8;
+		const skip = (page - 1) * limit;
+
+		const [recipes, count] = await Promise.all([
+			Recipe.find({isModerated: false}).populate({
+				path: "category kitchen gallery creator reviewsCount stages bookCount",
+				populate: {
+					path: "media avatar photo",
+					strictPopulate: false
+				}
+			}).sort({createdAt: -1}).skip(skip).limit(limit).lean(),
+			Recipe.countDocuments({isModerated: false})
+		]);
+
+		return {
+			recipes,
+			page,
+			count
+		};
+	},
 	setModerateStatus: async (id, status) => {
 		await Recipe.findByIdAndUpdate(id, {$set: {"isModerated": status}});
 	},

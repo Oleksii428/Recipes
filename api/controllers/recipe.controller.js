@@ -205,6 +205,16 @@ module.exports = {
 			next(e);
 		}
 	},
+	getNotModerated: async (req, res, next) => {
+		try {
+			const {recipes, count, page} = await recipeRepository.getNotModerated(req.query);
+			const presentRecipes = recipePresenter.presentManyWithCreator(recipes);
+
+			res.json({recipes: presentRecipes, page, count});
+		} catch (e) {
+			next(e);
+		}
+	},
 	getReviews: async (req, res, next) => {
 		try {
 			let reviews = await recipeRepository.getReviews(req.params.recipeId);

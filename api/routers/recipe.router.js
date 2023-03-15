@@ -30,6 +30,13 @@ router.post(
 );
 
 router.get(
+	"/notModerated",
+	authMiddleware.checkAccessToken,
+	authorMiddleware.isAdmin,
+	recipeController.getByQuery
+);
+
+router.get(
 	"/:recipeId",
 	authMiddleware.isMongoIdValid("recipeId"),
 	authMiddleware.checkAccessTokenIfExists,
