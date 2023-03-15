@@ -10,3 +10,4 @@ export * from "./review.slice";
 export * from "./report.slice";
 export * from "./block.slice";
 export * from "./photo.slice";
+export * from "./video.slice";

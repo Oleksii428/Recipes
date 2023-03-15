@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {Alert, Backdrop, Box, Button, CircularProgress, TextField} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
@@ -9,7 +9,7 @@ import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {photoActions, recipeActions} from "../../../redux";
+import {photoActions, recipeActions, videoActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
 
@@ -20,23 +20,35 @@ const CreateRecipeForm: FC = () => {
 	});
 
 	const dispatch = useAppDispatch();
-	const {error, loading: recipeLoading} = useAppSelector(state => state.recipeReducer);
+	const {error, loading: recipeLoading, createdRecipeId} = useAppSelector(state => state.recipeReducer);
 	const {loading: photoLoading} = useAppSelector(state => state.photoReducer);
+	const {loading: videoLoading} = useAppSelector(state => state.videoReducer);
 
-	const onSubmit: SubmitHandler<ICreateRecipe> = async (newRecipeData) => {
-		const recipeAction = await dispatch(recipeActions.create(newRecipeData));
-		const recipeId: unknown = recipeAction.payload;
-		if (photos && typeof recipeId === "string") {
-			photos.forEach(photo => {
-				dispatch(photoActions.addPhotoToRecipe({recipeId, photo}));
-			});
-		}
+	const onSubmit: SubmitHandler<ICreateRecipe> = (newRecipeData) => {
+		dispatch(recipeActions.create(newRecipeData));
+
 	};
+
 	const [photos, setPhotos] = useState<File[]>([]);
 	const [photoErrors, setPhotoErrors] = useState<string[]>([]);
 
 	const [video, setVideo] = useState<File | undefined>(undefined);
 	const [videoError, setVideoError] = useState<string | undefined>(undefined);
+
+	useEffect(() => {
+		if (createdRecipeId) {
+			if (photos.length) {
+				photos.forEach(photo => {
+					dispatch(photoActions.addPhotoToRecipe({recipeId: createdRecipeId, photo}));
+				});
+				setPhotos([]);
+			}
+			if (video) {
+				dispatch(videoActions.addVideoToRecipe({recipeId: createdRecipeId, video}));
+				setVideo(undefined);
+			}
+		}
+	}, [createdRecipeId, dispatch, photos, video]);
 
 	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !!videoError;
 
@@ -59,10 +71,19 @@ const CreateRecipeForm: FC = () => {
 			}
 			<Backdrop
 				sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
-				open={recipeLoading || photoLoading}
+				open={recipeLoading || photoLoading || videoLoading}
 			>
 				<CircularProgress color="inherit" />
 			</Backdrop>
+			{
+				createdRecipeId &&
+				<Alert
+					sx={{width: "100%", boxSizing: "border-box"}}
+					severity="success"
+				>
+					Recipe has been created
+				</Alert>
+			}
 			<Controller
 				name="title"
 				control={control}

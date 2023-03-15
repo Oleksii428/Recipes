@@ -11,6 +11,7 @@ interface IState {
 	recipe: IRecipe | null;
 	reviews: IReview[] | null;
 	myRecipes: IMyRecipes;
+	createdRecipeId: string | null;
 }
 
 const initialState: IState = {
@@ -27,7 +28,8 @@ const initialState: IState = {
 		recipes: [],
 		page: "0",
 		count: 0
-	}
+	},
+	createdRecipeId: null
 };
 
 const getByQuery = createAsyncThunk<IRecipes, IRecipesQuery | null>(
@@ -159,15 +161,18 @@ const recipeSlice = createSlice({
 				state.error = true;
 			})
 			// create
-			.addCase(create.fulfilled, state => {
+			.addCase(create.fulfilled, (state, action) => {
+				state.createdRecipeId = action.payload;
 				state.loading = false;
 				state.error = false;
 			})
 			.addCase(create.pending, state => {
+				state.createdRecipeId = null;
 				state.loading = true;
 				state.error = false;
 			})
 			.addCase(create.rejected, state => {
+				state.createdRecipeId = null;
 				state.loading = false;
 				state.error = true;
 			})

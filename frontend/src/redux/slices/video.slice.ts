@@ -16,11 +16,11 @@ const initialState: IState = {
 	errorMessage: null
 };
 
-const addPhotoToRecipe = createAsyncThunk<void, { recipeId: string, photo: File }, { rejectValue: IErrorResponse }>(
-	"reportSlice/addPhotoToRecipe",
-	async ({recipeId, photo}, {rejectWithValue}) => {
+const addVideoToRecipe = createAsyncThunk<void, { recipeId: string, video: File }, { rejectValue: IErrorResponse }>(
+	"reportSlice/addVideoToRecipe",
+	async ({recipeId, video}, {rejectWithValue}) => {
 		try {
-			const {data} = await recipeService.addPhoto(recipeId, photo);
+			const {data} = await recipeService.addVideo(recipeId, video);
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
@@ -29,36 +29,36 @@ const addPhotoToRecipe = createAsyncThunk<void, { recipeId: string, photo: File 
 	}
 );
 
-const photoSlice = createSlice({
-	name: "photoSlice",
+const videoSlice = createSlice({
+	name: "videoSlice",
 	initialState,
 	reducers: {},
 	extraReducers: builder =>
 		builder
-			// addPhoto
-			.addCase(addPhotoToRecipe.fulfilled, state => {
+			// addVideo
+			.addCase(addVideoToRecipe.fulfilled, state => {
 				state.statusCode = 200;
 				state.loading = false;
 			})
-			.addCase(addPhotoToRecipe.pending, state => {
+			.addCase(addVideoToRecipe.pending, state => {
 				state.statusCode = null;
 				state.errorMessage = null;
 				state.loading = true;
 			})
-			.addCase(addPhotoToRecipe.rejected, (state, action) => {
+			.addCase(addVideoToRecipe.rejected, (state, action) => {
 				state.loading = false;
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.statusCode = action.payload?.status ?? 500;
 			})
 });
 
-const {reducer: photoReducer} = photoSlice;
+const {reducer: videoReducer} = videoSlice;
 
-const photoActions = {
-	addPhotoToRecipe
+const videoActions = {
+	addVideoToRecipe
 };
 
 export {
-	photoActions,
-	photoReducer
+	videoActions,
+	videoReducer
 };

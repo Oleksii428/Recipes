@@ -11,7 +11,8 @@ import {
 	subscribeReducer,
 	reportReducer,
 	blockReducer,
-	photoReducer
+	photoReducer,
+	videoReducer
 } from "./slices";
 
 const rootReducer = combineReducers({
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
 	reviewReducer,
 	reportReducer,
 	blockReducer,
-	photoReducer
+	photoReducer,
+	videoReducer
 });
 
 const setupStore = () => configureStore({

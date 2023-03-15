@@ -17,7 +17,16 @@ const recipeService = {
 	getMyRecipes: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyRecipes, {params: {page}}),
 	getMyBook: (page: string | null): AxiosRes<IMyRecipes> => axiosService.get(urls.getMyBook, {params: {page}}),
 	create: (newRecipeData: ICreateRecipe): AxiosRes<string> => axiosService.post(urls.recipes, newRecipeData),
-	addPhoto: (recipeId: string, photo: File): AxiosRes<void> => axiosService.patch(urls.addPhotoToRecipe(recipeId), {photo}, {headers: {"Content-Type": "multipart/form-data"}})
+	addPhoto: (recipeId: string, photo: File): AxiosRes<void> => axiosService.patch(
+		urls.addPhotoToRecipe(recipeId),
+		{photo},
+		{headers: {"Content-Type": "multipart/form-data"}}
+	),
+	addVideo: (recipeId: string, video: File): AxiosRes<void> => axiosService.patch(
+		urls.addVideoToRecipe(recipeId),
+		{video},
+		{headers: {"Content-Type": "multipart/form-data"}}
+	)
 };
 
 export {

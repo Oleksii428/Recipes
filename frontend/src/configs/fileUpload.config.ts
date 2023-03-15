@@ -4,13 +4,13 @@ const fileUploadConfig = {
 		"image/png",
 		"image/webp"
 	],
-	IMAGE_MAX_SIZE: 2 * 1024 * 1024,
+	IMAGE_MAX_SIZE: 5 * 1024 * 1024,
 
 	VIDEO_MIMETYPES: [
 		"video/mp4",
 		"video/webm"
 	],
-	VIDEO_MAX_SIZE: 35 * 1024 * 1024
+	VIDEO_MAX_SIZE: 60 * 1024 * 1024
 };
 
 export {fileUploadConfig};
