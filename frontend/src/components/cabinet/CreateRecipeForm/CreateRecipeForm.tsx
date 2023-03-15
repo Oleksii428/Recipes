@@ -9,7 +9,7 @@ import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {recipeActions} from "../../../redux";
+import {photoActions, recipeActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
 
@@ -21,11 +21,15 @@ const CreateRecipeForm: FC = () => {
 
 	const dispatch = useAppDispatch();
 	const {error, loading: recipeLoading} = useAppSelector(state => state.recipeReducer);
+	const {loading: photoLoading} = useAppSelector(state => state.photoReducer);
 
 	const onSubmit: SubmitHandler<ICreateRecipe> = async (newRecipeData) => {
-		const createdId = await dispatch(recipeActions.create(newRecipeData));
-		if (photos) {
-			console.log("push photo to", createdId);
+		const recipeAction = await dispatch(recipeActions.create(newRecipeData));
+		const recipeId: unknown = recipeAction.payload;
+		if (photos && typeof recipeId === "string") {
+			photos.forEach(photo => {
+				dispatch(photoActions.addPhotoToRecipe({recipeId, photo}));
+			});
 		}
 	};
 	const [photos, setPhotos] = useState<File[]>([]);
@@ -55,7 +59,7 @@ const CreateRecipeForm: FC = () => {
 			}
 			<Backdrop
 				sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
-				open={recipeLoading}
+				open={recipeLoading || photoLoading}
 			>
 				<CircularProgress color="inherit" />
 			</Backdrop>
