@@ -12,7 +12,8 @@ import {
 	reportReducer,
 	blockReducer,
 	photoReducer,
-	videoReducer
+	videoReducer,
+	stageReducer
 } from "./slices";
 
 const rootReducer = combineReducers({
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
 	reportReducer,
 	blockReducer,
 	photoReducer,
-	videoReducer
+	videoReducer,
+	stageReducer
 });
 
 const setupStore = () => configureStore({

@@ -26,7 +26,8 @@ const urls = {
 	getMyRecipes: "/authors/recipes",
 	getMyBook: "/authors/book",
 	addPhotoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addPhotos`,
-	addVideoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addVideo`
+	addVideoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addVideo`,
+	addStageToRecipe: (recipeId: string) => `/recipes/${recipeId}/addStage`
 };
 
 export {

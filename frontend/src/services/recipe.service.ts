@@ -1,6 +1,15 @@
 import {AxiosRes, axiosService} from "./axios.servise";
 
-import {IRecipesQuery, IRecipe, IRecipes, IReview, ICreateReview, IMyRecipes, ICreateRecipe} from "../interfaces";
+import {
+	IRecipesQuery,
+	IRecipe,
+	IRecipes,
+	IReview,
+	ICreateReview,
+	IMyRecipes,
+	ICreateRecipe,
+	ICreateStage
+} from "../interfaces";
 import {urls} from "../configs";
 
 const recipeService = {
@@ -25,6 +34,11 @@ const recipeService = {
 	addVideo: (recipeId: string, video: File): AxiosRes<void> => axiosService.patch(
 		urls.addVideoToRecipe(recipeId),
 		{video},
+		{headers: {"Content-Type": "multipart/form-data"}}
+	),
+	addStage: (recipeId: string, newStage: ICreateStage): AxiosRes<void> => axiosService.post(
+		urls.addStageToRecipe(recipeId),
+		newStage,
 		{headers: {"Content-Type": "multipart/form-data"}}
 	)
 };

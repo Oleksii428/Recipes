@@ -17,7 +17,7 @@ const initialState: IState = {
 };
 
 const addPhotoToRecipe = createAsyncThunk<void, { recipeId: string, photo: File }, { rejectValue: IErrorResponse }>(
-	"reportSlice/addPhotoToRecipe",
+	"photoSlice/addPhotoToRecipe",
 	async ({recipeId, photo}, {rejectWithValue}) => {
 		try {
 			const {data} = await recipeService.addPhoto(recipeId, photo);

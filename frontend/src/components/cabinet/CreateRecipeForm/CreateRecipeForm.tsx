@@ -9,13 +9,13 @@ import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {photoActions, recipeActions, videoActions} from "../../../redux";
+import {photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
 import {StageForm} from "../../StageForm/StageForm";
 
 const CreateRecipeForm: FC = () => {
-	const {handleSubmit, control, setValue, formState: {errors}} = useForm<ICreateRecipe>({
+	const {handleSubmit, control, setValue, reset, formState: {errors, isSubmitSuccessful}} = useForm<ICreateRecipe>({
 		resolver: joiResolver(createRecipeValidator),
 		mode: "onChange"
 	});
@@ -24,6 +24,7 @@ const CreateRecipeForm: FC = () => {
 	const {error, loading: recipeLoading, createdRecipeId} = useAppSelector(state => state.recipeReducer);
 	const {loading: photoLoading} = useAppSelector(state => state.photoReducer);
 	const {loading: videoLoading} = useAppSelector(state => state.videoReducer);
+	const {loading: stageLoading} = useAppSelector(state => state.stageReducer);
 
 	const onSubmit: SubmitHandler<ICreateRecipe> = (newRecipeData) => {
 		dispatch(recipeActions.create(newRecipeData));
@@ -49,10 +50,22 @@ const CreateRecipeForm: FC = () => {
 				dispatch(videoActions.addVideoToRecipe({recipeId: createdRecipeId, video}));
 				setVideo(undefined);
 			}
+			stages.forEach(stage => {
+				dispatch(stageActions.addStageToRecipe({recipeId: createdRecipeId, newStage: stage}));
+			});
 		}
-	}, [createdRecipeId, dispatch, photos, video]);
+	}, [createdRecipeId, dispatch, photos, stages, video]);
 
-	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !!videoError;
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset();
+			setPhotos([]);
+			setVideo(undefined);
+			setStages([]);
+		}
+	}, [isSubmitSuccessful, reset]);
+
+	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !!videoError || !stages.length;
 
 	return (
 		<Box
@@ -73,7 +86,7 @@ const CreateRecipeForm: FC = () => {
 			}
 			<Backdrop
 				sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
-				open={recipeLoading || photoLoading || videoLoading}
+				open={recipeLoading || photoLoading || videoLoading || stageLoading}
 			>
 				<CircularProgress color="inherit" />
 			</Backdrop>
@@ -83,7 +96,7 @@ const CreateRecipeForm: FC = () => {
 					sx={{width: "100%", boxSizing: "border-box"}}
 					severity="success"
 				>
-					Recipe has been created
+					Recipe has been created. Wait for moderation
 				</Alert>
 			}
 			<Controller

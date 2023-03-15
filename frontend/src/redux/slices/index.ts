@@ -11,3 +11,4 @@ export * from "./report.slice";
 export * from "./block.slice";
 export * from "./photo.slice";
 export * from "./video.slice";
+export * from "./stage.slice";

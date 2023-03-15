@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IErrorResponse} from "../../interfaces";
+import {ICreateStage, IErrorResponse} from "../../interfaces";
 import {recipeService} from "../../services";
 
 interface IState {
@@ -16,11 +16,11 @@ const initialState: IState = {
 	errorMessage: null
 };
 
-const addVideoToRecipe = createAsyncThunk<void, { recipeId: string, video: File }, { rejectValue: IErrorResponse }>(
-	"videoSlice/addVideoToRecipe",
-	async ({recipeId, video}, {rejectWithValue}) => {
+const addStageToRecipe = createAsyncThunk<void, { recipeId: string, newStage: ICreateStage }, { rejectValue: IErrorResponse }>(
+	"stageSlice/addStageToRecipe",
+	async ({recipeId, newStage}, {rejectWithValue}) => {
 		try {
-			const {data} = await recipeService.addVideo(recipeId, video);
+			const {data} = await recipeService.addStage(recipeId, newStage);
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
@@ -29,36 +29,36 @@ const addVideoToRecipe = createAsyncThunk<void, { recipeId: string, video: File 
 	}
 );
 
-const videoSlice = createSlice({
-	name: "videoSlice",
+const stageSlice = createSlice({
+	name: "stageSlice",
 	initialState,
 	reducers: {},
 	extraReducers: builder =>
 		builder
-			// addVideo
-			.addCase(addVideoToRecipe.fulfilled, state => {
+			// addStage
+			.addCase(addStageToRecipe.fulfilled, state => {
 				state.statusCode = 200;
 				state.loading = false;
 			})
-			.addCase(addVideoToRecipe.pending, state => {
+			.addCase(addStageToRecipe.pending, state => {
 				state.statusCode = null;
 				state.errorMessage = null;
 				state.loading = true;
 			})
-			.addCase(addVideoToRecipe.rejected, (state, action) => {
+			.addCase(addStageToRecipe.rejected, (state, action) => {
 				state.loading = false;
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.statusCode = action.payload?.status ?? 500;
 			})
 });
 
-const {reducer: videoReducer} = videoSlice;
+const {reducer: stageReducer} = stageSlice;
 
-const videoActions = {
-	addVideoToRecipe
+const stageActions = {
+	addStageToRecipe
 };
 
 export {
-	videoActions,
-	videoReducer
+	stageActions,
+	stageReducer
 };
