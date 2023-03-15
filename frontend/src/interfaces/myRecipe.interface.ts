@@ -25,5 +25,6 @@ export interface IMyRecipe {
 	bookCount: number,
 	inBook?: boolean,
 	reviewsCount: number,
+	isModerated: boolean,
 	createdAt: string
 }

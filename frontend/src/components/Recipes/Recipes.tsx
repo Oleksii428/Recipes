@@ -33,7 +33,7 @@ const Recipes: FC = () => {
 				{
 					!loading && !error &&
 					list.recipes.map(recipe =>
-						<Recipe recipe={recipe} key={recipe._id} />
+						<Recipe showModerateButton={false} recipe={recipe} key={recipe._id} />
 					)
 				}
 				{

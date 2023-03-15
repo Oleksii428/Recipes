@@ -40,7 +40,8 @@ const recipeService = {
 		urls.addStageToRecipe(recipeId),
 		newStage,
 		{headers: {"Content-Type": "multipart/form-data"}}
-	)
+	),
+	getNotModerated: (page: string | null): AxiosRes<IRecipes> => axiosService.get(urls.getNotModeratedRecipes, {params: {page}})
 };
 
 export {

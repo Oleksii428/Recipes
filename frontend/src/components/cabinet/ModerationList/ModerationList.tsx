@@ -4,17 +4,17 @@ import {Box, Grid} from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {recipeActions} from "../../../redux";
+import {Recipe} from "../../Recipe/Recipe";
 import {RecipeSkeleton} from "../../Skeletons";
 import {MyPagination} from "../../MyPagingation/MyPagination";
-import {MyRecipe} from "../MyRecipe/MyRecipe";
 
-const MyRecipes: FC = () => {
+const ModerationList: FC = () => {
 	const dispatch = useAppDispatch();
-	const {myRecipes, loading, error} = useAppSelector(state => state.recipeReducer);
+	const {list, loading, error} = useAppSelector(state => state.recipeReducer);
 	const [searchParams] = useSearchParams();
 
 	useEffect(() => {
-		dispatch(recipeActions.getMyRecipes(searchParams.get("page")));
+		dispatch(recipeActions.getNotModerated(searchParams.get("page")));
 	}, [dispatch, searchParams]);
 
 	return (
@@ -25,8 +25,8 @@ const MyRecipes: FC = () => {
 				}
 				{
 					!loading && !error &&
-					myRecipes.recipes.map(recipe =>
-						<MyRecipe showBook={false} recipe={recipe} key={recipe._id} />
+					list.recipes.map(recipe =>
+						<Recipe showModerateButton={true} recipe={recipe} key={recipe._id} />
 					)
 				}
 				{
@@ -36,9 +36,9 @@ const MyRecipes: FC = () => {
 					)
 				}
 			</Grid>
-			<MyPagination count={myRecipes.count} />
+			<MyPagination count={list.count} />
 		</Box>
 	);
 };
 
-export {MyRecipes};
+export {ModerationList};

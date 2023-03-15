@@ -21,6 +21,7 @@ const present = (recipe) => {
 		bookCount: recipe.bookCount,
 		inBook: recipe.inBook,
 		reviewsCount: recipe.reviewsCount,
+		isModerated: recipe.isModerated,
 		createdAt: recipe.createdAt,
 	};
 };

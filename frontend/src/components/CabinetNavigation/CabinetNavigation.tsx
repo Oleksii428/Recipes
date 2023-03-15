@@ -34,8 +34,11 @@ const CabinetNavigation: FC = () => {
 		{
 			link: "create-recipe",
 			label: "Create recipe"
+		},
+		{
+			link: "moderation",
+			label: "Moderation list"
 		}
-
 	];
 
 	useEffect(() => {

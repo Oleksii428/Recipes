@@ -26,7 +26,7 @@ const MyBook: FC = () => {
 				{
 					!loading && !error &&
 					myRecipes.recipes.map(recipe =>
-						<MyRecipe recipe={recipe} key={recipe._id} />
+						<MyRecipe showBook={true} recipe={recipe} key={recipe._id} />
 					)
 				}
 				{

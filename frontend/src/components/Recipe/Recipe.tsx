@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import {
-	Avatar,
+	Avatar, Box,
 	Button,
 	Card,
 	CardContent,
@@ -20,9 +20,10 @@ import {getPrettyDate} from "../../helpers";
 
 interface IProps {
 	recipe: IRecipe;
+	showModerateButton: boolean;
 }
 
-const Recipe: FC<IProps> = ({recipe}) => {
+const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 	const {
 		_id,
 		category,
@@ -95,13 +96,24 @@ const Recipe: FC<IProps> = ({recipe}) => {
 					</Typography>
 					<Typography variant="body2" color="text.secondary" sx={{display: "flex", alignItems: "center"}}>
 						<Rating name="read-only" value={rating} precision={0.1} readOnly />
-						{reviewsCount}
+						({rating}) reviews: {reviewsCount}
 					</Typography>
-					<Link href={`/recipes/${_id}`} color="inherit" underline="none">
-						<Button variant="contained">
-							Details
-						</Button>
-					</Link>
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "space-between"
+						}}
+					>
+						<Link href={`/recipes/${_id}`} color="inherit" underline="none">
+							<Button variant="contained">
+								Details
+							</Button>
+						</Link>
+						{
+							showModerateButton && <Button variant="contained">Moderate</Button>
+						}
+					</Box>
 				</CardContent>
 			</Card>
 		</Grid>

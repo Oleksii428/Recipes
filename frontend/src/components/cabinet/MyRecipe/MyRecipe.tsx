@@ -1,5 +1,6 @@
 import {FC, useState} from "react";
 import {
+	Alert,
 	Button,
 	Card,
 	CardContent,
@@ -19,9 +20,10 @@ import {BookToggle} from "../../BookToggle/BookToggle";
 
 interface IProps {
 	recipe: IMyRecipe;
+	showBook: boolean;
 }
 
-const MyRecipe: FC<IProps> = ({recipe}) => {
+const MyRecipe: FC<IProps> = ({recipe, showBook}) => {
 	const {
 		_id,
 		category,
@@ -34,6 +36,7 @@ const MyRecipe: FC<IProps> = ({recipe}) => {
 		title,
 		bookCount,
 		inBook,
+		isModerated,
 		servings
 	} = recipe;
 
@@ -46,7 +49,7 @@ const MyRecipe: FC<IProps> = ({recipe}) => {
 				<CardHeader
 					subheader={getPrettyDate(createdAt)}
 					action={
-						<BookToggle
+						showBook && <BookToggle
 							_id={_id}
 							bookCount={bookCountState}
 							inBook={bookState}
@@ -56,6 +59,9 @@ const MyRecipe: FC<IProps> = ({recipe}) => {
 					}
 				/>
 				<CardContent>
+					{
+						!isModerated && <Alert severity="warning">Wait for moderation</Alert>
+					}
 					<Typography variant="h5">
 						{title}
 						{gallery.length ?

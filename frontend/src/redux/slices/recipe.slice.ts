@@ -97,6 +97,19 @@ const create = createAsyncThunk<string, ICreateRecipe>(
 	}
 );
 
+const getNotModerated = createAsyncThunk<IRecipes, string | null>(
+	"recipeSlice/getNotModerated",
+	async (page, {rejectWithValue}) => {
+		try {
+			const {data} = await recipeService.getNotModerated(page);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError;
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
 const recipeSlice = createSlice({
 	name: "recipeSlice",
 	initialState,
@@ -176,6 +189,19 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+			// getNotModerated
+			.addCase(getNotModerated.fulfilled, (state, action) => {
+				state.list = action.payload;
+				state.loading = false;
+				state.error = false;
+			})
+			.addCase(getNotModerated.pending, state => {
+				state.loading = true;
+			})
+			.addCase(getNotModerated.rejected, state => {
+				state.loading = false;
+				state.error = true;
+			})
 });
 
 const {reducer: recipeReducer} = recipeSlice;
@@ -185,7 +211,8 @@ const recipeActions = {
 	getById,
 	getReviews,
 	getMyRecipes,
-	create
+	create,
+	getNotModerated
 };
 
 export {

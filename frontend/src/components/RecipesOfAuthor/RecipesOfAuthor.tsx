@@ -35,7 +35,7 @@ const RecipesOfAuthor: FC = () => {
 				}
 				{!loading && !error &&
 					recipesList.recipes.map(recipe =>
-						<Recipe recipe={recipe} key={recipe._id} />
+						<Recipe showModerateButton={false} recipe={recipe} key={recipe._id} />
 					)
 				}
 				{loading && !error &&

@@ -27,7 +27,8 @@ const urls = {
 	getMyBook: "/authors/book",
 	addPhotoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addPhotos`,
 	addVideoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addVideo`,
-	addStageToRecipe: (recipeId: string) => `/recipes/${recipeId}/addStage`
+	addStageToRecipe: (recipeId: string) => `/recipes/${recipeId}/addStage`,
+	getNotModeratedRecipes: "/recipes/notModerated"
 };
 
 export {
