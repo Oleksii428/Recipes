@@ -10,7 +10,7 @@ const fileUploadConfig = {
 		"video/mp4",
 		"video/webm"
 	],
-	VIDEO_MAX_SIZE: 600 * 1024 * 1024
+	VIDEO_MAX_SIZE: 35 * 1024 * 1024
 };
 
 export {fileUploadConfig};

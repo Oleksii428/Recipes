@@ -11,6 +11,7 @@ import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {recipeActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
+import {AddVideo} from "../AddVideo/AddVideo";
 
 const CreateRecipeForm: FC = () => {
 	const {handleSubmit, control, setValue, formState: {errors}} = useForm<ICreateRecipe>({
@@ -29,6 +30,11 @@ const CreateRecipeForm: FC = () => {
 	};
 	const [photos, setPhotos] = useState<File[]>([]);
 	const [photoErrors, setPhotoErrors] = useState<string[]>([]);
+
+	const [video, setVideo] = useState<File | undefined>(undefined);
+	const [videoError, setVideoError] = useState<string | undefined>(undefined);
+
+	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !!videoError;
 
 	return (
 		<Box
@@ -68,6 +74,7 @@ const CreateRecipeForm: FC = () => {
 				)}
 			/>
 			<AddPhoto photos={photos} setPhotos={setPhotos} errors={photoErrors} setErrors={setPhotoErrors} />
+			<AddVideo video={video} setVideo={setVideo} error={videoError} setError={setVideoError} />
 			<Controller
 				name="time"
 				control={control}
@@ -116,7 +123,7 @@ const CreateRecipeForm: FC = () => {
 			<KitchenForm setValue={setValue} errors={errors.kitchen} />
 			<IngredientsForm setValue={setValue} name="ingredients" errors={errors.ingredients} />
 			<Button
-				disabled={!!photoErrors.filter(error => error !== undefined).length}
+				disabled={isValid()}
 				type="submit"
 				variant="contained"
 			>Create</Button>

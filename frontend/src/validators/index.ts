@@ -1,6 +1,7 @@
 export * from "./auth.validator";
 export * from "./createReview.validator";
 export * from "./image.validator";
+export * from "./video.validator";
 export * from "./report.validator";
 export * from "./block.validator";
 export * from "./authorValidator";
