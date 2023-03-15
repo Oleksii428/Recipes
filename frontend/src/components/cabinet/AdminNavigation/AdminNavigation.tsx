@@ -9,7 +9,7 @@ interface ITab {
 	label: string
 }
 
-const CabinetNavigation: FC = () => {
+const AdminNavigation: FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [value, setValue] = useState(0);
@@ -71,4 +71,4 @@ const CabinetNavigation: FC = () => {
 	);
 };
 
-export {CabinetNavigation};
+export {AdminNavigation};

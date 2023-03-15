@@ -33,6 +33,5 @@ export * from "./CreateReviewForm/CreateReviewForm";
 export * from "./ReportButton/ReportButton";
 export * from "./BlockButton/BlockButton";
 export * from "./Skeletons";
-export * from "./CabinetNavigation/CabinetNavigation";
 export * from "./StageForm/StageForm";
 export * from "./cabinet";

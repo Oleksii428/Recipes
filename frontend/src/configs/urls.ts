@@ -28,7 +28,8 @@ const urls = {
 	addPhotoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addPhotos`,
 	addVideoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addVideo`,
 	addStageToRecipe: (recipeId: string) => `/recipes/${recipeId}/addStage`,
-	getNotModeratedRecipes: "/recipes/notModerated"
+	getNotModeratedRecipes: "/recipes/notModerated",
+	moderate: (recipeId: string) => `/recipes/${recipeId}/moderation`
 };
 
 export {

@@ -33,7 +33,7 @@ router.get(
 	"/notModerated",
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
-	recipeController.getByQuery
+	recipeController.getNotModerated
 );
 
 router.get(

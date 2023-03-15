@@ -24,7 +24,7 @@ const MyPagination: FC<IProps> = ({count}) => {
 
 	return (
 		<Pagination
-			sx={{display: "flex", justifyContent: "center"}}
+			sx={{display: "flex", p: "20px 0px", justifyContent: "center"}}
 			size="large"
 			page={page}
 			onChange={handleChange}

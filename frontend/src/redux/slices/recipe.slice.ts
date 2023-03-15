@@ -113,7 +113,11 @@ const getNotModerated = createAsyncThunk<IRecipes, string | null>(
 const recipeSlice = createSlice({
 	name: "recipeSlice",
 	initialState,
-	reducers: {},
+	reducers: {
+		sliceRecipe: (state, action) => {
+			state.list = action.payload;
+		}
+	},
 	extraReducers: builder =>
 		builder
 			// getByQuery
@@ -204,7 +208,7 @@ const recipeSlice = createSlice({
 			})
 });
 
-const {reducer: recipeReducer} = recipeSlice;
+const {reducer: recipeReducer, actions: {sliceRecipe}} = recipeSlice;
 
 const recipeActions = {
 	getByQuery,
@@ -212,7 +216,8 @@ const recipeActions = {
 	getReviews,
 	getMyRecipes,
 	create,
-	getNotModerated
+	getNotModerated,
+	sliceRecipe
 };
 
 export {

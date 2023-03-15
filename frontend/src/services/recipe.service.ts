@@ -41,7 +41,8 @@ const recipeService = {
 		newStage,
 		{headers: {"Content-Type": "multipart/form-data"}}
 	),
-	getNotModerated: (page: string | null): AxiosRes<IRecipes> => axiosService.get(urls.getNotModeratedRecipes, {params: {page}})
+	getNotModerated: (page: string | null): AxiosRes<IRecipes> => axiosService.get(urls.getNotModeratedRecipes, {params: {page}}),
+	moderate: (recipeId: string): AxiosRes<void> => axiosService.patch(urls.moderate(recipeId))
 };
 
 export {

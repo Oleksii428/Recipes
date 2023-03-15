@@ -1,5 +1,6 @@
 import {FC, useState} from "react";
 import {
+	Alert,
 	Avatar, Box,
 	Button,
 	Card,
@@ -9,7 +10,7 @@ import {
 	Grid,
 	Link,
 	Paper,
-	Rating,
+	Rating, Snackbar,
 	Typography
 } from "@mui/material";
 
@@ -17,6 +18,8 @@ import {IRecipe} from "../../interfaces";
 import {baseURL} from "../../configs";
 import {BookToggle} from "../BookToggle/BookToggle";
 import {getPrettyDate} from "../../helpers";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {moderationActions} from "../../redux";
 
 interface IProps {
 	recipe: IRecipe;
@@ -43,6 +46,14 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 
 	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
 	const [bookCountState, setBookCountState] = useState<number>(bookCount);
+
+	const dispatch = useAppDispatch();
+	const {statusCode, loading, errorMessage} = useAppSelector(state => state.moderationReducer);
+
+	const handleModerate = (): void => {
+		dispatch(moderationActions.moderateRecipe(_id));
+		// dispatch(recipeActions.sliceRecipe())
+	};
 
 	return (
 		<Grid item xl={3} lg={4} md={5}>
@@ -111,9 +122,20 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 							</Button>
 						</Link>
 						{
-							showModerateButton && <Button variant="contained">Moderate</Button>
+							showModerateButton &&
+							<Button disabled={loading} onClick={handleModerate} variant="contained">Moderate</Button>
 						}
 					</Box>
+					<Snackbar open={statusCode === 200} autoHideDuration={3000}>
+						<Alert severity="success" sx={{width: "100%"}}>
+							Recipe has been moderated
+						</Alert>
+					</Snackbar>
+					<Snackbar open={!!errorMessage} autoHideDuration={3000}>
+						<Alert severity="error" sx={{width: "100%"}}>
+							{errorMessage}
+						</Alert>
+					</Snackbar>
 				</CardContent>
 			</Card>
 		</Grid>
