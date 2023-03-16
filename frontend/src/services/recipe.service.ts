@@ -42,7 +42,8 @@ const recipeService = {
 		{headers: {"Content-Type": "multipart/form-data"}}
 	),
 	getNotModerated: (page: string | null): AxiosRes<IRecipes> => axiosService.get(urls.getNotModeratedRecipes, {params: {page}}),
-	moderate: (recipeId: string): AxiosRes<void> => axiosService.patch(urls.moderate(recipeId))
+	moderate: (recipeId: string): AxiosRes<void> => axiosService.patch(urls.moderate(recipeId)),
+	delete: (recipeId: string): AxiosRes<void> => axiosService.delete(urls.deleteRecipe(recipeId))
 };
 
 export {

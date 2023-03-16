@@ -12,6 +12,7 @@ interface IState {
 	reviews: IReview[] | null;
 	myRecipes: IMyRecipes;
 	createdRecipeId: string | null;
+	deleted: boolean;
 }
 
 const initialState: IState = {
@@ -29,7 +30,8 @@ const initialState: IState = {
 		page: "0",
 		count: 0
 	},
-	createdRecipeId: null
+	createdRecipeId: null,
+	deleted: false
 };
 
 const getByQuery = createAsyncThunk<IRecipes, IRecipesQuery | null>(
@@ -102,6 +104,19 @@ const getNotModerated = createAsyncThunk<IRecipes, string | null>(
 	async (page, {rejectWithValue}) => {
 		try {
 			const {data} = await recipeService.getNotModerated(page);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError;
+			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
+const deleteRecipe = createAsyncThunk<void, string>(
+	"recipeSlice/deleteRecipe",
+	async (recipeId, {rejectWithValue}) => {
+		try {
+			const {data} = await recipeService.delete(recipeId);
 			return data;
 		} catch (e) {
 			const err = e as AxiosError;
@@ -206,6 +221,19 @@ const recipeSlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+			// deleteRecipe
+			.addCase(deleteRecipe.fulfilled, state => {
+				state.deleted = true;
+				state.loading = false;
+			})
+			.addCase(deleteRecipe.pending, state => {
+				state.deleted = false;
+				state.loading = true;
+			})
+			.addCase(deleteRecipe.rejected, state => {
+				state.deleted = false;
+				state.loading = false;
+			})
 });
 
 const {reducer: recipeReducer, actions: {sliceRecipe}} = recipeSlice;
@@ -217,7 +245,8 @@ const recipeActions = {
 	getMyRecipes,
 	create,
 	getNotModerated,
-	sliceRecipe
+	sliceRecipe,
+	deleteRecipe
 };
 
 export {

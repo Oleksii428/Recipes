@@ -17,13 +17,14 @@ import {IMyRecipe} from "../../../interfaces";
 import {baseURL} from "../../../configs";
 import {getPrettyDate} from "../../../helpers";
 import {BookToggle} from "../../BookToggle/BookToggle";
+import {DeleteButton} from "../DeleteButton/DeleteButton";
 
 interface IProps {
 	recipe: IMyRecipe;
-	showBook: boolean;
+	showBook?: boolean;
 }
 
-const MyRecipe: FC<IProps> = ({recipe, showBook}) => {
+const MyRecipe: FC<IProps> = ({recipe, showBook = false}) => {
 	const {
 		_id,
 		category,
@@ -49,13 +50,14 @@ const MyRecipe: FC<IProps> = ({recipe, showBook}) => {
 				<CardHeader
 					subheader={getPrettyDate(createdAt)}
 					action={
-						showBook && <BookToggle
-							_id={_id}
-							bookCount={bookCountState}
-							inBook={bookState}
-							setBook={setBookState}
-							setBookCount={setBookCountState}
-						/>
+						showBook ? <BookToggle
+								_id={_id}
+								bookCount={bookCountState}
+								inBook={bookState}
+								setBook={setBookState}
+								setBookCount={setBookCountState}
+							/> :
+							<DeleteButton recipeId={_id} />
 					}
 				/>
 				<CardContent>

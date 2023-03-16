@@ -29,7 +29,8 @@ const urls = {
 	addVideoToRecipe: (recipeId: string) => `/recipes/${recipeId}/addVideo`,
 	addStageToRecipe: (recipeId: string) => `/recipes/${recipeId}/addStage`,
 	getNotModeratedRecipes: "/recipes/notModerated",
-	moderate: (recipeId: string) => `/recipes/${recipeId}/moderation`
+	moderate: (recipeId: string) => `/recipes/${recipeId}/moderation`,
+	deleteRecipe: (recipeId: string) => `/recipes/${recipeId}`
 };
 
 export {

@@ -12,3 +12,4 @@ export * from "./AddPhoto/AddPhoto";
 export * from "./ModerationList/ModerationList";
 export * from "./UserNavigation/UserNavigation";
 export * from "./AdminNavigation/AdminNavigation";
+export * from "./DeleteButton/DeleteButton";
