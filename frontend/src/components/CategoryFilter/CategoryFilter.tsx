@@ -30,6 +30,7 @@ const CategoryFilter: FC = () => {
 		<Autocomplete
 			blurOnSelect
 			loading={true}
+			noOptionsText="admin must create categories"
 			options={titles}
 			renderInput={(titles) => (
 				<TextField {...titles} label="Category" variant="standard" />

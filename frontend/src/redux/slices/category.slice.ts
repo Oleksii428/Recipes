@@ -1,19 +1,23 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {ICategory} from "../../interfaces";
+import {ICategory, ICreateCategory, IErrorResponse} from "../../interfaces";
 import {categoryService} from "../../services/category.service";
 
 interface IState {
 	categories: ICategory[];
 	loading: boolean;
 	error: boolean;
+	statusCode: number | undefined;
+	errorMessage: string | undefined;
 }
 
 const initialState: IState = {
 	categories: [],
 	loading: false,
-	error: false
+	error: false,
+	statusCode: undefined,
+	errorMessage: undefined
 };
 
 const getByParams = createAsyncThunk<ICategory[], void>(
@@ -25,6 +29,19 @@ const getByParams = createAsyncThunk<ICategory[], void>(
 		} catch (e) {
 			const err = e as AxiosError;
 			return rejectWithValue(err.response?.data);
+		}
+	}
+);
+
+const createCategory = createAsyncThunk<void, ICreateCategory, { rejectValue: IErrorResponse }>(
+	"categorySlice/createCategory",
+	async (newCategory, {rejectWithValue}) => {
+		try {
+			const {data} = await categoryService.create(newCategory);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
 		}
 	}
 );
@@ -47,12 +64,26 @@ const categorySlice = createSlice({
 				state.loading = false;
 				state.error = true;
 			})
+			// createCategory
+			.addCase(createCategory.fulfilled, state => {
+				state.loading = false;
+				state.statusCode = 201;
+			})
+			.addCase(createCategory.pending, state => {
+				state.loading = true;
+			})
+			.addCase(createCategory.rejected, (state, action) => {
+				state.loading = false;
+				state.errorMessage = action.payload?.message;
+				state.statusCode = action.payload?.status;
+			})
 });
 
 const {reducer: categoryReducer} = categorySlice;
 
 const categoryActions = {
-	getByParams
+	getByParams,
+	createCategory
 };
 
 export {

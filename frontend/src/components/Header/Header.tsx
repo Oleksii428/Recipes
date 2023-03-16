@@ -68,11 +68,15 @@ const Header: FC = () => {
 						}
 						<MenuItem>
 							{
-								loginAuthor?.avatar && !loading &&
+								loginAuthor && loginAuthor?.avatar && !loading &&
 								<Avatar component="a" href="/cabinet" src={`${baseURL}/${loginAuthor.avatar}`} />
 							}
 							{
-								!loginAuthor?.avatar && !loading &&
+								loginAuthor && !loginAuthor?.avatar && !loading &&
+								<Avatar component="a" href="/cabinet" src="static/images/cards/paella.jpg" />
+							}
+							{
+								!loginAuthor && !loading &&
 								<Avatar component="a" href="/login" src="static/images/cards/paella.jpg" />
 							}
 						</MenuItem>

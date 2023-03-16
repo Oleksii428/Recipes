@@ -4,7 +4,7 @@ const fileUploadConfig = {
 		"image/png",
 		"image/webp"
 	],
-	IMAGE_MAX_SIZE: 2 * 1024 * 1024,
+	IMAGE_MAX_SIZE: 10 * 1024 * 1024,
 
 	VIDEO_MIMETYPES: [
 		"video/mp4",

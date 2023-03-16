@@ -1,7 +1,7 @@
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import {FC, SyntheticEvent, useEffect, useState} from "react";
+import {FC, SyntheticEvent, useEffect, useMemo, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 
 interface ITab {
@@ -18,7 +18,7 @@ const AdminNavigation: FC = () => {
 		setValue(newValue);
 	};
 
-	const tabs: ITab[] = [
+	const tabs: ITab[] = useMemo(() => [
 		{
 			link: "profile",
 			label: "Profile"
@@ -38,8 +38,9 @@ const AdminNavigation: FC = () => {
 		{
 			link: "moderation",
 			label: "Moderation list"
-		}
-	];
+		},
+		{link: "create-category", label: "Create category"}
+	], []);
 
 	useEffect(() => {
 		const pathName: string[] = location.pathname.split("/");

@@ -6,6 +6,7 @@ import {joiResolver} from "@hookform/resolvers/joi";
 import {changeUserName, imageValidator} from "../../../validators";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {authActions, authorActions} from "../../../redux";
+import {getPrettyDate} from "../../../helpers";
 
 interface IChangeUserName {
 	userName?: string;
@@ -15,6 +16,7 @@ interface IChangeUserName {
 const ProfileSettings: FC = () => {
 	const dispatch = useAppDispatch();
 	const {loading, statusCode, errorMessage} = useAppSelector(state => state.authorReducer);
+	const {loginAuthor} = useAppSelector(state => state.authReducer);
 
 	const {handleSubmit, control, reset} = useForm<IChangeUserName>({
 		resolver: joiResolver(changeUserName),
@@ -76,6 +78,10 @@ const ProfileSettings: FC = () => {
 			>
 				<CircularProgress color="inherit" />
 			</Backdrop>
+			{
+				loginAuthor?.block &&
+				<Alert severity="warning">You are blocked until {getPrettyDate(loginAuthor.block)}</Alert>
+			}
 			<Controller
 				name={"avatar"}
 				control={control}

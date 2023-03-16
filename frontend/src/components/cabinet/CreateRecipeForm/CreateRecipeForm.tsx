@@ -9,7 +9,7 @@ import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
+import {authActions, photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
 import {StageForm} from "../../StageForm/StageForm";
@@ -40,6 +40,7 @@ const CreateRecipeForm: FC = () => {
 
 	useEffect(() => {
 		if (createdRecipeId) {
+			dispatch(authActions.isLogin);
 			if (photos.length) {
 				photos.forEach(photo => {
 					dispatch(photoActions.addPhotoToRecipe({recipeId: createdRecipeId, photo}));

@@ -6,3 +6,4 @@ export * from "./report.validator";
 export * from "./block.validator";
 export * from "./authorValidator";
 export * from "./createRecipe.validator";
+export * from "./createCategory.validator";
