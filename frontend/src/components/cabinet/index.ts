@@ -14,3 +14,4 @@ export * from "./UserNavigation/UserNavigation";
 export * from "./AdminNavigation/AdminNavigation";
 export * from "./DeleteButton/DeleteButton";
 export * from "./CreateCategory/CreateCategory";
+export * from "./CreateKitchen/CreateKitchen";

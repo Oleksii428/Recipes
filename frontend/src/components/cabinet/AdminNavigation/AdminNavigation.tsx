@@ -39,7 +39,8 @@ const AdminNavigation: FC = () => {
 			link: "moderation",
 			label: "Moderation list"
 		},
-		{link: "create-category", label: "Create category"}
+		{link: "create-category", label: "Create category"},
+		{link: "create-kitchen", label: "Create kitchen"}
 	], []);
 
 	useEffect(() => {

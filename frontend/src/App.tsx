@@ -15,7 +15,15 @@ import {
 import {useAppDispatch} from "./hooks";
 import {authActions} from "./redux";
 import {authService} from "./services";
-import {CreateCategory, CreateRecipe, ModerationList, MyBook, MyRecipes, ProfileSettings} from "./components";
+import {
+	CreateCategory,
+	CreateKitchen,
+	CreateRecipe,
+	ModerationList,
+	MyBook,
+	MyRecipes,
+	ProfileSettings
+} from "./components";
 
 const App: FC = () => {
 	const dispatch = useAppDispatch();
@@ -47,6 +55,7 @@ const App: FC = () => {
 					<Route path={"create-recipe"} element={<CreateRecipe />} />
 					<Route path={"moderation"} element={<ModerationList />} />
 					<Route path={"create-category"} element={<CreateCategory />} />
+					<Route path={"create-kitchen"} element={<CreateKitchen />} />
 				</Route>
 			</Route>
 		</Routes>

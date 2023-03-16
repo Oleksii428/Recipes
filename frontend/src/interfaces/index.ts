@@ -14,4 +14,5 @@ export * from "./myRecipes.interface";
 export * from "./createRecipe.interface";
 export * from "./createStage.interface";
 export * from "./createCategory.interface";
+export * from "./createKitchen.interface";
 export * from "./auth";

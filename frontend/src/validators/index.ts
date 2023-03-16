@@ -7,3 +7,4 @@ export * from "./block.validator";
 export * from "./authorValidator";
 export * from "./createRecipe.validator";
 export * from "./createCategory.validator";
+export * from "./createKitchen.validator";

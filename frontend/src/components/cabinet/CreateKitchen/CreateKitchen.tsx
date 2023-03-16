@@ -3,21 +3,21 @@ import {Alert, Box, Button, Snackbar, TextField} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
 
-import {createCategoryValidator} from "../../../validators";
-import {ICreateCategory} from "../../../interfaces";
+import {createKitchenValidator} from "../../../validators";
+import {ICreateKitchen} from "../../../interfaces";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {categoryActions} from "../../../redux";
+import {kitchenActions} from "../../../redux";
 
-const CreateCategory: FC = () => {
+const CreateKitchen: FC = () => {
 	const dispatch = useAppDispatch();
 	const {statusCode, errorMessage} = useAppSelector(state => state.kitchenReducer);
-	const {handleSubmit, control, reset, formState: {isValid}} = useForm<ICreateCategory>({
-		resolver: joiResolver(createCategoryValidator),
+	const {handleSubmit, control, reset, formState: {isValid}} = useForm<ICreateKitchen>({
+		resolver: joiResolver(createKitchenValidator),
 		mode: "onSubmit"
 	});
 
-	const onSubmit: SubmitHandler<ICreateCategory> = (newCategory) => {
-		dispatch(categoryActions.createCategory(newCategory));
+	const onSubmit: SubmitHandler<ICreateKitchen> = (newKitchen) => {
+		dispatch(kitchenActions.createKitchen(newKitchen));
 		reset();
 	};
 
@@ -44,7 +44,7 @@ const CreateCategory: FC = () => {
 						value={value || ""}
 						onChange={onChange}
 						margin="dense"
-						label="Category Title"
+						label="Kitchen Title"
 					/>
 				)}
 			/>
@@ -57,7 +57,7 @@ const CreateCategory: FC = () => {
 			</Button>
 			<Snackbar open={statusCode === 201} autoHideDuration={3000}>
 				<Alert severity="success" sx={{width: "100%"}}>
-					Category has been deleted
+					Kitchen has been deleted
 				</Alert>
 			</Snackbar>
 			<Snackbar open={!!errorMessage} autoHideDuration={3000}>
@@ -69,4 +69,4 @@ const CreateCategory: FC = () => {
 	);
 };
 
-export {CreateCategory};
+export {CreateKitchen};
