@@ -9,13 +9,13 @@ import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {authActions, photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
+import {photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
 import {StageForm} from "../../StageForm/StageForm";
 
 const CreateRecipeForm: FC = () => {
-	const {handleSubmit, control, setValue, reset, formState: {errors, isSubmitSuccessful}} = useForm<ICreateRecipe>({
+	const {handleSubmit, control, setValue, formState: {errors}} = useForm<ICreateRecipe>({
 		resolver: joiResolver(createRecipeValidator),
 		mode: "onChange"
 	});
@@ -40,7 +40,6 @@ const CreateRecipeForm: FC = () => {
 
 	useEffect(() => {
 		if (createdRecipeId) {
-			dispatch(authActions.isLogin);
 			if (photos.length) {
 				photos.forEach(photo => {
 					dispatch(photoActions.addPhotoToRecipe({recipeId: createdRecipeId, photo}));
@@ -56,15 +55,6 @@ const CreateRecipeForm: FC = () => {
 			});
 		}
 	}, [createdRecipeId, dispatch, photos, stages, video]);
-
-	useEffect(() => {
-		if (isSubmitSuccessful) {
-			reset();
-			setPhotos([]);
-			setVideo(undefined);
-			setStages([]);
-		}
-	}, [isSubmitSuccessful, reset]);
 
 	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !!videoError || !stages.length;
 

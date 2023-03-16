@@ -50,8 +50,7 @@ const AdminNavigation: FC = () => {
 				setValue(i);
 			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [location.pathname, tabs]);
 
 	return (
 		<Box

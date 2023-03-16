@@ -7,5 +7,6 @@ module.exports = {
 	mediaMiddleware: require("./media.middleware"),
 	recipeMiddleware: require("./recipe.middleware"),
 	reviewMiddleware: require("./review.middleware"),
-	stageMiddleware: require("./stage.middleware")
+	stageMiddleware: require("./stage.middleware"),
+	roleMiddleware: require("./role.middleware")
 };

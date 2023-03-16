@@ -5,5 +5,6 @@ module.exports = {
 	kitchenRouter: require("./kitchen.router"),
 	recipeRouter: require("./recipe.router"),
 	reviewRouter: require("./review.router"),
-	stageRouter: require("./stage.router")
+	stageRouter: require("./stage.router"),
+	roleRouter: require("./role.router"),
 };

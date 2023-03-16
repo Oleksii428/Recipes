@@ -12,7 +12,9 @@ const {
 	categoryRouter,
 	kitchenRouter,
 	recipeRouter,
-	stageRouter, reviewRouter,
+	stageRouter,
+	reviewRouter,
+	roleRouter
 } = require("./routers");
 const {cronRunner} = require("./crons");
 const swaggerJson = require("./swagger.json");
@@ -41,6 +43,7 @@ app.use("/kitchens", kitchenRouter);
 app.use("/stages", stageRouter);
 app.use("/recipes", recipeRouter);
 app.use("/reviews", reviewRouter);
+app.use("/role", roleRouter);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJson));
 
 app.use((err, req, res, next) => {

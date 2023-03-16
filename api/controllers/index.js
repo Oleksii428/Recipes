@@ -5,5 +5,6 @@ module.exports = {
 	reviewController: require("./review.controller"),
 	kitchenController: require("./kitchen.controller"),
 	recipeController: require("./recipe.controller"),
-	stageController: require("./stage.controller")
+	stageController: require("./stage.controller"),
+	roleController: require("./role.controller")
 };

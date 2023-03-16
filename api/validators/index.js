@@ -6,5 +6,6 @@ module.exports = {
 	kitchenValidator: require("./kitchen.validator"),
 	recipeValidator: require("./recipe.validator"),
 	reviewValidator: require("./review.validator"),
-	stageValidator: require("./stage.validator")
+	stageValidator: require("./stage.validator"),
+	roleValidator: require("./role.validator")
 };
