@@ -5,6 +5,7 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "aws-sdk": "^2.1338.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "cron": "^2.1.0",

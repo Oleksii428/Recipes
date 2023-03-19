@@ -1,5 +1,3 @@
-const path = require("node:path");
-
 const {
 	recipeRepository,
 	authorRepository,
@@ -13,9 +11,8 @@ const {
 	NEW_SUBSCRIBED_RECIPE,
 	UPDATE_RECIPE_MODERATION
 } = require("../enums/email.actions.enum");
-const {emailService} = require("../services");
+const {emailService, s3Service} = require("../services");
 const {config} = require("../configs");
-const {fileHelper} = require("../helpers");
 const {uploadFileTypes} = require("../enums");
 const {recipePresenter, reviewPresenter} = require("../presenters");
 
@@ -27,11 +24,8 @@ module.exports = {
 			const imagesToUpload = Object.values(files);
 
 			for (const photo of imagesToUpload) {
-				const fileName = fileHelper.buildFileName(photo.name, uploadFileTypes.RECIPES, recipe.id);
-				const [newMedia] = await Promise.all([
-					mediaRepository.create({"path": fileName}),
-					photo.mv(path.join(process.cwd(), "uploads", fileName))
-				]);
+				const uploadedData = await s3Service.uploadPublicFile(photo, uploadFileTypes.RECIPES, recipe.id);
+				const newMedia = await mediaRepository.create({path: uploadedData.Location});
 				await galleryRepository.create(recipe._id, newMedia._id);
 			}
 
@@ -45,17 +39,12 @@ module.exports = {
 			const recipe = req.recipe;
 			const newReview = await reviewRepository.create(req.review);
 
-			await Promise.all([
-				recipeRepository.setRating(recipe._id)
-			]);
-
+			await recipeRepository.setRating(recipe._id);
 			if (req.photo) {
-				const fileName = fileHelper.buildFileName(req.photo.name, uploadFileTypes.REVIEWS, newReview.id);
-				const newMedia = await mediaRepository.create({path: fileName});
-				await Promise.all([
-					req.photo.mv(path.join(process.cwd(), "uploads", fileName)),
-					reviewRepository.addPhoto(newReview._id, newMedia._id)
-				]);
+				const uploadedData = await s3Service.uploadPublicFile(req.photo, uploadFileTypes.REVIEWS, recipe.id);
+
+				const newMedia = await mediaRepository.create({path: uploadedData.Location});
+				await reviewRepository.addPhoto(newReview._id, newMedia._id);
 			}
 
 			res.sendStatus(201);
@@ -67,14 +56,15 @@ module.exports = {
 		try {
 			const {recipe, video} = req;
 
-			const fileName = fileHelper.buildFileName(video.name, uploadFileTypes.RECIPES, recipe.id);
-			const [newMedia] = await Promise.all([
-				mediaRepository.create({"path": fileName}),
-				video.mv(path.join(process.cwd(), "uploads", fileName))
-			]);
-			await galleryRepository.create(recipe._id, newMedia._id);
+			s3Service.uploadPublicFile(video, uploadFileTypes.RECIPES, recipe.id)
+				.then(uploadedData => {
+					mediaRepository.create({"path": uploadedData.Location})
+						.then(newMedia => {
+							galleryRepository.create(recipe._id, newMedia._id);
+						});
+				});
 
-			res.json("ok");
+			res.json("video will be post soon");
 		} catch (e) {
 			next(e);
 		}
