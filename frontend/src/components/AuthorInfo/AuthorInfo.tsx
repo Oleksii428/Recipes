@@ -2,7 +2,6 @@ import {FC, useState} from "react";
 import {Alert, Avatar, Badge, Box, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
-import {baseURL} from "../../configs";
 import {LikeToggle} from "../LikeToggle/LikeToggle";
 import {SubscribeToggle} from "../SubscribeToggle/SubscribeToggle";
 import {ReportButton} from "../ReportButton/ReportButton";
@@ -48,7 +47,7 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 			</Alert>}
 			<Box sx={{display: "flex", columnGap: 2, alignItems: "center", padding: 1}}>
 				<Badge badgeContent={role} invisible={role === "user"} color="primary" showZero>
-					<Avatar sx={{width: 112, height: 112}} srcSet={avatar ? baseURL + avatar : "/broken-image.jpg"} />
+					<Avatar sx={{width: 112, height: 112}} srcSet={avatar ? avatar : "/broken-image.jpg"} />
 				</Badge>
 				<Box>
 					<Typography variant="h4">{userName}</Typography>

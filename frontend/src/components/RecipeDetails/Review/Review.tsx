@@ -3,7 +3,6 @@ import {Avatar, Backdrop, Box, CircularProgress, IconButton, Rating, Typography}
 import {Delete} from "@mui/icons-material";
 
 import {IReview} from "../../../interfaces";
-import {baseURL} from "../../../configs";
 import {getPrettyDate} from "../../../helpers";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {reviewActions} from "../../../redux";
@@ -42,7 +41,7 @@ const Review: FC<IProps> = ({review, setDeletedReview}) => {
 			</Backdrop>
 			<Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between", columnGap: 2}}>
 				<Box sx={{display: "flex", alignItems: "center", columnGap: 2}}>
-					<Avatar src={owner.avatar ? baseURL + owner.avatar : "/broken-image.jpg"} />
+					<Avatar src={owner.avatar ? owner.avatar : "/broken-image.jpg"} />
 					<Typography variant="h6">{owner.userName}</Typography>
 				</Box>
 				{
@@ -68,7 +67,7 @@ const Review: FC<IProps> = ({review, setDeletedReview}) => {
 					>
 						<Box
 							component="img"
-							src={`${baseURL}/${photo}`}
+							src={photo}
 							sx={{
 								position: "absolute",
 								width: "100%",
