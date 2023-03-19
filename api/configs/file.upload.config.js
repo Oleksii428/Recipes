@@ -11,5 +11,5 @@ module.exports = {
 		"video/mp4",
 		"video/webm"
 	],
-	VIDEO_MAX_SIZE: 60 * 1024 * 1024
+	VIDEO_MAX_SIZE: 40 * 1024 * 1024
 };

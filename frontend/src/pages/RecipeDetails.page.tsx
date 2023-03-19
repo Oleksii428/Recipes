@@ -56,7 +56,7 @@ const RecipeDetailsPage: FC = () => {
 						time={recipe.time}
 					/>
 					<Ingredients ingredients={recipe.ingredients} />
-					<Stages stages={recipe.stages} />
+					<Stages stages={[...recipe.stages].sort((a, b) => a.number - b.number)} />
 					<CreateReviewForm _id={recipe._id} />
 					<Box ref={ref}>
 						{inView && <Reviews recipeId={recipe._id} reviewsCount={recipe.reviewsCount} />}

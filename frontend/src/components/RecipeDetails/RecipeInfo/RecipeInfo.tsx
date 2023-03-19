@@ -36,7 +36,7 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
 	return (
-		<Box>
+		<Box sx={{maxWidth: "500px"}}>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Typography variant="h2" fontWeight={600}>
 					{title}

@@ -1,5 +1,5 @@
 import {FC, useEffect} from "react";
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 
 import {MainLayout} from "./layouts";
 import {
@@ -38,7 +38,6 @@ const App: FC = () => {
 	return (
 		<Routes>
 			<Route path={""} element={<MainLayout />}>
-				{/*<Route index element={<Navigate to={"recipes"} />} />*/}
 				<Route path={"recipes"} element={<RecipesPage />} />
 				<Route path={"recipes/:id"} element={<RecipeDetailsPage />} />
 				<Route path={"authors"} element={<AuthorsPage />} />
@@ -48,7 +47,6 @@ const App: FC = () => {
 				<Route path={"forgot-password"} element={<ForgotPasswordPage />} />
 				<Route path={"restore-password"} element={<RestorePasswordPage />} />
 				<Route path={"cabinet"} element={<CabinetPage />}>
-					<Route index element={<Navigate to={"profile"} />} />
 					<Route path={"profile"} element={<ProfileSettings />} />
 					<Route path={"my-recipes"} element={<MyRecipes />} />
 					<Route path={"my-book"} element={<MyBook />} />

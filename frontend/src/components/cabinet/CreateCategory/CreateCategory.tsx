@@ -57,7 +57,7 @@ const CreateCategory: FC = () => {
 			</Button>
 			<Snackbar open={statusCode === 201} autoHideDuration={3000}>
 				<Alert severity="success" sx={{width: "100%"}}>
-					Category has been deleted
+					Category has been created
 				</Alert>
 			</Snackbar>
 			<Snackbar open={!!errorMessage} autoHideDuration={3000}>
