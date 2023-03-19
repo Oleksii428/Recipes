@@ -57,7 +57,7 @@ const CreateKitchen: FC = () => {
 			</Button>
 			<Snackbar open={statusCode === 201} autoHideDuration={3000}>
 				<Alert severity="success" sx={{width: "100%"}}>
-					Kitchen has been deleted
+					Kitchen has been created
 				</Alert>
 			</Snackbar>
 			<Snackbar open={!!errorMessage} autoHideDuration={3000}>

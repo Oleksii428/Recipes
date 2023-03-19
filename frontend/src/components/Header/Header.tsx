@@ -62,7 +62,7 @@ const Header: FC = () => {
 						}
 						{
 							loginAuthor && !loading &&
-							<MenuItem>
+							<MenuItem component="a" href="/cabinet">
 								<Typography textAlign="center">{loginAuthor.userName}</Typography>
 							</MenuItem>
 						}

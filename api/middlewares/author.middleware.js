@@ -73,7 +73,7 @@ module.exports = {
 				const authorByEmail = await authorRepository.getOneByParamsWithPopulate({email});
 
 				if (!authorByEmail) {
-					throw new ApiError(`Author width email ${email} not found`, 400);
+					throw new ApiError(`Author with email ${email} not found`, 400);
 				}
 				req.author = authorByEmail;
 				next();
@@ -81,7 +81,7 @@ module.exports = {
 				const authorByUserName = await authorRepository.getOneByParamsWithPopulate({userName});
 
 				if (!authorByUserName) {
-					throw new ApiError(`Author width userName ${userName} not found`, 400);
+					throw new ApiError(`Author with userName ${userName} not found`, 400);
 				}
 				req.author = authorByUserName;
 				next();
@@ -97,7 +97,7 @@ module.exports = {
 			const author = await authorRepository.getOneByParams({[dbField]: fieldToSearch});
 
 			if (!author) {
-				throw new ApiError(`author width ${dbField} ${fieldToSearch} not found`, 400);
+				throw new ApiError(`author with ${dbField} ${fieldToSearch} not found`, 400);
 			}
 
 			req.author = author;

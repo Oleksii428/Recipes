@@ -5,7 +5,7 @@ const swaggerUI = require("swagger-ui-express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const {MONGO_URL, PORT} = require("./configs/config");
+const {MONGO_URL, PORT, HOST} = require("./configs/config");
 const {
 	authorRouter,
 	authRouter,
@@ -53,10 +53,29 @@ app.use((err, req, res, next) => {
 	});
 });
 
-app.listen(PORT, async () => {
-	mongoose.set("strictQuery", false);
-	await mongoose.connect(MONGO_URL);
-	console.log(`Server is listening port: ${PORT}`);
-	cronRunner();
-	console.log("Started cron");
-});
+const start = async () => {
+	try {
+		let dbConnected = false;
+
+		while (!dbConnected) {
+			try {
+				console.log("Connecting to database...");
+				mongoose.set("strictQuery", false);
+				await mongoose.connect(MONGO_URL);
+				dbConnected = true;
+				console.log(`Server is listening port: ${PORT}`);
+				cronRunner();
+				console.log("Started cron");
+			} catch (e) {
+				console.log("Database unavailable, wait 3 sec");
+				await new Promise(resolve => setTimeout(resolve, 3000));
+			}
+		}
+
+		await app.listen(+PORT, HOST);
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+start();

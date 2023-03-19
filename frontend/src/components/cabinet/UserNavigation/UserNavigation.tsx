@@ -12,7 +12,7 @@ interface ITab {
 const UserNavigation: FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const [value, setValue] = useState(0);
+	const [value, setValue] = useState<number | boolean>(false);
 
 	const handleChange = (event: SyntheticEvent, newValue: number) => {
 		setValue(newValue);
