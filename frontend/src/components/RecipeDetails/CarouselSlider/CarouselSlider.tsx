@@ -3,8 +3,6 @@ import Carousel from "react-material-ui-carousel";
 import {Box, Paper} from "@mui/material";
 import {ArrowForwardIosRounded, ArrowBackIosRounded} from "@mui/icons-material";
 
-import {baseURL} from "../../../configs";
-
 interface IProps {
 	gallery: [
 		{
@@ -53,7 +51,7 @@ const CarouselSlider: FC<IProps> = ({gallery}) => {
 						{isVideo ? (
 							<Box
 								component="video"
-								src={`${baseURL}${path}`}
+								src={path}
 								controls={true}
 								loop={true}
 								muted={true}
@@ -69,7 +67,7 @@ const CarouselSlider: FC<IProps> = ({gallery}) => {
 						) : (
 							<Box
 								component="img"
-								src={`${baseURL}${path}`}
+								src={path}
 								sx={{
 									width: "100%",
 									height: "100%",

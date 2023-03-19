@@ -1,6 +1,5 @@
 import {FC} from "react";
 import {Box, Typography} from "@mui/material";
-import {baseURL} from "../../../configs";
 
 interface IStage {
 	stage: {
@@ -28,7 +27,7 @@ const Stage: FC<IStage> = ({stage}) => {
 				}}>
 					<Box
 						component="img"
-						src={`${baseURL}/${photo}`}
+						src={photo}
 						sx={{
 							position: "absolute",
 							width: "100%",

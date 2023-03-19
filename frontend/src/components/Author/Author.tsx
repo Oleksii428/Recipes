@@ -2,7 +2,6 @@ import {FC, useState} from "react";
 import {Avatar, Box, Card, CardContent, CardHeader, Grid, Link, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
-import {baseURL} from "../../configs";
 import {LikeToggle} from "../LikeToggle/LikeToggle";
 
 interface IProps {
@@ -48,7 +47,7 @@ const Author: FC<IProps> = ({author}) => {
 		<Grid item xs={12} sm={6} md={4} lg={3}>
 			<Card>
 				<CardHeader
-					avatar={<Avatar sx={{width: 56, height: 56}} srcSet={avatar ? baseURL + avatar : "/broken-image.jpg"} />}
+					avatar={<Avatar sx={{width: 56, height: 56}} srcSet={avatar ? avatar : "/broken-image.jpg"} />}
 					title={
 						<Link
 							href={`authors/${_id}`}

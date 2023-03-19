@@ -15,7 +15,7 @@ import {Logout} from "@mui/icons-material";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {authActions} from "../../redux";
-import {baseURL} from "../../configs";
+
 
 const Header: FC = () => {
 	const {loginAuthor, loading, tokenData} = useAppSelector(state => state.authReducer);
@@ -69,7 +69,7 @@ const Header: FC = () => {
 						<MenuItem>
 							{
 								loginAuthor && loginAuthor?.avatar && !loading &&
-								<Avatar component="a" href="/cabinet" src={`${baseURL}/${loginAuthor.avatar}`} />
+								<Avatar component="a" href="/cabinet" src={loginAuthor.avatar} />
 							}
 							{
 								loginAuthor && !loginAuthor?.avatar && !loading &&

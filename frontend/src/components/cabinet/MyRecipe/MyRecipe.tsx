@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 
 import {IMyRecipe} from "../../../interfaces";
-import {baseURL} from "../../../configs";
 import {getPrettyDate} from "../../../helpers";
 import {BookToggle} from "../../BookToggle/BookToggle";
 import {DeleteButton} from "../DeleteButton/DeleteButton";
@@ -70,7 +69,7 @@ const MyRecipe: FC<IProps> = ({recipe, showBook = false}) => {
 							<CardMedia
 								component="img"
 								height="200"
-								image={gallery.length ? baseURL + gallery[0].path : "static/images/cards/paella.jpg"}
+								image={gallery.length ? gallery[0].path : "static/images/cards/paella.jpg"}
 								alt="preview"
 								sx={{borderRadius: 5}}
 							/> :
