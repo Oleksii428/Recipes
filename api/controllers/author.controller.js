@@ -1,5 +1,3 @@
-const path = require("node:path");
-
 const {
 	authorRepository,
 	recipeRepository,
@@ -9,9 +7,9 @@ const {
 	subscriberRepository,
 	bookRepository
 } = require("../repositories");
-const {authService, emailService} = require("../services");
+const {authService, emailService, s3Service} = require("../services");
 const {emailActions, uploadFileTypes} = require("../enums");
-const {dateHelper, fileHelper} = require("../helpers");
+const {dateHelper} = require("../helpers");
 const {config} = require("../configs");
 const {recipePresenter, authorPresenter, subscriberPresenter} = require("../presenters");
 
@@ -249,12 +247,9 @@ module.exports = {
 			const {avatar} = req.files;
 			const {author} = req.tokenInfo;
 
-			const fileName = fileHelper.buildFileName(avatar.name, uploadFileTypes.AUTHORS, author.id);
+			const uploadedData = await s3Service.uploadPublicFile(avatar, uploadFileTypes.AUTHORS, author.id);
 
-			const [newMedia] = await Promise.all([
-				mediaRepository.create({path: fileName}),
-				avatar.mv(path.join(process.cwd(), "uploads", fileName))
-			]);
+			const newMedia = await mediaRepository.create({path: uploadedData.Location});
 			await authorRepository.setAvatar(author._id, newMedia._id);
 
 			res.status(201).json("uploaded");

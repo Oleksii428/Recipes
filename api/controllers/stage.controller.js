@@ -1,8 +1,6 @@
-const path = require("node:path");
-
 const {stageRepository, mediaRepository} = require("../repositories");
-const {fileHelper} = require("../helpers");
 const {uploadFileTypes} = require("../enums");
+const {s3Service} = require("../services");
 
 module.exports = {
 	create: async (req, res, next) => {
@@ -12,15 +10,9 @@ module.exports = {
 			const newStage = await stageRepository.create(stage);
 
 			if (files) {
-				const {image} = files;
+				const uploadedData = await s3Service.uploadPublicFile(files.image, uploadFileTypes.STAGES, newStage.id);
 
-				const fileName = fileHelper.buildFileName(image.name, uploadFileTypes.STAGES, newStage.id);
-
-				const [newMedia] = await Promise.all([
-					mediaRepository.create({path: fileName}),
-					image.mv(path.join(process.cwd(), "uploads", fileName))
-				]);
-
+				const newMedia = await mediaRepository.create({"path": uploadedData.Location});
 				await stageRepository.addPhoto(newStage._id, newMedia._id);
 			}
 
@@ -45,15 +37,9 @@ module.exports = {
 			await stageRepository.update(stage._id, updateStage);
 
 			if (files) {
-				const {image} = files;
+				const uploadedData = await s3Service.uploadPublicFile(files.image, uploadFileTypes.STAGES, stage.id);
 
-				const fileName = fileHelper.buildFileName(image.name, uploadFileTypes.STAGES, stage._id);
-
-				const [newMedia] = await Promise.all([
-					mediaRepository.create({path: fileName}),
-					image.mv(path.join(process.cwd(), "uploads", fileName))
-				]);
-
+				const newMedia = await mediaRepository.create({"path": uploadedData.Location});
 				await stageRepository.addPhoto(stage._id, newMedia._id);
 			}
 

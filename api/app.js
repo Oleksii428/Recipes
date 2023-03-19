@@ -18,7 +18,6 @@ const {
 } = require("./routers");
 const {cronRunner} = require("./crons");
 const swaggerJson = require("./swagger.json");
-const path = require("path");
 
 const app = express();
 app.use(cors({
@@ -29,7 +28,6 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(express.static(path.join(process.cwd(), "uploads")));
 app.use(fileUpload());
 
 app.get("/", (req, res) => {
