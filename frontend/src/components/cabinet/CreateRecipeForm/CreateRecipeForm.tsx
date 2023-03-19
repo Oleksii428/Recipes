@@ -33,8 +33,8 @@ const CreateRecipeForm: FC = () => {
 	const [photos, setPhotos] = useState<File[]>([]);
 	const [photoErrors, setPhotoErrors] = useState<string[]>([]);
 
-	// const [video, setVideo] = useState<File | undefined>(undefined);
-	// const [videoError, setVideoError] = useState<string | undefined>(undefined);
+	const [video, setVideo] = useState<File | undefined>(undefined);
+	const [videoError, setVideoError] = useState<string | undefined>(undefined);
 
 	const [stages, setStages] = useState<ICreateStage[]>([]);
 
@@ -47,12 +47,12 @@ const CreateRecipeForm: FC = () => {
 		}
 	}, [createdRecipeId, dispatch, photos]);
 
-	// useEffect(() => {
-	// 	if (createdRecipeId && video) {
-	// 		dispatch(videoActions.addVideoToRecipe({recipeId: createdRecipeId, video}));
-	// 		setVideo(undefined);
-	// 	}
-	// }, [createdRecipeId, dispatch, video]);
+	useEffect(() => {
+		if (createdRecipeId && video) {
+			dispatch(videoActions.addVideoToRecipe({recipeId: createdRecipeId, video}));
+			setVideo(undefined);
+		}
+	}, [createdRecipeId, dispatch, video]);
 
 	useEffect(() => {
 		if (createdRecipeId && stages.length) {
@@ -112,7 +112,7 @@ const CreateRecipeForm: FC = () => {
 				)}
 			/>
 			<AddPhoto photos={photos} setPhotos={setPhotos} errors={photoErrors} setErrors={setPhotoErrors} />
-			{/*<AddVideo video={video} setVideo={setVideo} error={videoError} setError={setVideoError} />*/}
+			<AddVideo video={video} setVideo={setVideo} error={videoError} setError={setVideoError} />
 			<Controller
 				name="time"
 				control={control}

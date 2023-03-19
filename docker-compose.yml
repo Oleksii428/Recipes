@@ -11,7 +11,7 @@ services:
       - /app/node_modules
     restart: on-failure
     command: >
-      sh -c "node app"
+      sh -c "npm run dev"
 
   db:
     image: mongo
