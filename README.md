@@ -24,27 +24,21 @@ Web-site when people can view recipes and create their own.
 
 `git clone https://github.com/OleksiiObabko/Recipes.git`
 
-### In first terminal:
-
 ```
-cd .\frontend
-npm install	
+cd .\frontend\
+npm install
+npm run build
 ```
 
-### In second terminal
-
-`cd .\api`
-
-`npm install`
-
-### add .env file in api folder (optional)
+Add .env file in api folder
 
 Should look like this
 
 ```dotenv
 PORT=5000
+HOST=0.0.0.0
 
-MONGO_URL=yourMongoDbUrl
+MONGO_URL=mongodb://yourUserName:yourPassword@db:27017/nameOfYourDatabase
 
 MONGO_INITDB_DATABASE=nameOfYourDatabase
 MONGO_INITDB_ROOT_USERNAME=yourUserName
@@ -71,33 +65,21 @@ S3_SECRET_KEY=yourS3BucketSecretKey
 
 ## Usage
 
-### Backend
+Create two roles:
 
-Select backend directory `cd .\api`
-
-Run `node app`
-
-Before use backend create two roles:
-
-- make first `post` request to `http://localhost:5000/role` with body below
+- make first `post` request to `localhost:80/api/role` with body below
   ```json
   {
     "title": "user"
   }
   ```
-- make second `post` request to `http://localhost:5000/role` with body below
+- make second `post` request to `localhost:80/api/role` with body below
   ```json
   {
     "title": "admin"
   }
   ```
 
-Now backend is ready to use
+Run `docker compose up`
 
-### Frontend
-
-Select frontend directory `cd .\frontend`
-
-Run `npm run start`
-
-Open [http://localhost:3000](http://localhost:3000) in browser
+Open [http://localhost:80](http://localhost:80) in browser
