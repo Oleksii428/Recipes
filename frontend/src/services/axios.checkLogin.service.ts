@@ -25,7 +25,7 @@ checkLoginService.interceptors.response.use((config) => {
 		isRefreshing = true;
 
 		try {
-			const {data: newTokenData} = await authService.refresh(refreshToken);
+			const {data: newTokenData} = await authService.refreshLogin(refreshToken);
 			authService.setTokenData(newTokenData);
 		} catch (e) {
 			authService.deleteTokenData();
