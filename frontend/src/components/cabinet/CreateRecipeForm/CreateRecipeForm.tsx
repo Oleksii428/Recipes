@@ -9,7 +9,7 @@ import {IngredientsForm} from "../IngredientsForm/IngredientsForm";
 import {CategoryForm} from "../CategoryForm/CategoryForm";
 import {KitchenForm} from "../KitchenForm/KitchenForm";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
+import {authActions, photoActions, recipeActions, stageActions, videoActions} from "../../../redux";
 import {AddPhoto} from "../AddPhoto/AddPhoto";
 import {AddVideo} from "../AddVideo/AddVideo";
 import {StageForm} from "../../StageForm/StageForm";
@@ -27,6 +27,7 @@ const CreateRecipeForm: FC = () => {
 	const {loading: stageLoading} = useAppSelector(state => state.stageReducer);
 
 	const onSubmit: SubmitHandler<ICreateRecipe> = (newRecipeData) => {
+		dispatch(authActions.isLogin);
 		dispatch(recipeActions.create(newRecipeData));
 	};
 

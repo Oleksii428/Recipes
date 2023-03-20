@@ -161,7 +161,7 @@ const StageForm: FC<IProps> = ({stages, setStages}) => {
 			<Button
 				onClick={addStage}
 				variant="outlined"
-				disabled={currentDescription.length < 5 || !!photoError}
+				disabled={(currentDescription.length < 5 || currentDescription.length > 1000) || !!photoError}
 			>
 				Add stage
 			</Button>

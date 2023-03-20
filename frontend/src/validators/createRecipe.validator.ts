@@ -8,7 +8,7 @@ const createRecipeValidator = Joi
 			.string()
 			.trim()
 			.min(2)
-			.max(20)
+			.max(40)
 			.required()
 			.lowercase()
 			.messages({
@@ -48,7 +48,7 @@ const createRecipeValidator = Joi
 		description: Joi
 			.string()
 			.min(10)
-			.max(300)
+			.max(1000)
 			.required()
 			.messages({
 				"string.base": "Description must be a string",
@@ -82,7 +82,7 @@ const createRecipeValidator = Joi
 			.items(Joi
 				.string()
 				.min(3)
-				.max(20))
+				.max(40))
 			.min(1)
 			.required()
 			.messages({

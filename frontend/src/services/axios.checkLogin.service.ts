@@ -2,7 +2,6 @@ import axios from "axios";
 
 import {baseURL} from "../configs";
 import {authService} from "./auth.service";
-import {axiosService} from "./axios.servise";
 
 const checkLoginService = axios.create({baseURL});
 
@@ -33,7 +32,7 @@ checkLoginService.interceptors.response.use((config) => {
 		}
 
 		isRefreshing = false;
-		return axiosService(error.config);
+		return checkLoginService(error.config);
 	}
 
 	return Promise.reject(error);
