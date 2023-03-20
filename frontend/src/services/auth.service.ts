@@ -17,6 +17,7 @@ const authService = {
 		adminKey: data?.adminKey
 	}),
 	refresh: (refreshToken: string): AxiosRes<ITokenData> => axiosService.post(urls.refresh, {refreshToken}),
+	refreshLogin: (refreshToken: string): AxiosRes<ITokenData> => checkLoginService.post(urls.refresh, {refreshToken}),
 	forgotPass: ({userName}: IForgotData): AxiosRes<void> => axiosService.post(urls.forgotPass, {userName}),
 	restorePass: ({password, token}: IRestoreData): AxiosRes<void> =>
 		axiosService.patch(urls.restorePass(token), {password}),
