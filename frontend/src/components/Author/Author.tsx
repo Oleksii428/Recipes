@@ -52,7 +52,7 @@ const Author: FC<IProps> = ({author}) => {
 					avatar={<Avatar sx={{width: 56, height: 56}} srcSet={avatar ? avatar : "/broken-image.jpg"} />}
 					title={
 						<Link
-							onClick={() => navigate(`authors/${_id}`)}
+							onClick={() => navigate(`/authors/${_id}`)}
 							variant="body1"
 							sx={{cursor: "pointer"}}
 						>
