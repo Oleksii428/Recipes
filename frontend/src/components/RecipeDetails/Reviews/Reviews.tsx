@@ -28,7 +28,7 @@ const Reviews: FC<IProps> = ({reviewsCount, recipeId}) => {
 			<Box sx={{display: "flex", flexDirection: "column", rowGap: 3}}>
 				{
 					reviews && reviews.map(review =>
-						<Box>
+						<Box key={review._id}>
 							{
 								deletedReviewId === review._id &&
 								<Alert severity="success">

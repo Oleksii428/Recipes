@@ -137,14 +137,10 @@ const RestorePasswordPage: FC = () => {
 					</Button>
 					<Grid container>
 						<Grid item xs>
-							<Link href={"/login"} variant="body2">
-								Already have an account?
-							</Link>
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/login")}>Already have an account?</Link>
 						</Grid>
 						<Grid item>
-							<Link href={"/register"} variant="body2">
-								Don't have an account?
-							</Link>
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/register")}>Don't have an account?</Link>
 						</Grid>
 					</Grid>
 				</Box>

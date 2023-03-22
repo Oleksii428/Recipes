@@ -20,8 +20,10 @@ import {forgot} from "../validators";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
 import {IForgotData} from "../interfaces";
+import {useNavigate} from "react-router-dom";
 
 const ForgotPasswordPage: FC = () => {
+	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 	const [wasTryToSendEmail, setWasTryToSendEmail] = useState<boolean>(false);
 	const {loading, errorMessage, statusCode} = useAppSelector(state => state.authReducer);
@@ -100,14 +102,10 @@ const ForgotPasswordPage: FC = () => {
 					</Button>
 					<Grid container>
 						<Grid item xs>
-							<Link href={"/login"} variant="body2">
-								Already have an account?
-							</Link>
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/login")}>Already have an account?</Link>
 						</Grid>
 						<Grid item>
-							<Link href={"/register"} variant="body2">
-								Don't have an account?
-							</Link>
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/register")}>Don't have an account?</Link>
 						</Grid>
 					</Grid>
 				</Box>

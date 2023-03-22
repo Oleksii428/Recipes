@@ -64,7 +64,7 @@ const CreateRecipeForm: FC = () => {
 		}
 	}, [createdRecipeId, dispatch, stages]);
 
-	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !stages.length;
+	const isValid = (): boolean => !!photoErrors.filter(error => error !== undefined).length || !!videoError || !stages.length;
 
 	return (
 		<Box

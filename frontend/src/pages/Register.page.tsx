@@ -215,7 +215,7 @@ const RegisterPage: FC = () => {
 					</Button>
 					<Grid container justifyContent="flex-end">
 						<Grid item>
-							<Link href={"/login"} variant="body2">
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/login")}>
 								Already have an account? Sign in
 							</Link>
 						</Grid>
