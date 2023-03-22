@@ -15,6 +15,7 @@ import {Logout} from "@mui/icons-material";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {authActions} from "../../redux";
+import {useNavigate} from "react-router-dom";
 
 
 const Header: FC = () => {
@@ -22,6 +23,7 @@ const Header: FC = () => {
 	const [isLogout, setIsLogout] = useState<boolean>(false);
 	const [wasTryToLogout, setWasTryToLogout] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!tokenData && wasTryToLogout) {
@@ -38,46 +40,50 @@ const Header: FC = () => {
 		setWasTryToLogout(true);
 	};
 
+	const handleNav = (to: string): void => {
+		navigate(to);
+	};
+
 	return (
 		<AppBar position="static" sx={{mb: 4}}>
 			<Container maxWidth={"xl"}>
 				<Toolbar disableGutters>
 					<Box sx={{display: "flex", flexGrow: 1}}>
-						<MenuItem component="a" href="/">
+						<MenuItem onClick={() => handleNav("/")}>
 							<Typography textAlign="center">Home</Typography>
 						</MenuItem>
-						<MenuItem component="a" href="/recipes">
+						<MenuItem onClick={() => handleNav("/recipes")}>
 							<Typography textAlign="center">Recipes</Typography>
 						</MenuItem>
-						<MenuItem component="a" href="/authors">
+						<MenuItem onClick={() => handleNav("/authors")}>
 							<Typography textAlign="center">Authors</Typography>
 						</MenuItem>
 					</Box>
 					<Box sx={{display: "flex", columnGap: 2}}>
 						{
 							!loginAuthor && !loading &&
-							<MenuItem component="a" href="/login">
+							<MenuItem onClick={() => handleNav("/login")}>
 								<Typography textAlign="center">Login</Typography>
 							</MenuItem>
 						}
 						{
 							loginAuthor && !loading &&
-							<MenuItem component="a" href="/cabinet">
+							<MenuItem onClick={() => handleNav("/cabinet")}>
 								<Typography textAlign="center">{loginAuthor.userName}</Typography>
 							</MenuItem>
 						}
 						<MenuItem>
 							{
 								loginAuthor && loginAuthor?.avatar && !loading &&
-								<Avatar component="a" href="/cabinet" src={loginAuthor.avatar} />
+								<Avatar onClick={() => handleNav("/cabinet")} src={loginAuthor.avatar} />
 							}
 							{
 								loginAuthor && !loginAuthor?.avatar && !loading &&
-								<Avatar component="a" href="/cabinet" src="static/images/cards/paella.jpg" />
+								<Avatar onClick={() => handleNav("/cabinet")} src="static/images/cards/paella.jpg" />
 							}
 							{
 								!loginAuthor && !loading &&
-								<Avatar component="a" href="/login" src="static/images/cards/paella.jpg" />
+								<Avatar onClick={() => handleNav("/login")} src="static/images/cards/paella.jpg" />
 							}
 						</MenuItem>
 						{

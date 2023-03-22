@@ -17,6 +17,7 @@ import {IMyRecipe} from "../../../interfaces";
 import {getPrettyDate} from "../../../helpers";
 import {BookToggle} from "../../BookToggle/BookToggle";
 import {DeleteButton} from "../DeleteButton/DeleteButton";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
 	recipe: IMyRecipe;
@@ -40,6 +41,7 @@ const MyRecipe: FC<IProps> = ({recipe, showBook = false}) => {
 		servings
 	} = recipe;
 
+	const navigate = useNavigate();
 	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
 	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
@@ -93,7 +95,8 @@ const MyRecipe: FC<IProps> = ({recipe, showBook = false}) => {
 						<Rating name="read-only" value={rating} precision={0.1} readOnly />
 						{reviewsCount}
 					</Typography>
-					<Link href={`/recipes/${_id}`} color="inherit" underline="none">
+					<Link sx={{cursor: "pointer"}} onClick={() => navigate(`/recipes/${_id}`)} color="inherit"
+							underline="none">
 						<Button variant="contained">
 							Details
 						</Button>

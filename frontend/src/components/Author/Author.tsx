@@ -3,6 +3,7 @@ import {Avatar, Box, Card, CardContent, CardHeader, Grid, Link, Typography} from
 
 import {IAuthor} from "../../interfaces";
 import {LikeToggle} from "../LikeToggle/LikeToggle";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
 	author: IAuthor;
@@ -21,6 +22,7 @@ const Author: FC<IProps> = ({author}) => {
 		isLiked
 	} = author;
 
+	const navigate = useNavigate();
 	const [liked, setLiked] = useState<boolean | undefined>(isLiked);
 	const [totalLikesState, setTotalLikesState] = useState<number>(totalLikes);
 
@@ -50,7 +52,7 @@ const Author: FC<IProps> = ({author}) => {
 					avatar={<Avatar sx={{width: 56, height: 56}} srcSet={avatar ? avatar : "/broken-image.jpg"} />}
 					title={
 						<Link
-							href={`authors/${_id}`}
+							onClick={() => navigate(`authors/${_id}`)}
 							variant="body1"
 							sx={{cursor: "pointer"}}
 						>

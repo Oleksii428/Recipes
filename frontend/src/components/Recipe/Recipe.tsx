@@ -8,7 +8,6 @@ import {
 	CardHeader,
 	CardMedia,
 	Grid,
-	Link,
 	Paper,
 	Rating, Snackbar,
 	Typography
@@ -19,6 +18,7 @@ import {BookToggle} from "../BookToggle/BookToggle";
 import {getPrettyDate} from "../../helpers";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {moderationActions} from "../../redux";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
 	recipe: IRecipe;
@@ -43,6 +43,7 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 	} = recipe;
 	const {avatar, userName} = creator;
 
+	const navigate = useNavigate();
 	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
 	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
@@ -60,9 +61,9 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 					avatar={<Avatar src={avatar ? avatar : "/broken-image.jpg"} />}
 					title={
 						<Typography variant="subtitle1">
-							<Link
-								href={`/authors/${creator._id}`}>{userName}
-							</Link>
+							<Button onClick={() => navigate(`/authors/${creator._id}`)}>
+								{userName}
+							</Button>
 						</Typography>
 					}
 					subheader={getPrettyDate(createdAt)}
@@ -114,11 +115,9 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 							justifyContent: "space-between"
 						}}
 					>
-						<Link href={`/recipes/${_id}`} color="inherit" underline="none">
-							<Button variant="contained">
-								Details
-							</Button>
-						</Link>
+						<Button onClick={() => navigate(`/recipes/${_id}`)} variant="contained">
+							Details
+						</Button>
 						{
 							showModerateButton &&
 							<Button disabled={loading} onClick={handleModerate} variant="contained">Moderate</Button>

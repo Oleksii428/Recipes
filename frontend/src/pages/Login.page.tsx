@@ -138,12 +138,10 @@ const LoginPage: FC = () => {
 					</Button>
 					<Grid container>
 						<Grid item xs>
-							<Link href={"/forgot-password"} variant="body2">
-								Forgot password?
-							</Link>
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/forgot-password")}>Forgot password?</Link>
 						</Grid>
 						<Grid item>
-							<Link href={"/register"} variant="body2">
+							<Link sx={{cursor: "pointer"}} onClick={() => navigate("/register")}>
 								Don't have an account? Sign Up
 							</Link>
 						</Grid>

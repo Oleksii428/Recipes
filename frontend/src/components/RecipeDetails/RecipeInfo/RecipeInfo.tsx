@@ -1,7 +1,8 @@
 import {FC, useState} from "react";
-import {Box, Link, Rating, Typography} from "@mui/material";
+import {Box, Button, Rating, Typography} from "@mui/material";
 import {BookToggle} from "../../BookToggle/BookToggle";
 import {getPrettyDate} from "../../../helpers";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
 	_id: string;
@@ -32,6 +33,7 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 		createdAt
 	} = recipe;
 
+	const navigate = useNavigate();
 	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
 	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
@@ -57,7 +59,8 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 				description: {description}
 			</Typography>
 			<Typography>
-				By <Link href={`/authors/${creator._id}`}>{creator.userName}</Link> | Created on {getPrettyDate(createdAt)}
+				By <Button onClick={() => navigate(`/authors/${creator._id}`)}>{creator.userName}</Button> | Created
+				on {getPrettyDate(createdAt)}
 			</Typography>
 		</Box>
 	);
