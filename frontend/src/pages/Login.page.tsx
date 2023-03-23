@@ -19,11 +19,13 @@ import {
 import {ILoginData} from "../interfaces";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
+import {authService} from "../services";
 
 const LoginPage: FC = () => {
 	const navigate = useNavigate();
 	const [query] = useSearchParams();
 	const dispatch = useAppDispatch();
+	const accessToken = authService.getAccessToken();
 	const {loading, errorMessage, statusCode, tokenData} = useAppSelector(state => state.authReducer);
 	const [wasTryToLogin, setWasTryToLogin] = useState<boolean>(false);
 
@@ -62,6 +64,13 @@ const LoginPage: FC = () => {
 					position: "relative"
 				}}
 			>
+				{
+					!!accessToken &&
+					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
+							 severity="error">
+						You already login
+					</Alert>
+				}
 				{errorMessage && wasTryToLogin &&
 					<Alert sx={{position: "absolute", top: "-45px", width: "100%", boxSizing: "border-box"}}
 							 severity="error">
@@ -126,7 +135,7 @@ const LoginPage: FC = () => {
 						)}
 					/>
 					<Button
-						disabled={!!tokenData || !isValid}
+						disabled={!!tokenData || !isValid || !!accessToken}
 						type="submit"
 						fullWidth
 						variant="contained"
