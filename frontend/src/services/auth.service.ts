@@ -12,8 +12,7 @@ const authService = {
 	register: (data: IRegisterData): AxiosRes<void> => axiosService.post(urls.register, {
 		userName: data.userName,
 		password: data.password,
-		email: data.email,
-		adminKey: data?.adminKey
+		email: data.email
 	}),
 	refresh: (refreshToken: string): AxiosRes<ITokenData> => axiosService.post(urls.refresh, {refreshToken}),
 	forgotPass: ({userName}: IForgotData): AxiosRes<void> => axiosService.post(urls.forgotPass, {userName}),

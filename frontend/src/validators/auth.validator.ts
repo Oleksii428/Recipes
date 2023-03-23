@@ -40,13 +40,6 @@ const signUp = Joi.object({
 			"any.only": "Passwords must match",
 			"string.empty": "Please confirm your password",
 			"any.required": "Please confirm your password"
-		}),
-	adminKey: Joi
-		.string()
-		.optional()
-		.messages({
-			"string.empty": "Admin Key is required",
-			"any.required": "Admin Key is required"
 		})
 });
 
