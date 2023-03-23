@@ -1,6 +1,5 @@
 import {FC, useEffect, useState} from "react";
 import {LockOutlined} from "@mui/icons-material";
-import {joiResolver} from "@hookform/resolvers/joi";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {
@@ -17,7 +16,6 @@ import {
 	Alert
 } from "@mui/material";
 
-import {signIn} from "../validators";
 import {ILoginData} from "../interfaces";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
@@ -29,8 +27,7 @@ const LoginPage: FC = () => {
 	const {loading, errorMessage, statusCode, tokenData} = useAppSelector(state => state.authReducer);
 	const [wasTryToLogin, setWasTryToLogin] = useState<boolean>(false);
 
-	const {handleSubmit, control, reset} = useForm<ILoginData>({
-		resolver: joiResolver(signIn),
+	const {handleSubmit, control, reset, formState: {isValid}} = useForm<ILoginData>({
 		mode: "all"
 	});
 
@@ -115,6 +112,7 @@ const LoginPage: FC = () => {
 						rules={{required: "Password is required"}}
 						render={({field: {onChange, value}, fieldState: {error}}) => (
 							<TextField
+								type="password"
 								error={!!error}
 								helperText={error?.message}
 								onChange={onChange}
@@ -128,7 +126,7 @@ const LoginPage: FC = () => {
 						)}
 					/>
 					<Button
-						disabled={!!tokenData}
+						disabled={!!tokenData || !isValid}
 						type="submit"
 						fullWidth
 						variant="contained"

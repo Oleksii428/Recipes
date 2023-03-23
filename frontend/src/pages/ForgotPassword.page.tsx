@@ -1,7 +1,6 @@
 import {FC, useState} from "react";
 import {LockOutlined} from "@mui/icons-material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {joiResolver} from "@hookform/resolvers/joi";
 import {
 	Alert,
 	Avatar,
@@ -16,7 +15,6 @@ import {
 	Typography
 } from "@mui/material";
 
-import {forgot} from "../validators";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {authActions} from "../redux";
 import {IForgotData} from "../interfaces";
@@ -28,8 +26,7 @@ const ForgotPasswordPage: FC = () => {
 	const [wasTryToSendEmail, setWasTryToSendEmail] = useState<boolean>(false);
 	const {loading, errorMessage, statusCode} = useAppSelector(state => state.authReducer);
 
-	const {handleSubmit, control, reset} = useForm<IForgotData>({
-		resolver: joiResolver(forgot),
+	const {handleSubmit, control, reset, formState: {isValid}} = useForm<IForgotData>({
 		mode: "all"
 	});
 
@@ -93,6 +90,7 @@ const ForgotPasswordPage: FC = () => {
 						)}
 					/>
 					<Button
+						disabled={!isValid}
 						type="submit"
 						fullWidth
 						variant="contained"

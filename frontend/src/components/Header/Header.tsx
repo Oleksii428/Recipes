@@ -49,9 +49,6 @@ const Header: FC = () => {
 			<Container maxWidth={"xl"}>
 				<Toolbar disableGutters>
 					<Box sx={{display: "flex", flexGrow: 1}}>
-						<MenuItem onClick={() => handleNav("/")}>
-							<Typography textAlign="center">Home</Typography>
-						</MenuItem>
 						<MenuItem onClick={() => handleNav("/recipes")}>
 							<Typography textAlign="center">Recipes</Typography>
 						</MenuItem>

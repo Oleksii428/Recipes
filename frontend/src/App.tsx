@@ -1,5 +1,5 @@
 import {FC, useEffect} from "react";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 
 import {MainLayout} from "./layouts";
 import {
@@ -38,6 +38,7 @@ const App: FC = () => {
 	return (
 		<Routes>
 			<Route path={""} element={<MainLayout />}>
+				<Route index element={<Navigate to={"recipes"} />} />
 				<Route path={"recipes"} element={<RecipesPage />} />
 				<Route path={"recipes/:id"} element={<RecipeDetailsPage />} />
 				<Route path={"authors"} element={<AuthorsPage />} />
