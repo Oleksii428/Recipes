@@ -38,8 +38,12 @@ const App: FC = () => {
 	}, [accessToken, dispatch]);
 
 	const PrivateRouteWrapper = useCallback((): JSX.Element => {
-		return <div>{loginAuthor && accessToken ? <Outlet /> : <Navigate to={"/login"} />}</div>;
-	}, [accessToken, loginAuthor]);
+		return <div>{accessToken ? <Outlet /> : <Navigate to={"/login"} />}</div>;
+	}, [accessToken]);
+
+	const AdminRouteWrapper = useCallback((): JSX.Element => {
+		return <div>{loginAuthor?.role === "admin" ? <Outlet /> : <h1>you are not an admin</h1>}</div>;
+	}, [loginAuthor]);
 
 	return (
 		<Routes>
@@ -59,9 +63,11 @@ const App: FC = () => {
 						<Route path={"my-recipes"} element={<MyRecipes />} />
 						<Route path={"my-book"} element={<MyBook />} />
 						<Route path={"create-recipe"} element={<CreateRecipe />} />
-						<Route path={"moderation"} element={<ModerationList />} />
-						<Route path={"create-category"} element={<CreateCategory />} />
-						<Route path={"create-kitchen"} element={<CreateKitchen />} />
+						<Route element={<AdminRouteWrapper />}>
+							<Route path={"moderation"} element={<ModerationList />} />
+							<Route path={"create-category"} element={<CreateCategory />} />
+							<Route path={"create-kitchen"} element={<CreateKitchen />} />
+						</Route>
 					</Route>
 				</Route>
 			</Route>
