@@ -1,4 +1,4 @@
-const {config, fileUploadConfig} = require("../configs");
+const {fileUploadConfig} = require("../configs");
 const {ApiError} = require("../errors");
 const {authorValidator, commonValidator,} = require("../validators");
 const {
@@ -65,6 +65,21 @@ module.exports = {
 			next(e);
 		}
 	},
+	isNotAdmin: async (req, res, next) => {
+		try {
+			const author = req.author;
+
+			const adminRole = await roleRepository.getRoleId("admin");
+
+			if (author.role.valueOf() === adminRole) {
+				throw new ApiError(`author ${author.userName} already admin`, 400);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 	isAuthorExistsByEmailOrUserName: async (req, res, next) => {
 		try {
 			const {email, userName} = req.body;
@@ -73,7 +88,7 @@ module.exports = {
 				const authorByEmail = await authorRepository.getOneByParamsWithPopulate({email});
 
 				if (!authorByEmail) {
-					throw new ApiError(`Author with email ${email} not found`, 400);
+					throw new ApiError(`Wrong login or password`, 400);
 				}
 				req.author = authorByEmail;
 				next();
@@ -81,7 +96,7 @@ module.exports = {
 				const authorByUserName = await authorRepository.getOneByParamsWithPopulate({userName});
 
 				if (!authorByUserName) {
-					throw new ApiError(`Author with userName ${userName} not found`, 400);
+					throw new ApiError(`Wrong login or password`, 400);
 				}
 				req.author = authorByUserName;
 				next();
@@ -153,15 +168,8 @@ module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
 			const authorInfo = req.body;
-			const {adminKey} = authorInfo;
 
-			if (adminKey && adminKey === config.CREATE_ADMIN_KEY) {
-				authorInfo.role = await roleRepository.getRoleId("admin");
-			} else if (adminKey && adminKey !== config.CREATE_ADMIN_KEY) {
-				throw new ApiError("Not valid admin key", 400);
-			} else {
-				authorInfo.role = await roleRepository.getRoleId();
-			}
+			authorInfo.role = await roleRepository.getRoleId();
 
 			const validatedAuthor = authorValidator.createAuthorValidator.validate(authorInfo);
 
@@ -236,6 +244,18 @@ module.exports = {
 
 			req.body.userName = validatedUserName.value.userName;
 			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	makeAdmin: async (req, res, next) => {
+		try {
+			const author = req.author;
+
+			const adminRoleId = await roleRepository.getRoleId("admin");
+			await authorRepository.makeAdmin(author._id, adminRoleId);
+
+			res.json(`author ${author.userName} is admin now`);
 		} catch (e) {
 			next(e);
 		}

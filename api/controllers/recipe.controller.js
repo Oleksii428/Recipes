@@ -4,8 +4,7 @@ const {
 	reviewRepository,
 	mediaRepository,
 	subscriberRepository,
-	bookRepository,
-	galleryRepository
+	bookRepository, galleryRepository
 } = require("../repositories");
 const {
 	CREATE_RECIPE_MODERATION,

@@ -43,7 +43,7 @@ module.exports = {
 		const isPasswordsSame = await bcrypt.compare(password, hashPassword);
 
 		if (!isPasswordsSame) {
-			throw new ApiError("Wrong password", 400);
+			throw new ApiError("Wrong login or password", 400);
 		}
 	},
 	generateActionToken: (actionType, dataToSign = {}) => {
