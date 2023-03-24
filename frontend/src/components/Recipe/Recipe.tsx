@@ -85,7 +85,7 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 								component="img"
 								height="200"
 								image={gallery.length ? gallery[0].path : "static/images/cards/paella.jpg"}
-								alt="preview"
+								alt={`${title} preview`}
 								sx={{borderRadius: 5}}
 							/> :
 							<Paper sx={{height: 200, borderRadius: 5, bgcolor: "grey"}}

@@ -1,5 +1,5 @@
 import {FC, useEffect} from "react";
-import {Box, CircularProgress, Container} from "@mui/material";
+import {Backdrop, Box, CircularProgress, Container} from "@mui/material";
 import {useParams} from "react-router-dom";
 
 import {AuthorInfo, RecipesFilters, RecipesOfAuthor} from "../components";
@@ -19,9 +19,12 @@ const AuthorDetailsPage: FC = () => {
 		<Container maxWidth={"xl"}>
 			{
 				loading &&
-				<Box sx={{display: "flex"}}>
-					<CircularProgress />
-				</Box>
+				<Backdrop
+					sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
+					open={loading}
+				>
+					<CircularProgress color="inherit" />
+				</Backdrop>
 			}
 			{error && <h2>ERROR</h2>}
 			{

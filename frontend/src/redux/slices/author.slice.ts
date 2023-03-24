@@ -19,6 +19,7 @@ interface IState {
 	author: IAuthor | null;
 	errorMessage: string | null;
 	statusCode: number | null;
+	successMessage: string | null;
 }
 
 const initialState: IState = {
@@ -36,7 +37,8 @@ const initialState: IState = {
 	error: false,
 	author: null,
 	errorMessage: null,
-	statusCode: null
+	statusCode: null,
+	successMessage: null
 };
 
 const getByQuery = createAsyncThunk<IAuthors, IAuthorsQuery | null>(
@@ -101,6 +103,19 @@ const changeUserName = createAsyncThunk<void, { userName: string }, { rejectValu
 	async ({userName}, {rejectWithValue}) => {
 		try {
 			const {data} = await authorService.changeUserName(userName);
+			return data;
+		} catch (e) {
+			const err = e as AxiosError<IErrorResponse>;
+			return rejectWithValue(err.response!.data);
+		}
+	}
+);
+
+const makeAdmin = createAsyncThunk<string, string, { rejectValue: IErrorResponse }>(
+	"authorSlice/makeAdmin",
+	async (id, {rejectWithValue}) => {
+		try {
+			const {data} = await authorService.makeAdmin(id);
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;
@@ -182,6 +197,20 @@ const authorSlice = createSlice({
 				state.errorMessage = action.payload?.message ?? "Unknown error";
 				state.loading = false;
 			})
+			// makeAdmin
+			.addCase(makeAdmin.fulfilled, (state, action) => {
+				state.successMessage = action.payload;
+				state.loading = false;
+			})
+			.addCase(makeAdmin.pending, state => {
+				state.successMessage = null;
+				state.errorMessage = null;
+				state.loading = true;
+			})
+			.addCase(makeAdmin.rejected, (state, action) => {
+				state.errorMessage = action.payload?.message ?? "Unknown error";
+				state.loading = false;
+			})
 });
 
 const {reducer: authorReducer} = authorSlice;
@@ -191,7 +220,8 @@ const authorActions = {
 	getRecipesOfAuthor,
 	getById,
 	uploadAvatar,
-	changeUserName
+	changeUserName,
+	makeAdmin
 };
 
 export {

@@ -69,10 +69,10 @@ module.exports = {
 		try {
 			const author = req.author;
 
-			const adminRole = await roleRepository.getRoleId("admin")
+			const adminRole = await roleRepository.getRoleId("admin");
 
 			if (author.role.valueOf() === adminRole) {
-				throw new ApiError(`author ${author.userName} already admin`);
+				throw new ApiError(`author ${author.userName} already admin`, 400);
 			}
 
 			next();

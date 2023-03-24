@@ -34,4 +34,5 @@ export * from "./ReportButton/ReportButton";
 export * from "./BlockButton/BlockButton";
 export * from "./Skeletons";
 export * from "./StageForm/StageForm";
+export * from "./MakeAdminButton/MakeAdminButton";
 export * from "./cabinet";

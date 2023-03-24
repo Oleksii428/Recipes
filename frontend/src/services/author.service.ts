@@ -12,7 +12,8 @@ const authorService = {
 	sendReport: (id: string, text: string): AxiosRes<void> => axiosService.patch(urls.reportAuthor(id), {text}),
 	blockAuthor: (id: string, days: number): AxiosRes<void> => axiosService.patch(urls.blockAuthor(id), {days}),
 	uploadAvatar: (avatar: File): AxiosRes<void> => axiosService.post(urls.uploadAvatar, {avatar}, {headers: {"Content-Type": "multipart/form-data"}}),
-	changeUserName: (userName: string): AxiosRes<void> => axiosService.patch(urls.changeUserName, {userName})
+	changeUserName: (userName: string): AxiosRes<void> => axiosService.patch(urls.changeUserName, {userName}),
+	makeAdmin: (id: string): AxiosRes<string> => axiosService.patch(urls.makeAdmin(id))
 };
 
 export {
