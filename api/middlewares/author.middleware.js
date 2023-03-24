@@ -1,4 +1,4 @@
-const {config, fileUploadConfig} = require("../configs");
+const {fileUploadConfig} = require("../configs");
 const {ApiError} = require("../errors");
 const {authorValidator, commonValidator,} = require("../validators");
 const {
@@ -153,15 +153,8 @@ module.exports = {
 	isBodyCreateValid: async (req, res, next) => {
 		try {
 			const authorInfo = req.body;
-			const {adminKey} = authorInfo;
 
-			if (adminKey && adminKey === config.CREATE_ADMIN_KEY) {
-				authorInfo.role = await roleRepository.getRoleId("admin");
-			} else if (adminKey && adminKey !== config.CREATE_ADMIN_KEY) {
-				throw new ApiError("Not valid admin key", 400);
-			} else {
-				authorInfo.role = await roleRepository.getRoleId();
-			}
+			authorInfo.role = await roleRepository.getRoleId();
 
 			const validatedAuthor = authorValidator.createAuthorValidator.validate(authorInfo);
 
@@ -236,6 +229,18 @@ module.exports = {
 
 			req.body.userName = validatedUserName.value.userName;
 			next();
+		} catch (e) {
+			next(e);
+		}
+	},
+	makeAdmin: async (req, res, next) => {
+		try {
+			const author = req.author;
+
+			const adminRoleId = await roleRepository.getRoleId("admin");
+			await authorRepository.makeAdmin(author._id, adminRoleId);
+
+			res.json(`author ${author.userName} is admin now`);
 		} catch (e) {
 			next(e);
 		}

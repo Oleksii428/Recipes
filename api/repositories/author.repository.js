@@ -68,6 +68,7 @@ module.exports = {
 	incTotalLikes: async (fromId, toId) => {
 		await Author.findByIdAndUpdate(toId, {$inc: {"totalLikes": 1}});
 	},
+	makeAdmin: (authorId, adminRoleId) => Author.findByIdAndUpdate(authorId, {$set: {"role": adminRoleId}}).lean(),
 	setAvatar: (authorId, avatar) => Author.findByIdAndUpdate(authorId, {$set: {"avatar": avatar}}),
 	setBlock: (authorId, date) => Author.findByIdAndUpdate(authorId, {$set: {"block": date}}),
 	unlock: (authorId) => Author.findByIdAndUpdate(authorId, {$set: {"block": null}}),

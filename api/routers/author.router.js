@@ -73,6 +73,15 @@ router.get(
 );
 
 router.patch(
+	"/:authorId/makeAdmin",
+	authMiddleware.isMongoIdValid("authorId"),
+	authMiddleware.checkAccessToken,
+	authorMiddleware.isAdmin,
+	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.makeAdmin
+);
+
+router.patch(
 	"/:authorId/complain",
 	authMiddleware.isMongoIdValid("authorId"),
 	authMiddleware.checkAccessToken,
