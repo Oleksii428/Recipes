@@ -65,6 +65,21 @@ module.exports = {
 			next(e);
 		}
 	},
+	isNotAdmin: async (req, res, next) => {
+		try {
+			const author = req.author;
+
+			const adminRole = await roleRepository.getRoleId("admin")
+
+			if (author.role.valueOf() === adminRole) {
+				throw new ApiError(`author ${author.userName} already admin`);
+			}
+
+			next();
+		} catch (e) {
+			next(e);
+		}
+	},
 	isAuthorExistsByEmailOrUserName: async (req, res, next) => {
 		try {
 			const {email, userName} = req.body;

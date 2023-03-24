@@ -78,6 +78,7 @@ router.patch(
 	authMiddleware.checkAccessToken,
 	authorMiddleware.isAdmin,
 	authorMiddleware.isAuthorExistsDynamically("authorId", "params", "_id"),
+	authorMiddleware.isNotAdmin,
 	authorMiddleware.makeAdmin
 );
 
