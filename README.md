@@ -51,7 +51,6 @@ MONGO_INITDB_ROOT_USERNAME=yourUserName
 MONGO_INITDB_ROOT_PASSWORD=yourPassword
 
 FRONTEND_URL=http://localhost:3000
-CREATE_ADMIN_KEY=yourValue
 
 ACCESS_SECRET=yourAccessSecretWord
 REFRESH_SECRET=yourRefreshSecretWord
@@ -77,7 +76,9 @@ Select backend directory `cd .\api`
 
 Run `node app`
 
-Before use backend create two roles:
+#### Before use backend need create two roles and admin user:
+
+Roles:
 
 - make first `post` request to `http://localhost:5000/role` with body below
   ```json
@@ -91,6 +92,22 @@ Before use backend create two roles:
     "title": "admin"
   }
   ```
+
+Admin user:
+
+- make pust request to `http://localhost:5000/authors` with body below
+  ```json
+  {
+      "userName": "yourUserName",
+      "password": "yourPassword",
+      "email": "yourEmail@foo.foo"
+  }
+  ```
+
+- in your db change user role to admin
+
+  `db.getCollection('authors').update({"_id" : ObjectId("yourUserObjectId")}, {$set: {"role" : ObjectId("
+  yourRoleObjectId")}})`
 
 Now backend is ready to use
 
