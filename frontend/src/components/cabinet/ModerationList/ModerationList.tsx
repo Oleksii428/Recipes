@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
-import {Box, Grid} from "@mui/material";
+import {Box, Grid, Typography} from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {recipeActions} from "../../../redux";
@@ -24,10 +24,14 @@ const ModerationList: FC = () => {
 					error && <h2>ERROR</h2>
 				}
 				{
-					!loading && !error &&
+					!loading && !error && !!list.recipes.length &&
 					list.recipes.map(recipe =>
 						<Recipe showModerateButton={true} recipe={recipe} key={recipe._id} />
 					)
+				}
+				{
+					!loading && !error && !list.recipes.length &&
+					<Typography variant="h4" sx={{pt: 4}}>Moderation list is empty</Typography>
 				}
 				{
 					loading && !error &&

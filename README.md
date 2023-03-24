@@ -45,7 +45,6 @@ MONGO_INITDB_ROOT_USERNAME=yourUserName
 MONGO_INITDB_ROOT_PASSWORD=yourPassword
 
 FRONTEND_URL=http://localhost:3000
-CREATE_ADMIN_KEY=yourValue
 
 ACCESS_SECRET=yourAccessSecretWord
 REFRESH_SECRET=yourRefreshSecretWord
@@ -65,7 +64,9 @@ S3_SECRET_KEY=yourS3BucketSecretKey
 
 ## Usage
 
-Create two roles:
+### Create two roles and admin user:
+
+Roles:
 
 - make first `post` request to `localhost:80/api/role` with body below
   ```json
@@ -79,6 +80,22 @@ Create two roles:
     "title": "admin"
   }
   ```
+
+Admin user:
+
+- make pust request to `http://localhost:5000/authors` with body below
+  ```json
+  {
+      "userName": "yourUserName",
+      "password": "yourPassword",
+      "email": "yourEmail@foo.foo"
+  }
+  ```
+
+- in your db change user role to admin
+
+  `db.getCollection('authors').update({"_id" : ObjectId("yourUserObjectId")}, {$set: {"role" : ObjectId("
+  yourRoleObjectId")}})`
 
 Run `docker compose up`
 

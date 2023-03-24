@@ -8,6 +8,7 @@ import {ReportButton} from "../ReportButton/ReportButton";
 import {useAppSelector} from "../../hooks";
 import {BlockButton} from "../BlockButton/BlockButton";
 import {getPrettyDate} from "../../helpers";
+import {MakeAdminButton} from "../MakeAdminButton/MakeAdminButton";
 
 interface IProps {
 	author: IAuthor;
@@ -36,6 +37,7 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 	const [isBlock, setIsBlock] = useState<boolean>(false);
 
 	const {loginAuthor} = useAppSelector(state => state.authReducer);
+	const {successMessage, errorMessage} = useAppSelector(state => state.authorReducer);
 
 	return (
 		<Box sx={{width: "fit-content", margin: "0 auto", padding: 2}}>
@@ -44,6 +46,12 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 			</Alert>}
 			{isBlock && <Alert severity="success">
 				Author has been blocked
+			</Alert>}
+			{successMessage && <Alert severity="success">
+				{successMessage}
+			</Alert>}
+			{errorMessage && <Alert severity="error">
+				{errorMessage}
 			</Alert>}
 			<Box sx={{display: "flex", columnGap: 2, alignItems: "center", padding: 1}}>
 				<Badge badgeContent={role} invisible={role === "user"} color="primary" showZero>
@@ -67,6 +75,10 @@ const AuthorInfo: FC<IProps> = ({author}) => {
 							<BlockButton authorId={_id} isBlock={setIsBlock} />
 						}
 					</Box>
+					{
+						loginAuthor?.role === "admin" && role !== "admin" &&
+						<MakeAdminButton _id={_id} />
+					}
 					<SubscribeToggle _id={_id} isSubscribed={isSubscribed} />
 				</Box>
 			</Box>

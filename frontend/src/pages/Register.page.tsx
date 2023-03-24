@@ -14,12 +14,7 @@ import {
 	TextField,
 	Backdrop,
 	CircularProgress,
-	Alert,
-	InputLabel,
-	Select,
-	MenuItem,
-	FormControl,
-	SelectChangeEvent
+	Alert
 } from "@mui/material";
 
 import {IRegisterData} from "../interfaces";
@@ -36,23 +31,14 @@ const RegisterPage: FC = () => {
 	const navigate = useNavigate();
 	const {loading, errorMessage, statusCode} = useAppSelector(state => state.authReducer);
 	const [wasTryToRegister, setWasTryToRegister] = useState<boolean>(false);
-	const [accountType, setAccountType] = useState<string>("user");
 
-	const {handleSubmit, control, reset} = useForm<ISignUpForm>({
+	const {handleSubmit, control, reset, formState: {isValid}} = useForm<ISignUpForm>({
 		resolver: joiResolver(signUp),
 		mode: "all"
 	});
 
-	const handleChange = (event: SelectChangeEvent) => {
-		setAccountType(event.target.value);
-	};
-
-	const onSubmit: SubmitHandler<ISignUpForm> = async ({userName, email, password, adminKey}) => {
-		if (adminKey) {
-			await dispatch(authActions.register({userName, password, email, adminKey}));
-		} else {
-			await dispatch(authActions.register({userName, password, email}));
-		}
+	const onSubmit: SubmitHandler<ISignUpForm> = async ({userName, email, password}) => {
+		await dispatch(authActions.register({userName, password, email}));
 		setWasTryToRegister(true);
 	};
 
@@ -100,17 +86,6 @@ const RegisterPage: FC = () => {
 				<Typography component="h1" variant="h5">
 					Sign up
 				</Typography>
-				<FormControl fullWidth>
-					<InputLabel>User type</InputLabel>
-					<Select
-						value={accountType}
-						label="User Type"
-						onChange={handleChange}
-					>
-						<MenuItem value="user">User</MenuItem>
-						<MenuItem value="admin">Admin</MenuItem>
-					</Select>
-				</FormControl>
 				<Box component="form" noValidate sx={{mt: 1}} onSubmit={handleSubmit(onSubmit)}>
 					<Controller
 						name={"userName"}
@@ -183,29 +158,8 @@ const RegisterPage: FC = () => {
 							/>
 						)}
 					/>
-					{
-						accountType === "admin" &&
-						<Controller
-							shouldUnregister={true}
-							name={"adminKey"}
-							control={control}
-							rules={{required: "Admin key is required"}}
-							defaultValue=""
-							render={({field: {onChange, value}, fieldState: {error}}) => (
-								<TextField
-									required={accountType === "admin"}
-									error={!!error}
-									helperText={error?.message}
-									onChange={onChange}
-									value={value || ""}
-									label="Admin Key"
-									margin="normal"
-									fullWidth
-									type="password"
-								/>)}
-						/>
-					}
 					<Button
+						disabled={!isValid}
 						type="submit"
 						fullWidth
 						variant="contained"

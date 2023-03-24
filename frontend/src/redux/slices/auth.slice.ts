@@ -71,9 +71,9 @@ const logout = createAsyncThunk<void, void, { rejectValue: IErrorResponse }>(
 
 const register = createAsyncThunk<void, IRegisterData, { rejectValue: IErrorResponse }>(
 	"authSlice/register",
-	async ({userName, password, email, adminKey}, {rejectWithValue}) => {
+	async ({userName, password, email}, {rejectWithValue}) => {
 		try {
-			const {data} = await authService.register({userName, password, email, adminKey});
+			const {data} = await authService.register({userName, password, email});
 			return data;
 		} catch (e) {
 			const err = e as AxiosError<IErrorResponse>;

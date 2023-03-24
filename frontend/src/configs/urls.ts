@@ -1,4 +1,3 @@
-// const baseURL = "http://localhost:5000/";
 const baseURL = "/api/";
 
 const urls = {
@@ -31,7 +30,8 @@ const urls = {
 	addStageToRecipe: (recipeId: string) => `/recipes/${recipeId}/addStage`,
 	getNotModeratedRecipes: "/recipes/notModerated",
 	moderate: (recipeId: string) => `/recipes/${recipeId}/moderation`,
-	deleteRecipe: (recipeId: string) => `/recipes/${recipeId}`
+	deleteRecipe: (recipeId: string) => `/recipes/${recipeId}`,
+	makeAdmin: (authorId: string) => `/authors/${authorId}/makeAdmin`
 };
 
 export {

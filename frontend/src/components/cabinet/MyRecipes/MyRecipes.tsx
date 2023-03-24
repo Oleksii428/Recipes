@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
-import {Box, Grid} from "@mui/material";
+import {Box, Grid, Typography} from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {recipeActions} from "../../../redux";
@@ -24,10 +24,16 @@ const MyRecipes: FC = () => {
 					error && <h2>ERROR</h2>
 				}
 				{
-					!loading && !error &&
+					!loading && !error && !!myRecipes.recipes.length &&
 					myRecipes.recipes.map(recipe =>
 						<MyRecipe recipe={recipe} key={recipe._id} />
 					)
+				}
+				{
+					!loading && !error && !myRecipes.recipes.length &&
+					<Typography variant="h4" sx={{pt: 4}}>
+						You dont have any recipes yet.
+					</Typography>
 				}
 				{
 					loading && !error &&
