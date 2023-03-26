@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
 import {
@@ -127,7 +127,41 @@ const makeAdmin = createAsyncThunk<string, string, { rejectValue: IErrorResponse
 const authorSlice = createSlice({
 	name: "authorSlice",
 	initialState,
-	reducers: {},
+	reducers: {
+		likeToggle: (state, action: PayloadAction<string>) => {
+			const authors = state.list.authors;
+			const index = authors.findIndex(author => author._id === action.payload);
+
+			if (index >= 0) {
+				authors[index].isLiked = !authors[index].isLiked;
+			}
+		},
+		incTotalLikes: (state, action: PayloadAction<string>) => {
+			const authors = state.list.authors;
+			const index = authors.findIndex(author => author._id === action.payload);
+
+			if (index >= 0) {
+				authors[index].totalLikes += 1;
+			}
+		},
+		decTotalLikes: (state, action: PayloadAction<string>) => {
+			const authors = state.list.authors;
+			const index = authors.findIndex(author => author._id === action.payload);
+
+			if (index >= 0) {
+				authors[index].totalLikes -= 1;
+			}
+		},
+		likeToggleId: state => {
+			if (state.author) state.author.isLiked = !state.author.isLiked;
+		},
+		incTotalLikesId: state => {
+			if (state.author) state.author.totalLikes += 1;
+		},
+		decTotalLikesId: state => {
+			if (state.author) state.author.totalLikes -= 1;
+		}
+	},
 	extraReducers: builder =>
 		builder
 			// getByQuery
@@ -213,7 +247,17 @@ const authorSlice = createSlice({
 			})
 });
 
-const {reducer: authorReducer} = authorSlice;
+const {
+	reducer: authorReducer,
+	actions: {
+		likeToggle,
+		incTotalLikes,
+		decTotalLikes,
+		likeToggleId,
+		incTotalLikesId,
+		decTotalLikesId
+	}
+} = authorSlice;
 
 const authorActions = {
 	getByQuery,
@@ -221,7 +265,13 @@ const authorActions = {
 	getById,
 	uploadAvatar,
 	changeUserName,
-	makeAdmin
+	makeAdmin,
+	likeToggle,
+	incTotalLikes,
+	decTotalLikes,
+	likeToggleId,
+	incTotalLikesId,
+	decTotalLikesId
 };
 
 export {

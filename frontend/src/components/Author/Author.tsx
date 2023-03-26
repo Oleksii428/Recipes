@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC} from "react";
 import {Avatar, Box, Card, CardContent, CardHeader, Grid, Link, Typography} from "@mui/material";
 
 import {IAuthor} from "../../interfaces";
@@ -17,14 +17,10 @@ const Author: FC<IProps> = ({author}) => {
 		recipes,
 		totalBook,
 		totalSubscribers,
-		totalSubscriptions,
-		totalLikes,
-		isLiked
+		totalSubscriptions
 	} = author;
 
 	const navigate = useNavigate();
-	const [liked, setLiked] = useState<boolean | undefined>(isLiked);
-	const [totalLikesState, setTotalLikesState] = useState<number>(totalLikes);
 
 	const tableData = [
 		{
@@ -59,15 +55,7 @@ const Author: FC<IProps> = ({author}) => {
 							{userName}
 						</Link>
 					}
-					action={
-						<LikeToggle
-							setLiked={setLiked}
-							isLiked={liked}
-							totalLikes={totalLikesState}
-							setTotalLikes={setTotalLikesState}
-							_id={_id}
-						/>
-					}
+					action={<LikeToggle _id={_id} />}
 				/>
 				<CardContent>
 					<Box sx={{display: "flex", flexDirection: "column", rowGap: 1}}>

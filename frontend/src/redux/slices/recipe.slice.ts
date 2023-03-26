@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
 import {IRecipesQuery, IRecipe, IRecipes, IReview, IMyRecipes, ICreateRecipe} from "../../interfaces";
@@ -131,6 +131,39 @@ const recipeSlice = createSlice({
 	reducers: {
 		sliceRecipe: (state, action) => {
 			state.list = action.payload;
+		},
+		bookToggle: (state, action: PayloadAction<string>) => {
+			const recipes = state.list.recipes;
+			const index = recipes.findIndex(recipe => recipe._id === action.payload);
+
+			if (index >= 0) {
+				recipes[index].inBook = !recipes[index].inBook;
+			}
+		},
+		incBookCount: (state, action: PayloadAction<string>) => {
+			const recipes = state.list.recipes;
+			const index = recipes.findIndex(recipe => recipe._id === action.payload);
+
+			if (index >= 0) {
+				recipes[index].bookCount += 1;
+			}
+		},
+		decBookCount: (state, action: PayloadAction<string>) => {
+			const recipes = state.list.recipes;
+			const index = recipes.findIndex(recipe => recipe._id === action.payload);
+
+			if (index >= 0) {
+				recipes[index].bookCount -= 1;
+			}
+		},
+		bookToggleId: state => {
+			if (state.recipe) state.recipe.inBook = !state.recipe.inBook;
+		},
+		incBookCountId: state => {
+			if (state.recipe) state.recipe.bookCount += 1;
+		},
+		decBookCountId: state => {
+			if (state.recipe) state.recipe.bookCount -= 1;
 		}
 	},
 	extraReducers: builder =>
@@ -236,7 +269,18 @@ const recipeSlice = createSlice({
 			})
 });
 
-const {reducer: recipeReducer, actions: {sliceRecipe}} = recipeSlice;
+const {
+	reducer: recipeReducer,
+	actions: {
+		sliceRecipe,
+		bookToggle,
+		incBookCount,
+		decBookCount,
+		bookToggleId,
+		incBookCountId,
+		decBookCountId
+	}
+} = recipeSlice;
 
 const recipeActions = {
 	getByQuery,
@@ -245,8 +289,14 @@ const recipeActions = {
 	getMyRecipes,
 	create,
 	getNotModerated,
+	deleteRecipe,
 	sliceRecipe,
-	deleteRecipe
+	bookToggle,
+	incBookCount,
+	decBookCount,
+	bookToggleId,
+	incBookCountId,
+	decBookCountId
 };
 
 export {

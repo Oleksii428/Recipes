@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC} from "react";
 import {
 	Alert,
 	Button,
@@ -35,15 +35,11 @@ const MyRecipe: FC<IProps> = ({recipe, showBook = false}) => {
 		reviewsCount,
 		time,
 		title,
-		bookCount,
-		inBook,
 		isModerated,
 		servings
 	} = recipe;
 
 	const navigate = useNavigate();
-	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
-	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
 	return (
 		<Grid item xl={3} lg={4} md={5}>
@@ -51,13 +47,7 @@ const MyRecipe: FC<IProps> = ({recipe, showBook = false}) => {
 				<CardHeader
 					subheader={getPrettyDate(createdAt)}
 					action={
-						showBook ? <BookToggle
-								_id={_id}
-								bookCount={bookCountState}
-								inBook={bookState}
-								setBook={setBookState}
-								setBookCount={setBookCountState}
-							/> :
+						showBook ? <BookToggle _id={_id} /> :
 							<DeleteButton recipeId={_id} />
 					}
 				/>

@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC} from "react";
 import {
 	Alert,
 	Avatar, Box,
@@ -37,15 +37,11 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 		reviewsCount,
 		time,
 		title,
-		bookCount,
-		inBook,
 		servings
 	} = recipe;
 	const {avatar, userName} = creator;
 
 	const navigate = useNavigate();
-	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
-	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
 	const dispatch = useAppDispatch();
 	const {statusCode, loading, errorMessage} = useAppSelector(state => state.moderationReducer);
@@ -67,15 +63,7 @@ const Recipe: FC<IProps> = ({recipe, showModerateButton}) => {
 						</Typography>
 					}
 					subheader={getPrettyDate(createdAt)}
-					action={
-						<BookToggle
-							_id={_id}
-							bookCount={bookCountState}
-							inBook={bookState}
-							setBook={setBookState}
-							setBookCount={setBookCountState}
-						/>
-					}
+					action={<BookToggle _id={_id} />}
 				/>
 				<CardContent>
 					<Typography variant="h5">
