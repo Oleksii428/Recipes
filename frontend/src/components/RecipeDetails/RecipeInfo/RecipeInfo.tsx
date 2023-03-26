@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC} from "react";
 import {Box, Button, Rating, Typography} from "@mui/material";
 import {BookToggle} from "../../BookToggle/BookToggle";
 import {getPrettyDate} from "../../../helpers";
@@ -27,15 +27,11 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 		description,
 		rating,
 		reviewsCount,
-		bookCount,
-		inBook,
 		creator,
 		createdAt
 	} = recipe;
 
 	const navigate = useNavigate();
-	const [bookState, setBookState] = useState<boolean | undefined>(inBook);
-	const [bookCountState, setBookCountState] = useState<number>(bookCount);
 
 	return (
 		<Box sx={{maxWidth: "500px"}}>
@@ -43,13 +39,7 @@ const RecipeInfo: FC<IProps> = (recipe) => {
 				<Typography variant="h2" fontWeight={600}>
 					{title}
 				</Typography>
-				<BookToggle
-					_id={_id}
-					inBook={bookState}
-					bookCount={bookCountState}
-					setBook={setBookState}
-					setBookCount={setBookCountState}
-				/>
+				<BookToggle _id={_id} />
 			</Box>
 			<Box sx={{display: "flex", alignItems: "center"}}>
 				<Rating name="read-only" value={rating} precision={0.1} readOnly />

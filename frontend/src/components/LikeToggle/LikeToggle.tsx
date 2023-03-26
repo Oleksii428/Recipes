@@ -1,36 +1,63 @@
-import {FC} from "react";
+import {FC, useEffect, useMemo, useState} from "react";
 import {Badge, Box, IconButton} from "@mui/material";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {likeActions} from "../../redux";
+import {authorActions, likeActions} from "../../redux";
 
 interface IProps {
 	_id: string;
-	totalLikes: number;
-	isLiked: boolean | undefined;
-	setLiked: Function;
-	setTotalLikes: Function;
 }
 
-const LikeToggle: FC<IProps> = ({_id, totalLikes, isLiked, setLiked, setTotalLikes}) => {
+const LikeToggle: FC<IProps> = ({_id}) => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
 	const {loginAuthor} = useAppSelector(state => state.authReducer);
 	const {loading} = useAppSelector(state => state.likeReducer);
+	const {list: {authors}, author: authorById} = useAppSelector(state => state.authorReducer);
+
+	const [isLiked, setIsLiked] = useState<boolean>(false);
+	const [totalLikes, setTotalLikes] = useState<number>(0);
+
+	const author = useMemo(() => {
+		if (!!authors.length) {
+			const index = authors.findIndex(author => author._id === _id);
+
+			if (index >= 0) return authors[index];
+		} else {
+			return authorById;
+		}
+	}, [_id, authorById, authors]);
+
+	useEffect(() => {
+		if (author) {
+			setIsLiked(!!author.isLiked);
+			setTotalLikes(author.totalLikes);
+		}
+	}, [author]);
 
 	const handleLikeInc = async () => {
 		await dispatch(likeActions.likeToggle(_id));
-		setTotalLikes(totalLikes + 1);
-		setLiked(true);
+		if (!!authors.length) {
+			dispatch(authorActions.likeToggle(_id));
+			dispatch(authorActions.incTotalLikes(_id));
+		} else {
+			dispatch(authorActions.likeToggleId());
+			dispatch(authorActions.incTotalLikesId());
+		}
 	};
 
 	const handleLikeDec = async () => {
 		await dispatch(likeActions.likeToggle(_id));
-		setTotalLikes(totalLikes - 1);
-		setLiked(false);
+		if (!!authors.length) {
+			dispatch(authorActions.likeToggle(_id));
+			dispatch(authorActions.decTotalLikes(_id));
+		} else {
+			dispatch(authorActions.likeToggleId());
+			dispatch(authorActions.decTotalLikesId());
+		}
 	};
 
 	function renderAction() {
